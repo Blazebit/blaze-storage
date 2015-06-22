@@ -1,0 +1,14 @@
+language: java
+sudo: false
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+script:
+  - mvn -P install
+#after_success:
+#  - "bash ./.travis-deploy.sh"
+matrix:
+  fast_finish: true
+  include:
+    - jdk: oraclejdk7
+    - jdk: oraclejdk8
