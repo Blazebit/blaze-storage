@@ -1,308 +1,838 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.blazebit</groupId>
-        <artifactId>blazebit-parent</artifactId>
-        <version>8</version>
-    </parent>
+	<parent>
+		<groupId>com.blazebit</groupId>
+		<artifactId>blazebit-parent</artifactId>
+		<version>8</version>
+	</parent>
 
-    <artifactId>blaze-storage</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<artifactId>blaze-storage</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <name>Blazebit Storage</name>
-    <url>http://blazebit.com/storage</url>
-    <description>Extendible storage abstraction for files</description>
+	<name>Blazebit Storage</name>
+	<url>http://blazebit.com/storage</url>
+	<description>Extendible storage abstraction for files</description>
 
-    <modules>
-        <module>core</module>
-        <module>rest</module>
-        <module>server</module>
-        <module>documentation</module>
-    </modules>
+	<properties>
+		<!-- **************** -->
+		<!-- Plugins versions -->
+		<!-- **************** -->
+		<version.processor.plugin>2.2.1</version.processor.plugin>
+		<version.buildhelper.plugin>1.5</version.buildhelper.plugin>
+		<version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+		<version.clean.plugin>2.4.1</version.clean.plugin>
+		<version.compiler.plugin>3.1</version.compiler.plugin>
+		<version.dependency.plugin>2.3</version.dependency.plugin>
+		<version.deploy.plugin>2.5</version.deploy.plugin>
+		<version.ear.plugin>2.8</version.ear.plugin>
+		<version.ejb.plugin>2.3</version.ejb.plugin>
+		<version.enforcer.plugin>1.0</version.enforcer.plugin>
+		<version.gpg.plugin>1.4</version.gpg.plugin>
+		<version.jar.plugin>2.3.1</version.jar.plugin>
+		<version.javadoc.plugin>2.8</version.javadoc.plugin>
+		<version.source.plugin>2.1.2</version.source.plugin>
+		<version.surefire.plugin>2.17</version.surefire.plugin>
+		<version.war.plugin>2.3</version.war.plugin>
+		<version.asciidoctor>1.5.2</version.asciidoctor>
+		<version.release.plugin>2.5.1</version.release.plugin>
 
-    <issueManagement>
-        <system>github</system>
-        <url>https://github.com/Blazebit/blaze-storage/issues</url>
-    </issueManagement>
+		<!-- ******************* -->
+		<!-- Dependency versions -->
+		<!-- ******************* -->
 
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <organization>
-        <name>Blazebit</name>
-        <url>http://www.blazebit.com</url>
-    </organization>
-
-    <scm>
-        <connection>scm:git:git@github.com:Blazebit/blaze-storage.git</connection>
-        <developerConnection>scm:git:git@github.com:Blazebit/blaze-storage.git</developerConnection>
-        <url>git@github.com:Blazebit/blaze-storage.git</url>
-      <tag>HEAD</tag>
-  </scm>
-
-    <developers>
-        <developer>
-            <id>christian</id>
-            <name>Christian Beikov</name>
-            <email>christian@blazebit.com</email>
-            <organization>Blazebit</organization>
-            <organizationUrl>http://www.blazebit.com</organizationUrl>
-            <timezone>UTC+1</timezone>
-            <roles>
-                <role>Project Owner</role>
-                <role>Committer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>cchet</id>
-            <name>Thomas Herzog</name>
-            <email>t.herzog@curecomp.com</email>
-            <organization>Curecomp</organization>
-            <organizationUrl>http://www.curecomp.com</organizationUrl>
-            <timezone>UTC+1</timezone>
-            <roles>
-                <role>Committer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>Mobe91</id>
-            <name>Moritz Becker</name>
-            <email>m.becker@curecomp.com</email>
-            <organization>Curecomp</organization>
-            <organizationUrl>http://www.curecomp.com</organizationUrl>
-            <timezone>UTC+1</timezone>
-            <roles>
-                <role>Committer</role>
-            </roles>
-        </developer>
-    </developers>
-
-    <properties>
-        <version.blazecbav>0.2.0</version.blazecbav>
-        <version.blazeutils>0.1.10</version.blazeutils>
-        <version.deltaspike>1.0.1</version.deltaspike>
-        <version.junit>4.11</version.junit>
-
-        <version.openejb>4.6.0</version.openejb>
-        <version.openejb.javaee-api>6.0-4</version.openejb.javaee-api>
+		<!-- The server part uses Java EE 7 -->
 		<version.javaee-api>7.0</version.javaee-api>
+		<!-- The client available parts are Java EE 6 compatible -->
+		<version.openejb>4.6.0</version.openejb>
+		<version.openejb.javaee-api>6.0-4</version.openejb.javaee-api>
+		
+		<version.blazecbav>0.2.0</version.blazecbav>
+		<version.blazeutils>0.1.10</version.blazeutils>
+		<version.deltaspike>1.4.1</version.deltaspike>
+		<version.junit>4.11</version.junit>
 
-        <!-- Plugin versions -->
-        <version.processor.plugin>2.2.1</version.processor.plugin>
-        <version.release.plugin>2.5.1</version.release.plugin>
-    </properties>
+		<version.keycloak>1.1.0.Final</version.keycloak>
+		<version.keycloak.resteasy-jaxrs>3.0.10.Final</version.keycloak.resteasy-jaxrs>
+		<version.keycloak.jboss-servlet-api_3.0_spec>1.0.2.Final</version.keycloak.jboss-servlet-api_3.0_spec>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- Project dependencies -->
-            
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-apt-utils</artifactId>
-                <version>${version.blazeutils}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-common-utils</artifactId>
-                <version>${version.blazeutils}</version>
-            </dependency>
-                        
-            <!-- Module dependencies -->
-                        
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-core-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-core-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-core-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-rest-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-rest-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>blaze-storage-rest-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-                        
-            <!-- Platform dependencies -->
-                        
-            <dependency>
-                <groupId>org.apache.openejb</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${version.openejb.javaee-api}</version>
-                <scope>provided</scope>
-            </dependency>
+		<!-- ************** -->
+		<!-- Build settings -->
+		<!-- ************** -->
+
+		<!-- Cross plugins settings -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- maven-compiler-plugin -->
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+
+		<!-- Options to override the compiler arguments directly on the compiler 
+			arument line to separate between what the IDE understands as the source level 
+			and what the Maven compiler actually use. -->
+		<maven.compiler.argument.target>${maven.compiler.target}</maven.compiler.argument.target>
+		<maven.compiler.argument.source>${maven.compiler.source}</maven.compiler.argument.source>
+
+		<!-- maven-enforcer-plugin -->
+		<!-- Version 3.0-beta-1 includes strong POM validation and correct "import" 
+			scope dependency resolution. -->
+		<maven.min.version>3.0</maven.min.version>
+		<jdk.min.version>${maven.compiler.source}</jdk.min.version>
+
+		<!-- maven-idea-plugin & maven-eclipse-plugin -->
+		<downloadSources>true</downloadSources>
+
+		<!-- maven-pmd-plugin -->
+		<targetJdk>${maven.compiler.target}</targetJdk>
+
+		<!-- maven-release-plugin -->
+		<useReleaseProfile>false</useReleaseProfile>
+		<arguments>-Psweazer-release</arguments>
+	</properties>
+
+	<prerequisites>
+		<maven>${maven.min.version}</maven>
+	</prerequisites>
+
+	<modules>
+		<module>core</module>
+		<module>rest</module>
+		<module>server</module>
+		<module>examples</module>
+		<module>documentation</module>
+	</modules>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/Blazebit/blaze-storage/issues</url>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Blazebit</name>
+		<url>http://www.blazebit.com</url>
+	</organization>
+
+	<scm>
+		<connection>scm:git:git@github.com:Blazebit/blaze-storage.git</connection>
+		<developerConnection>scm:git:git@github.com:Blazebit/blaze-storage.git</developerConnection>
+		<url>git@github.com:Blazebit/blaze-storage.git</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>christian</id>
+			<name>Christian Beikov</name>
+			<email>christian@blazebit.com</email>
+			<organization>Blazebit</organization>
+			<organizationUrl>http://www.blazebit.com</organizationUrl>
+			<timezone>UTC+1</timezone>
+			<roles>
+				<role>Project Owner</role>
+				<role>Committer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>cchet</id>
+			<name>Thomas Herzog</name>
+			<email>t.herzog@curecomp.com</email>
+			<organization>Curecomp</organization>
+			<organizationUrl>http://www.curecomp.com</organizationUrl>
+			<timezone>UTC+1</timezone>
+			<roles>
+				<role>Committer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>Mobe91</id>
+			<name>Moritz Becker</name>
+			<email>m.becker@curecomp.com</email>
+			<organization>Curecomp</organization>
+			<organizationUrl>http://www.curecomp.com</organizationUrl>
+			<timezone>UTC+1</timezone>
+			<roles>
+				<role>Committer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Project dependencies -->
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-apt-utils</artifactId>
+				<version>${version.blazeutils}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-common-utils</artifactId>
+				<version>${version.blazeutils}</version>
+			</dependency>
+
+			<!-- Module dependencies -->
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-core-model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-core-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-core-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-rest-model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-rest-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-rest-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-server</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+
+			<!-- Platform dependencies -->
+
+			<dependency>
+				<groupId>org.apache.openejb</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>${version.openejb.javaee-api}</version>
+				<scope>provided</scope>
+			</dependency>
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
 				<version>${version.javaee-api}</version>
-	            <scope>provided</scope>
+				<scope>provided</scope>
 			</dependency>
 
-            <!-- Test -->
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${version.junit}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.catch-exception</groupId>
-                <artifactId>catch-exception</artifactId>
-                <version>1.2.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>1.4.183</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-api</artifactId>
-                <version>${version.deltaspike}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-impl</artifactId>
-                <version>${version.deltaspike}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.deltaspike.cdictrl</groupId>
-                <artifactId>deltaspike-cdictrl-api</artifactId>
-                <version>${version.deltaspike}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.deltaspike.cdictrl</groupId>
-                <artifactId>deltaspike-cdictrl-openejb</artifactId>
-                <version>${version.deltaspike}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.openejb</groupId>
-                <artifactId>openejb-core</artifactId>
-                <version>${version.openejb}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+			<!-- Resteasy -->
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.bsc.maven</groupId>
-                    <artifactId>maven-processor-plugin</artifactId>
-                    <version>${version.processor.plugin}</version>
-                </plugin>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                	<groupId>org.eclipse.m2e</groupId>
-                	<artifactId>lifecycle-mapping</artifactId>
-                	<version>1.0.0</version>
-                	<configuration>
-                		<lifecycleMappingMetadata>
-                			<pluginExecutions>
-                				<pluginExecution>
-                					<pluginExecutionFilter>
-                						<groupId>
-                							org.asciidoctor
-                						</groupId>
-                						<artifactId>
-                							asciidoctor-maven-plugin
-                						</artifactId>
-                						<versionRange>
-                							[1.5.0,)
-                						</versionRange>
-                						<goals>
-                							<goal>
-                								process-asciidoc
-                							</goal>
-                						</goals>
-                					</pluginExecutionFilter>
-                					<action>
-                						<ignore></ignore>
-                					</action>
-                				</pluginExecution>
-                			</pluginExecutions>
-                		</lifecycleMappingMetadata>
-                	</configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${version.keycloak.resteasy-jaxrs}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>jaxrs-api</artifactId>
+				<version>${version.keycloak.resteasy-jaxrs}</version>
+			</dependency>
 
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${maven.compiler.argument.source}</source>
-                    <target>${maven.compiler.argument.target}</target>
-                    <!-- Disable annotation processing via compiler plugin. -->
-                    <compilerArgument>-proc:none</compilerArgument>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <pushChanges>false</pushChanges>
-                    <localCheckout>true</localCheckout>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
+			<!-- Keycloak dependencies -->
 
-                    <preparationGoals>clean install</preparationGoals>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
-    <profiles>
-        <profile>
-            <!-- It disables javadoc doclint for JDK > 8 -->
-            <id>javadoc-xdoclint-disable-jdk8+</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <configuration>
-                                <additionalJOption>-Xdoclint:none</additionalJOption>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-server</artifactId>
+				<version>${version.keycloak}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-wildfly-adapter</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-adapter-core</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-core</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-dependencies-server-all</artifactId>
+				<version>${version.keycloak}</version>
+				<type>pom</type>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-parent</artifactId>
+				<version>${version.keycloak}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-services</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-model-api</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-forms-common-freemarker</artifactId>
+				<version>${version.keycloak}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-model-jpa</artifactId>
+				<version>${version.keycloak}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec.javax.servlet</groupId>
+				<artifactId>jboss-servlet-api_3.0_spec</artifactId>
+				<version>${version.keycloak.jboss-servlet-api_3.0_spec}</version>
+			</dependency>
+
+			<!-- Test -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${version.junit}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.catch-exception</groupId>
+				<artifactId>catch-exception</artifactId>
+				<version>1.2.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>1.4.183</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.core</groupId>
+				<artifactId>deltaspike-core-api</artifactId>
+				<version>${version.deltaspike}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.core</groupId>
+				<artifactId>deltaspike-core-impl</artifactId>
+				<version>${version.deltaspike}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.cdictrl</groupId>
+				<artifactId>deltaspike-cdictrl-api</artifactId>
+				<version>${version.deltaspike}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.deltaspike.cdictrl</groupId>
+				<artifactId>deltaspike-cdictrl-openejb</artifactId>
+				<version>${version.deltaspike}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.openejb</groupId>
+				<artifactId>openejb-core</artifactId>
+				<version>${version.openejb}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.bsc.maven</groupId>
+					<artifactId>maven-processor-plugin</artifactId>
+					<version>${version.processor.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${version.buildhelper.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>${version.buildnumber.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.compiler.plugin}</version>
+					<configuration>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+						<compilerArguments>
+							<source>${maven.compiler.argument.source}</source>
+							<target>${maven.compiler.argument.target}</target>
+						</compilerArguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${version.dependency.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${version.deploy.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ejb-plugin</artifactId>
+					<version>${version.ejb.plugin}</version>
+					<configuration>
+						<ejbVersion>3.1</ejbVersion>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${version.enforcer.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>${version.gpg.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${version.jar.plugin}</version>
+					<configuration>
+						<archive>
+							<index>true</index>
+							<manifest>
+								<addDefaultSpecificationEntries>
+									true
+								</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>
+									true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-URL>${project.url}</Implementation-URL>
+								<Java-Version>${java.version}</Java-Version>
+								<Java-Vendor>${java.vendor}</Java-Vendor>
+								<Os-Name>${os.name}</Os-Name>
+								<Os-Arch>${os.arch}</Os-Arch>
+								<Os-Version>${os.version}</Os-Version>
+								<Scm-Url>${project.scm.url}</Scm-Url>
+								<Scm-Connection>${project.scm.connection}</Scm-Connection>
+								<Scm-Revision>${buildNumber}</Scm-Revision>
+								<Build-Timestamp>${build.datetime}</Build-Timestamp>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${version.javadoc.plugin}</version>
+					<configuration>
+						<header><![CDATA[<b>${project.name} ${project.version}</b>]]>
+						</header>
+						<footer><![CDATA[<b>${project.name} ${project.version}</b>]]>
+						</footer>
+						<archive>
+							<index>true</index>
+							<manifest>
+								<addDefaultSpecificationEntries>
+									true
+								</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>
+									true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-URL>${project.url}</Implementation-URL>
+								<Java-Version>${java.version}</Java-Version>
+								<Java-Vendor>${java.vendor}</Java-Vendor>
+								<Os-Name>${os.name}</Os-Name>
+								<Os-Arch>${os.arch}</Os-Arch>
+								<Os-Version>${os.version}</Os-Version>
+								<Scm-Url>${project.scm.url}</Scm-Url>
+								<Scm-Connection>${project.scm.connection}</Scm-Connection>
+								<Scm-Revision>${buildNumber}</Scm-Revision>
+								<Build-Timestamp>${build.datetime}</Build-Timestamp>
+							</manifestEntries>
+						</archive>
+						<encoding>UTF-8</encoding>
+						<maxmemory>1g</maxmemory>
+						<links>
+							<link>http://docs.oracle.com/javase/6/docs/api/</link>
+						</links>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${version.source.plugin}</version>
+					<configuration>
+						<archive>
+							<index>true</index>
+							<manifest>
+								<addDefaultSpecificationEntries>
+									true
+								</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>
+									true
+								</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Implementation-URL>${project.url}</Implementation-URL>
+								<Java-Version>${java.version}</Java-Version>
+								<Java-Vendor>${java.vendor}</Java-Vendor>
+								<Os-Name>${os.name}</Os-Name>
+								<Os-Arch>${os.arch}</Os-Arch>
+								<Os-Version>${os.version}</Os-Version>
+								<Scm-Url>${project.scm.url}</Scm-Url>
+								<Scm-Connection>${project.scm.connection}</Scm-Connection>
+								<Scm-Revision>${buildNumber}</Scm-Revision>
+								<Build-Timestamp>${build.datetime}</Build-Timestamp>
+							</manifestEntries>
+						</archive>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${version.surefire.plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${version.war.plugin}</version>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<version>${version.asciidoctor}</version>
+					<executions>
+						<execution>
+							<id>output-html</id>
+							<phase>generate-resources</phase>
+							<goals>
+								<goal>process-asciidoc</goal>
+							</goals>
+							<configuration>
+								<sourceDirectory>${basedir}</sourceDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- Configure m2e to ignore the Maven enforcer plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<!-- Configure m2e to ignore the buildnumber-maven-plugin. -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											buildnumber-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.0,)
+										</versionRange>
+										<goals>
+											<goal>create</goal>
+											<goal>create-timestamp</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.asciidoctor
+										</groupId>
+										<artifactId>
+											asciidoctor-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.5,)
+										</versionRange>
+										<goals>
+											<goal>process-asciidoc</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.liquibase</groupId>
+										<artifactId>
+											liquibase-maven-plugin
+										</artifactId>
+										<versionRange>
+											[3.2.2,)
+										</versionRange>
+										<goals>
+											<goal>updateSQL</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${version.release.plugin}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+
+			<!-- Check for the minimum version of Java and Maven. Runs during the 
+				validate phase. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-java-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<message>To build this project JDK ${jdk.min.version} (or
+										greater) is required. Please install it.</message>
+									<version>${jdk.min.version}</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+					<execution>
+						<id>enforce-maven-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<message>To build this project Maven ${maven.min.version} (or
+										greater) is required. Please install it.</message>
+									<version>${maven.min.version}</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Set properties containing the scm revision and build timestamp -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-build-timestamp</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create-timestamp</goal>
+						</goals>
+						<configuration>
+							<!-- Example date: Wed, 4 Jul 2001 12:08:56 -0700 -->
+							<timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
+							<timestampPropertyName>build.datetime</timestampPropertyName>
+						</configuration>
+					</execution>
+					<execution>
+						<id>get-scm-revision</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+						<configuration>
+							<doCheck>false</doCheck>
+							<doUpdate>false</doUpdate>
+							<revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>
+							<getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Attach source jar to all builds. Runs during the package phase. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>blazebit-release</id>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<updateReleaseInfo>true</updateReleaseInfo>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- This will sign the artifact, the POM, and all attached artifacts -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<configuration>
+							<passphrase>${gpg.passphrase}</passphrase>
+							<useAgent>true</useAgent>
+						</configuration>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<configuration>
+							<pushChanges>false</pushChanges>
+							<localCheckout>true</localCheckout>
+							<autoVersionSubmodules>true</autoVersionSubmodules>
+
+							<preparationGoals>clean install</preparationGoals>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<!-- It disables javadoc doclint for JDK > 8 -->
+			<id>javadoc-xdoclint-disable-jdk8+</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-javadoc-plugin</artifactId>
+							<configuration>
+								<additionalJOption>-Xdoclint:none</additionalJOption>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>

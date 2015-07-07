@@ -12,17 +12,12 @@
     <artifactId>blaze-storage-documentation</artifactId>
 	
     <name>Blazebit Storage Documentation</name>
-	
-    <properties>
-        <version.asciidoctor>1.5.0</version.asciidoctor>
-    </properties>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
                 <executions>
                     <execution>
                         <id>copy-asciidoc-resources-core-manual-en_US</id>
@@ -47,7 +42,6 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>${version.asciidoctor}</version>
                 <configuration>
                     <attributes>
                         <endpoint-url>http://blazebit.github.io/blaze-storage</endpoint-url>
