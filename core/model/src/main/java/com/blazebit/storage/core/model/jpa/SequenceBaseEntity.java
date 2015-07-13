@@ -7,6 +7,13 @@ import javax.persistence.Id;
 public abstract class SequenceBaseEntity extends BaseEntity<Long> {
 
 	private static final long serialVersionUID = 1L;
+	
+	public SequenceBaseEntity() {
+	}
+
+	protected SequenceBaseEntity(Long id) {
+		super(id);
+	}
 
 	@Id
 	@Override

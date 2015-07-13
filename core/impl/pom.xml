@@ -15,6 +15,12 @@
     <name>Blazebit Storage Core Impl</name>
 
     <dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+		</dependency>
+		
         <!-- Project dependencies -->
         
         <dependency>
@@ -25,11 +31,9 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>blaze-common-utils</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.apache.openejb</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>blaze-persistence-core-api</artifactId>
         </dependency>
     </dependencies>
     

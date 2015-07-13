@@ -12,14 +12,13 @@ import javax.persistence.ManyToOne;
 public class StorageId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private UserAccount owner;
 	private String name;
 	
 	public StorageId() {
 	}
 	
-
 	public StorageId(UserAccount owner, String name) {
 		this.owner = owner;
 		this.name = name;
@@ -33,9 +32,9 @@ public class StorageId implements Serializable {
 	public void setOwner(UserAccount owner) {
 		this.owner = owner;
 	}
-	
+
 	@Basic(optional = false)
-	@Column(length = RdbmsConstants.NAME_MAX_LENGTH)
+	@Column(length = RdbmsConstants.FILE_NAME_MAX_LENGTH)
 	public String getName() {
 		return name;
 	}
@@ -43,7 +42,7 @@ public class StorageId implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,7 +51,7 @@ public class StorageId implements Serializable {
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

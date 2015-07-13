@@ -9,29 +9,28 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class FileId implements Serializable {
+public class BucketObjectId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private UserAccount owner;
+	private Bucket bucket;
 	private String name;
 	
-	public FileId() {
+	public BucketObjectId() {
 	}
 	
-
-	public FileId(UserAccount owner, String name) {
-		this.owner = owner;
+	public BucketObjectId(Bucket bucket, String name) {
+		this.bucket = bucket;
 		this.name = name;
 	}
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	public UserAccount getOwner() {
-		return owner;
+	public Bucket getBucket() {
+		return bucket;
 	}
 	
-	public void setOwner(UserAccount owner) {
-		this.owner = owner;
+	public void setBucket(Bucket bucket) {
+		this.bucket = bucket;
 	}
 	
 	@Basic(optional = false)
@@ -43,16 +42,18 @@ public class FileId implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((bucket == null) ? 0 : bucket.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		return result;
 	}
-	
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -61,16 +62,16 @@ public class FileId implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FileId other = (FileId) obj;
+		BucketObjectId other = (BucketObjectId) obj;
+		if (bucket == null) {
+			if (other.bucket != null)
+				return false;
+		} else if (!bucket.equals(other.bucket))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (owner == null) {
-			if (other.owner != null)
-				return false;
-		} else if (!owner.equals(other.owner))
 			return false;
 		return true;
 	}
