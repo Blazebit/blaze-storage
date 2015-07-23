@@ -4,7 +4,8 @@ import com.blazebit.storage.rest.api.AccountSubResource;
 import com.blazebit.storage.rest.api.StoragesSubResource;
 import com.blazebit.storage.rest.model.AccountRepresentation;
 
-public class AccountSubResourceImpl implements AccountSubResource {
+public class AccountSubResourceImpl extends AbstractResource implements AccountSubResource {
+	
 
 	@Override
 	public AccountRepresentation get() {
@@ -14,8 +15,7 @@ public class AccountSubResourceImpl implements AccountSubResource {
 
 	@Override
 	public StoragesSubResource getStorages() {
-		// TODO Auto-generated method stub
-		return null;
+		return inject(new StoragesSubResourceImpl());
 	}
 
 }

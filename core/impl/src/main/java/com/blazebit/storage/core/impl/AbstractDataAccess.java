@@ -6,12 +6,15 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.blazebit.persistence.view.EntityViewManager;
 
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class AbstractDataAccess {
+public abstract class AbstractDataAccess {
 
 	@Inject
 	protected EntityManager em;
 	@Inject
 	protected CriteriaBuilderFactory cbf;
+	@Inject
+	protected EntityViewManager evm;
 }

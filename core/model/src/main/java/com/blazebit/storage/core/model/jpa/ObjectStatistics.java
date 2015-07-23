@@ -2,16 +2,20 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
-public class BucketStatistics implements Serializable {
+public class ObjectStatistics implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private long objectCount;
 	private long objectBytes;
 
+	@NotNull
+	@Column(name = "object_count")
 	public long getObjectCount() {
 		return objectCount;
 	}
@@ -20,6 +24,8 @@ public class BucketStatistics implements Serializable {
 		this.objectCount = objectCount;
 	}
 
+	@NotNull
+	@Column(name = "object_bytes")
 	public long getObjectBytes() {
 		return objectBytes;
 	}

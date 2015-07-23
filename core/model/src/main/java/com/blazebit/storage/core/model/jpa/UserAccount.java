@@ -1,12 +1,12 @@
 package com.blazebit.storage.core.model.jpa;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@SequenceGenerator(name = "idGenerator", sequenceName = "user_account_seq")
+@SequenceGenerator(name = "idGenerator", sequenceName = RdbmsConstants.PREFIX + "user_account_seq")
 public class UserAccount extends SequenceBaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -18,7 +18,7 @@ public class UserAccount extends SequenceBaseEntity {
 		super();
 	}
 
-	@Basic(optional = false)
+	@NotNull
 	@Column(unique = true)
 	public String getKey() {
 		return key;
@@ -28,7 +28,7 @@ public class UserAccount extends SequenceBaseEntity {
 		this.key = key;
 	}
 
-	@Basic(optional = false)
+	@NotNull
 	public String getName() {
 		return name;
 	}

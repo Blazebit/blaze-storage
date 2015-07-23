@@ -1,22 +1,28 @@
 package com.blazebit.storage.core.impl;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 
 import com.blazebit.storage.core.api.BucketService;
 import com.blazebit.storage.core.api.StorageException;
+import com.blazebit.storage.core.api.event.BucketDeletedEvent;
 import com.blazebit.storage.core.model.jpa.Bucket;
-import com.blazebit.storage.core.model.jpa.BucketStatistics;
+import com.blazebit.storage.core.model.jpa.ObjectStatistics;
 
 @Stateless
 public class BucketServiceImpl extends AbstractService implements BucketService {
 
+	@Inject
+	private Event<BucketDeletedEvent> bucketDeleted;
+	
 	@Override
 	public void createBucket(Bucket bucket) {
 		em.persist(bucket);
 	}
 
 	@Override
-	public void updateBucketStatistics(String bucketId, BucketStatistics deltaStatistics) {		
+	public void updateBucketStatistics(String bucketId, ObjectStatistics deltaStatistics) {
 		int updated = em.createQuery("UPDATE Bucket b "
 				+ "SET statistics.objectCount = statistics.objectCount + :objectCountDelta, "
 				+ "statistics.objectBytes = statistics.objectBytes + :objectBytesDelta "
@@ -32,8 +38,14 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	}
 
 	@Override
-	public void deleteBucket(String bucketName) {
-		throw new UnsupportedOperationException("Deletion of buckets not yet supported!");
+	public void deleteBucket(String bucketId) {
+		int updated = em.createQuery("UPDATE Bucket b "
+				+ "SET deleted = true "
+				+ "WHERE b.id = :bucketId")
+			.setParameter("bucketId", bucketId)
+			.executeUpdate();
+		
+		bucketDeleted.fire(new BucketDeletedEvent(bucketId));
 	}
 
 }

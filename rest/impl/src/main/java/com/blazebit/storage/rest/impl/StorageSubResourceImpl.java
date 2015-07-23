@@ -5,7 +5,13 @@ import com.blazebit.storage.rest.api.FilesSubResource;
 import com.blazebit.storage.rest.api.StorageSubResource;
 import com.blazebit.storage.rest.model.StorageRepresentation;
 
-public class StorageSubResourceImpl implements StorageSubResource {
+public class StorageSubResourceImpl extends AbstractResource implements StorageSubResource {
+	
+	private String id;
+
+	public StorageSubResourceImpl(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public StorageRepresentation get() {
@@ -15,14 +21,12 @@ public class StorageSubResourceImpl implements StorageSubResource {
 
 	@Override
 	public DirectoriesSubResource getDirectories() {
-		// TODO Auto-generated method stub
-		return null;
+		return inject(new DirectoriesSubResourceImpl());
 	}
 
 	@Override
 	public FilesSubResource getFiles() {
-		// TODO Auto-generated method stub
-		return null;
+		return inject(new FilesSubResourceImpl());
 	}
 
 }

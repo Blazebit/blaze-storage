@@ -8,6 +8,13 @@ public class AccountUpdate implements Serializable {
 
 	private String name;
 
+	public AccountUpdate() {
+	}
+
+	public AccountUpdate(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}

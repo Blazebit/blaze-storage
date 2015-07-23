@@ -54,6 +54,7 @@
 		<version.blazeutils>0.1.10</version.blazeutils>
 		<version.blazepersistence>1.0.4</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
+		<version.hibernate>4.3.9.Final</version.hibernate>
 		<version.junit>4.11</version.junit>
 
 		<version.keycloak>1.1.0.Final</version.keycloak>
@@ -193,9 +194,24 @@
 				<artifactId>blaze-persistence-core-impl</artifactId>
 				<version>${version.blazepersistence}</version>
 			</dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-persistence-entity-view-api</artifactId>
+				<version>${version.blazepersistence}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-persistence-entity-view-impl</artifactId>
+				<version>${version.blazepersistence}</version>
+	        </dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>blaze-persistence-integration-core-cdi</artifactId>
+				<version>${version.blazepersistence}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-persistence-integration-entity-view-cdi</artifactId>
 				<version>${version.blazepersistence}</version>
 			</dependency>
 			<dependency>
@@ -256,6 +272,21 @@
 				<artifactId>javaee-api</artifactId>
 				<version>${version.javaee-api}</version>
 				<scope>provided</scope>
+			</dependency>
+			
+			<!-- Hibernate dependencies -->
+
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${version.hibernate}</version>
+				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<artifactId>hibernate-jpa-2.1-api</artifactId>
+						<groupId>org.hibernate.javax.persistence</groupId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<!-- Resteasy -->
@@ -358,13 +389,11 @@
 				<groupId>org.apache.deltaspike.core</groupId>
 				<artifactId>deltaspike-core-api</artifactId>
 				<version>${version.deltaspike}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.core</groupId>
 				<artifactId>deltaspike-core-impl</artifactId>
 				<version>${version.deltaspike}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.cdictrl</groupId>

@@ -3,7 +3,9 @@ package com.blazebit.storage.core.model.jpa;
 import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public abstract class EmbeddedIdBaseEntity<I extends Serializable> extends BaseEntity<I> {
 
 	private static final long serialVersionUID = 1L;

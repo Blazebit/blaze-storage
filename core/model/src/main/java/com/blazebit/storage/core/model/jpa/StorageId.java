@@ -2,11 +2,13 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class StorageId implements Serializable {
@@ -24,7 +26,9 @@ public class StorageId implements Serializable {
 		this.name = name;
 	}
 
+	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_owner"))
 	public UserAccount getOwner() {
 		return owner;
 	}
@@ -33,7 +37,7 @@ public class StorageId implements Serializable {
 		this.owner = owner;
 	}
 
-	@Basic(optional = false)
+	@NotNull
 	@Column(length = RdbmsConstants.FILE_NAME_MAX_LENGTH)
 	public String getName() {
 		return name;

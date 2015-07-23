@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 import com.blazebit.storage.rest.api.DirectoriesSubResource;
 import com.blazebit.storage.rest.model.DirectoryRepresentation;
 
-public class DirectoriesSubResourceImpl implements DirectoriesSubResource {
+public class DirectoriesSubResourceImpl extends AbstractResource implements DirectoriesSubResource {
 
 	@Override
 	public DirectoryRepresentation getRoot() {

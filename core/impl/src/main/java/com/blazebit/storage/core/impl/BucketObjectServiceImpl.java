@@ -1,36 +1,51 @@
 package com.blazebit.storage.core.impl;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
 
 import com.blazebit.storage.core.api.BucketObjectService;
-import com.blazebit.storage.core.api.BucketService;
+import com.blazebit.storage.core.api.StorageException;
+import com.blazebit.storage.core.api.event.BucketObjectDeletedEvent;
+import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.BucketObject;
+import com.blazebit.storage.core.model.jpa.BucketObjectId;
+import com.blazebit.storage.core.model.jpa.BucketObjectState;
 
 @Stateless
 public class BucketObjectServiceImpl extends AbstractService implements BucketObjectService {
 	
 	@Inject
 	private BucketObjectInternalService bucketObjectInternalService;
+	@Inject
+	private Event<BucketObjectDeletedEvent> bucketObjectDeleted;
 
 	@Override
 	public void putObject(BucketObject bucketObject) {
-//		bucketObjectInternalService.createObject(bucketObject);
-		try {
-			em.persist(bucketObject);
-			em.flush();
+		if (bucketObjectInternalService.createObject(bucketObject)) {
 			return;
-		} catch (EntityExistsException ex) {
 		}
 		
-		em.merge(bucketObject);
-		em.flush();
+		if (bucketObjectInternalService.updateObject(bucketObject)) {
+			return;
+		}
+		
+		throw new StorageException("Could neither create or update the bucket object: " + bucketObject);
 	}
 
 	@Override
 	public void deleteObject(String bucketId, String objectName) {
-		throw new UnsupportedOperationException("Deletion of bucket objects not yet supported!");
+		int updatedObjects = em.createQuery("UPDATE BucketObject SET state = :state WHERE id.bucket.id = :bucketId AND id.name = :objectName")
+				.setParameter("state", BucketObjectState.REMOVING)
+				.setParameter("bucketId", bucketId)
+				.setParameter("objectName", objectName)
+				.executeUpdate();
+		int updatedVersions = em.createQuery("UPDATE BucketObjectVersion SET state = :state WHERE object.id.bucket.id = :bucketId AND object.id.name = :objectName")
+				.setParameter("state", BucketObjectState.REMOVING)
+				.setParameter("bucketId", bucketId)
+				.setParameter("objectName", objectName)
+				.executeUpdate();
+		bucketObjectDeleted.fire(new BucketObjectDeletedEvent(new BucketObjectId(new Bucket(bucketId), objectName)));
 	}
 
 }

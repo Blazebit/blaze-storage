@@ -31,6 +31,28 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>blaze-storage-core-impl</artifactId>
         </dependency>
+        
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-persistence-core-impl</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>blaze-persistence-entity-view-impl</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-persistence-integration-core-cdi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-persistence-integration-entity-view-cdi</artifactId>
+		</dependency>
+        
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-impl</artifactId>
+		</dependency>
     </dependencies>
     
 </project>

@@ -17,6 +17,7 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 		try {
 			return cbf.create(em, Bucket.class)
 					.where("id").eq(bucketName)
+					.where("deleted").eqExpression("false")
 					.getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
@@ -27,6 +28,7 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 	public List<Bucket> getBuckets(long userAccountId) {
 		return cbf.create(em, Bucket.class)
 				.where("owner.id").eq(userAccountId)
+				.where("deleted").eqExpression("false")
 				.getResultList();
 	}
 
@@ -36,6 +38,7 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 				.from(BucketObject.class)
 				.where("id.bucket.owner.id").eq(userAccountId)
 				.where("storage.id.name").eq(storageName)
+				.where("deleted").eqExpression("false")
 				.distinct()
 				.select("id.bucket")
 				.getResultList();

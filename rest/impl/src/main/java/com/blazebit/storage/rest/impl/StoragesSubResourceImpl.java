@@ -8,7 +8,7 @@ import com.blazebit.storage.rest.api.StorageSubResource;
 import com.blazebit.storage.rest.api.StoragesSubResource;
 import com.blazebit.storage.rest.model.StorageRepresentation;
 
-public class StoragesSubResourceImpl implements StoragesSubResource {
+public class StoragesSubResourceImpl extends AbstractResource implements StoragesSubResource {
 
 	@Override
 	public List<StorageRepresentation> getList() {
@@ -18,8 +18,7 @@ public class StoragesSubResourceImpl implements StoragesSubResource {
 
 	@Override
 	public StorageSubResource get(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return inject(new StorageSubResourceImpl(id));
 	}
 
 	@Override

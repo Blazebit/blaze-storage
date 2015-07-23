@@ -3,6 +3,12 @@
 	xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
 	
-	<entity class="com.blazebit.storage.model.jpa.UserAccount"/>
+	<entity class="com.blazebit.storage.core.model.jpa.Bucket"/>
+	<entity class="com.blazebit.storage.core.model.jpa.BucketObject"/>
+	<entity class="com.blazebit.storage.core.model.jpa.BucketObjectVersion"/>
+	<entity class="com.blazebit.storage.core.model.jpa.Storage"/>
+	<entity class="com.blazebit.storage.core.model.jpa.StorageQuotaModel"/>
+	<entity class="com.blazebit.storage.core.model.jpa.StorageQuotaPlan"/>
+	<entity class="com.blazebit.storage.core.model.jpa.UserAccount"/>
 	
 </entity-mappings>

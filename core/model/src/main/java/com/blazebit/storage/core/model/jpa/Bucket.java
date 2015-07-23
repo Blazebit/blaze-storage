@@ -2,15 +2,19 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Bucket extends BaseEntity<String> {
@@ -20,7 +24,8 @@ public class Bucket extends BaseEntity<String> {
 	private Calendar creationDate;
 	private UserAccount owner;
 	private Storage storage;
-	private BucketStatistics statistics = new BucketStatistics();
+	private Boolean deleted = false;
+	private ObjectStatistics statistics = new ObjectStatistics();
 	
 	public Bucket() {
 	}
@@ -29,12 +34,15 @@ public class Bucket extends BaseEntity<String> {
 		setId(id);
 	}
 
+	@Id
 	@Override
 	public String getId() {
 		return id();
 	}
 
+	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "creation_date")
 	public Calendar getCreationDate() {
 		return creationDate;
 	}
@@ -43,7 +51,9 @@ public class Bucket extends BaseEntity<String> {
 		this.creationDate = creationDate;
 	}
 
+	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_fk_owner"))
 	public UserAccount getOwner() {
 		return owner;
 	}
@@ -52,8 +62,11 @@ public class Bucket extends BaseEntity<String> {
 		this.owner = owner;
 	}
 	
+	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumns({
+	@JoinColumns(
+			foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_fk_storage"),
+			value = {
 		@JoinColumn(name = "storage_owner", referencedColumnName = "owner_id"),
 		@JoinColumn(name = "storage_name", referencedColumnName = "name")
 	})
@@ -65,12 +78,21 @@ public class Bucket extends BaseEntity<String> {
 		this.storage = storage;
 	}
 
+	@NotNull
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	@Embedded
-	public BucketStatistics getStatistics() {
+	public ObjectStatistics getStatistics() {
 		return statistics;
 	}
 
-	public void setStatistics(BucketStatistics statistics) {
+	public void setStatistics(ObjectStatistics statistics) {
 		this.statistics = statistics;
 	}
 	

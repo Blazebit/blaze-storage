@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 import com.blazebit.storage.rest.api.FilesSubResource;
 import com.blazebit.storage.rest.model.FileRepresentation;
 
-public class FilesSubResourceImpl implements FilesSubResource {
+public class FilesSubResourceImpl extends AbstractResource implements FilesSubResource {
 
 	@Override
 	public FileRepresentation get(String path) {
