@@ -4,7 +4,7 @@ import com.blazebit.storage.core.model.jpa.UserAccount;
 
 public interface UserAccountService {
 
-	public void createUserAccount(UserAccount userAccount);
+	public void create(UserAccount userAccount);
 
-	public void deleteUserAccount(long userAccountId);
+	public void delete(long userAccountId);
 }

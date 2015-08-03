@@ -10,12 +10,11 @@ import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import com.blazebit.storage.core.api.actor.BucketObjectDeleter;
 import com.blazebit.storage.core.api.event.BucketObjectDeletedEvent;
 import com.blazebit.storage.core.model.jpa.BucketObjectId;
 
 @Singleton
-public class BucketObjectDeleterActor extends AbstractActor implements BucketObjectDeleter {
+public class BucketObjectDeleterActor extends AbstractActor {
 	
 	@Inject
 	private ManagedScheduledExecutorService executorService;
@@ -26,7 +25,6 @@ public class BucketObjectDeleterActor extends AbstractActor implements BucketObj
 		addBucketObject(event.getBucketObjectId());
 	}
 	
-	@Override
 	public void addBucketObject(BucketObjectId bucketObjectId) {
 		bucketObjectsToDelete.add(bucketObjectId);
 	}

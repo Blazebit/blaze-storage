@@ -9,12 +9,12 @@ import com.blazebit.storage.core.model.jpa.UserAccount;
 public class UserAccountServiceImpl extends AbstractService implements UserAccountService {
 
 	@Override
-	public void createUserAccount(UserAccount userAccount) {
+	public void create(UserAccount userAccount) {
 		em.persist(userAccount);
 	}
 
 	@Override
-	public void deleteUserAccount(long userAccountId) {
+	public void delete(long userAccountId) {
 		throw new UnsupportedOperationException("Deletion of user accounts not yet supported!");
 	}
 

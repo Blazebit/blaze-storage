@@ -2,13 +2,14 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Embeddable
 public class StorageId implements Serializable {
@@ -38,7 +39,8 @@ public class StorageId implements Serializable {
 	}
 
 	@NotNull
-	@Column(length = RdbmsConstants.FILE_NAME_MAX_LENGTH)
+	@Size(min = 1, max = 256)
+	@Pattern(regexp = "[^/]*", message = "The slash character is not allowed")
 	public String getName() {
 		return name;
 	}

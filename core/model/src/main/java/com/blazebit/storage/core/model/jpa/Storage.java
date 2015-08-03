@@ -2,15 +2,20 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.net.URI;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,6 +32,7 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 	private Calendar creationDate;
 	private StorageQuotaPlan quotaPlan;
 	private ObjectStatistics statistics = new ObjectStatistics();
+	private Map<String, String> tags = new HashMap<String, String>();
 
 	public Storage() {
 		super(new StorageId());
@@ -75,6 +81,23 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 
 	public void setStatistics(ObjectStatistics statistics) {
 		this.statistics = statistics;
+	}
+	
+	@ElementCollection
+	@CollectionTable(name = "storage_tags", 
+		foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_tags_fk_storage"),
+		joinColumns = {
+			@JoinColumn(name = "owner_id", referencedColumnName = "owner_id"),
+			@JoinColumn(name = "name", referencedColumnName = "storage_name")
+	})
+	@MapKeyColumn(name = "tag", nullable = false)
+	@Column(name = "value", nullable = false)
+	public Map<String, String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Map<String, String> tags) {
+		this.tags = tags;
 	}
 	
 	@PrePersist

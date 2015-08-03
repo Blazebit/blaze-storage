@@ -1,10 +1,11 @@
 package com.blazebit.storage.core.api;
 
 import com.blazebit.storage.core.model.jpa.BucketObject;
+import com.blazebit.storage.core.model.jpa.BucketObjectId;
 
 public interface BucketObjectService {
 
-	public void putObject(BucketObject bucketObject);
+	public void put(BucketObject bucketObject);
 	
-	public void deleteObject(String bucketId, String objectName);
+	public void delete(BucketObjectId bucketObjectId);
 }

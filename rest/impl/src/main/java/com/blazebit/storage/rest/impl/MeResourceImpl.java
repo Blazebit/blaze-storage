@@ -7,7 +7,7 @@ public class MeResourceImpl extends AbstractResource implements MeResource {
 
 	@Override
 	public AccountSubResource getAccount() {
-		return inject(new AccountSubResourceImpl());
+		return inject(new AccountSubResourceImpl(null));
 	}
 
 }

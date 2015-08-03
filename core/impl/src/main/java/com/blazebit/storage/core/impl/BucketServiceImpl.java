@@ -17,12 +17,12 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	private Event<BucketDeletedEvent> bucketDeleted;
 	
 	@Override
-	public void createBucket(Bucket bucket) {
+	public void create(Bucket bucket) {
 		em.persist(bucket);
 	}
 
 	@Override
-	public void updateBucketStatistics(String bucketId, ObjectStatistics deltaStatistics) {
+	public void updateStatistics(String bucketId, ObjectStatistics deltaStatistics) {
 		int updated = em.createQuery("UPDATE Bucket b "
 				+ "SET statistics.objectCount = statistics.objectCount + :objectCountDelta, "
 				+ "statistics.objectBytes = statistics.objectBytes + :objectBytesDelta "
@@ -38,7 +38,7 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	}
 
 	@Override
-	public void deleteBucket(String bucketId) {
+	public void delete(String bucketId) {
 		int updated = em.createQuery("UPDATE Bucket b "
 				+ "SET deleted = true "
 				+ "WHERE b.id = :bucketId")

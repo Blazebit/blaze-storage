@@ -4,10 +4,10 @@ import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.storage.core.model.jpa.UserAccount;
-import com.blazebit.storage.rest.model.AccountRepresentation;
+import com.blazebit.storage.rest.model.AccountListElementRepresentation;
 
 @EntityView(UserAccount.class)
-public abstract class AccountRepresentationView extends AccountRepresentation {
+public abstract class AccountRepresentationView extends AccountListElementRepresentation {
 
 	private static final long serialVersionUID = 1L;
 
@@ -15,7 +15,7 @@ public abstract class AccountRepresentationView extends AccountRepresentation {
 			@IdMapping("id") Long id, 
 			@Mapping("key") String key, 
 			@Mapping("name") String name) {
-		super(id, key, name);
+		super(key, name);
 	}
 	
 }

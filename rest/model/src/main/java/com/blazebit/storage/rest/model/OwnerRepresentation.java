@@ -6,23 +6,23 @@ public class OwnerRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String id;
+	private String key;
 	private String displayName;
 
 	public OwnerRepresentation() {
 	}
 
-	public OwnerRepresentation(String id, String displayName) {
-		this.id = id;
+	public OwnerRepresentation(String key, String displayName) {
+		this.key = key;
 		this.displayName = displayName;
 	}
 
-	public String getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getDisplayName() {

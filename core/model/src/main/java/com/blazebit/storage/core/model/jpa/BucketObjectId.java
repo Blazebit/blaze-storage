@@ -2,13 +2,13 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Embeddable
 public class BucketObjectId implements Serializable {
@@ -38,7 +38,7 @@ public class BucketObjectId implements Serializable {
 	}
 
 	@NotNull
-	@Column(length = RdbmsConstants.FILE_NAME_MAX_LENGTH)
+	@Size(min = 1, max = RdbmsConstants.FILE_NAME_MAX_LENGTH)
 	public String getName() {
 		return name;
 	}

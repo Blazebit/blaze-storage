@@ -3,10 +3,11 @@ package com.blazebit.storage.core.api;
 import java.util.List;
 
 import com.blazebit.storage.core.model.jpa.Storage;
+import com.blazebit.storage.core.model.jpa.StorageId;
 
 public interface StorageDataAccess {
 
-	public List<Storage> getStorages(long userAccountId);
+	public List<Storage> findByUserAccountId(long userAccountId);
 
-	public Storage getStorage(long userAccountId, String name);
+	public Storage findById(StorageId storageId);
 }

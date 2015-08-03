@@ -6,9 +6,9 @@ import com.blazebit.storage.core.model.jpa.Bucket;
 
 public interface BucketDataAccess {
 	
-	public Bucket getBucket(String bucketName);
+	public Bucket findByName(String bucketName);
 
-	public List<Bucket> getBuckets(long userAccountId);
+	public List<Bucket> findByUserAccountId(long userAccountId);
 
-	public List<Bucket> getBuckets(long userAccountId, String storageName);
+	public List<Bucket> findByUserAccountIdAndStorageName(long userAccountId, String storageName);
 }

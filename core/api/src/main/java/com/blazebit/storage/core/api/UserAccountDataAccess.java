@@ -8,9 +8,9 @@ import com.blazebit.storage.core.model.jpa.UserAccount;
 
 public interface UserAccountDataAccess {
 
-	public <T> List<T> getUserAccounts(EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
+	public <T> List<T> findAll(EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
 
-	public UserAccount getUserAccount(long userAccountId);
+	public UserAccount findById(long userAccountId);
 	
-	public UserAccount getUserAccountByKey(String key);
+	public UserAccount findByKey(String key);
 }

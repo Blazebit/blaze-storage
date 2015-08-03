@@ -15,6 +15,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Bucket extends BaseEntity<String> {
@@ -35,6 +37,8 @@ public class Bucket extends BaseEntity<String> {
 	}
 
 	@Id
+	@Size(min = 1, max = 256)
+	@Pattern(regexp = "[^/]*", message = "The slash character is not allowed")
 	@Override
 	public String getId() {
 		return id();

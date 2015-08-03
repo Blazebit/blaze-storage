@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
 
 import com.blazebit.storage.core.api.BucketService;
+import com.blazebit.storage.core.api.StorageService;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.BucketObjectState;
 import com.blazebit.storage.core.model.jpa.BucketObjectVersion;
@@ -24,6 +25,8 @@ public class BucketObjectInternalService extends AbstractService {
 
 	@Inject
 	private BucketService bucketService;
+	@Inject
+	private StorageService storageService;
 
 	public boolean createObject(BucketObject bucketObject) {
 		BucketObjectVersion version;
@@ -63,20 +66,27 @@ public class BucketObjectInternalService extends AbstractService {
 			em.persist(version);
 			em.flush();
 		} catch (EntityExistsException ex) {
+			// This is very rare taken branch since UUID is pretty unique
 			LOG.log(Level.SEVERE, "Error on persisting BucketObjectVersion", ex);
 			return false;
 		}
+		
+		// 3. Update storage statistics
+		ObjectStatistics storageDeltaStatistics = new ObjectStatistics();
+		storageDeltaStatistics.setObjectBytes(bucketObject.getContentVersion().getContentLength());
+		storageDeltaStatistics.setObjectCount(1);
+		storageService.updateStatistics(version.getStorage().getId(), storageDeltaStatistics);
 
-		// 3. Update bucket object to latest version
+		// 4. Update bucket object to latest version
 		bucketObject.setState(BucketObjectState.CREATED);
 		bucketObject.setContentVersion(version);
 		bucketObject = em.merge(bucketObject);
 			
-		// 4. Update statistics
-		ObjectStatistics deltaStatistics = new ObjectStatistics();
-		deltaStatistics.setObjectBytes(bucketObject.getContentVersion().getContentLength());
-		deltaStatistics.setObjectCount(1);
-		bucketService.updateBucketStatistics(bucketObject.getId().getBucket().getId(), deltaStatistics);
+		// 5. Update statistics
+		ObjectStatistics bucketDeltaStatistics = new ObjectStatistics();
+		bucketDeltaStatistics.setObjectBytes(bucketObject.getContentVersion().getContentLength());
+		bucketDeltaStatistics.setObjectCount(1);
+		bucketService.updateStatistics(bucketObject.getId().getBucket().getId(), bucketDeltaStatistics);
 		em.flush();
 		return true;
 	}

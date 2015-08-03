@@ -15,13 +15,13 @@ import com.blazebit.storage.core.model.jpa.UserAccount;
 public class UserAccountDataAccessImpl extends AbstractDataAccess implements UserAccountDataAccess {
 	
 	@Override
-	public <T> List<T> getUserAccounts(EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
+	public <T> List<T> findAll(EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
 		CriteriaBuilder<UserAccount> cb = cbf.create(em, UserAccount.class);
 		return evm.applySetting(setting, cb).getResultList();
 	}
 	
 	@Override
-	public UserAccount getUserAccount(long userAccountId) {
+	public UserAccount findById(long userAccountId) {
 		try {
 			return cbf.create(em, UserAccount.class)
 					.where("id").eq(userAccountId)
@@ -32,7 +32,7 @@ public class UserAccountDataAccessImpl extends AbstractDataAccess implements Use
 	}
 
 	@Override
-	public UserAccount getUserAccountByKey(String key) {
+	public UserAccount findByKey(String key) {
 		try {
 			return cbf.create(em, UserAccount.class)
 					.where("key").eq(key)

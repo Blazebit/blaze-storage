@@ -21,7 +21,7 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	private Event<BucketObjectDeletedEvent> bucketObjectDeleted;
 
 	@Override
-	public void putObject(BucketObject bucketObject) {
+	public void put(BucketObject bucketObject) {
 		if (bucketObjectInternalService.createObject(bucketObject)) {
 			return;
 		}
@@ -34,7 +34,9 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	}
 
 	@Override
-	public void deleteObject(String bucketId, String objectName) {
+	public void delete(BucketObjectId bucketObjectId) {
+		String bucketId = bucketObjectId.getBucket().getId();
+		String objectName = bucketObjectId.getName();
 		int updatedObjects = em.createQuery("UPDATE BucketObject SET state = :state WHERE id.bucket.id = :bucketId AND id.name = :objectName")
 				.setParameter("state", BucketObjectState.REMOVING)
 				.setParameter("bucketId", bucketId)

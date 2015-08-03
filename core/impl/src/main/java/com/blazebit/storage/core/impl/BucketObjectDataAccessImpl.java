@@ -8,17 +8,17 @@ import javax.persistence.NoResultException;
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.storage.core.api.BucketObjectDataAccess;
 import com.blazebit.storage.core.model.jpa.BucketObject;
+import com.blazebit.storage.core.model.jpa.BucketObjectId;
 import com.blazebit.storage.core.model.jpa.BucketObjectState;
 
 @Stateless
 public class BucketObjectDataAccessImpl extends AbstractDataAccess implements BucketObjectDataAccess {
 
 	@Override
-	public BucketObject getObject(String bucketId, String name) {
+	public BucketObject findById(BucketObjectId bucketObjectId) {
 		try {
 			return cbf.create(em, BucketObject.class)
-					.where("id.bucket.id").eq(bucketId)
-					.where("id.name").eq(name)
+					.where("id").eq(bucketObjectId)
 					.where("state").eq(BucketObjectState.CREATED)
 					.getSingleResult();
 		} catch (NoResultException ex) {
@@ -27,7 +27,7 @@ public class BucketObjectDataAccessImpl extends AbstractDataAccess implements Bu
 	}
 
 	@Override
-	public List<BucketObject> getObjects(String bucketId, String prefix) {
+	public List<BucketObject> findByBucketIdAndPrefix(String bucketId, String prefix) {
 		CriteriaBuilder<BucketObject> cb = cbf.create(em, BucketObject.class)
 				.where("id.bucket.id").eq(bucketId)
 				.where("state").eq(BucketObjectState.CREATED)

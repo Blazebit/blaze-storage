@@ -1,16 +1,19 @@
 package com.blazebit.storage.rest.impl;
 
-import com.blazebit.storage.rest.api.DirectoriesSubResource;
-import com.blazebit.storage.rest.api.FilesSubResource;
+import javax.ws.rs.core.Response;
+
+import com.blazebit.storage.core.model.jpa.StorageId;
+import com.blazebit.storage.core.model.jpa.UserAccount;
 import com.blazebit.storage.rest.api.StorageSubResource;
 import com.blazebit.storage.rest.model.StorageRepresentation;
+import com.blazebit.storage.rest.model.StorageUpdateRepresentation;
 
 public class StorageSubResourceImpl extends AbstractResource implements StorageSubResource {
 	
-	private String id;
+	private StorageId id;
 
-	public StorageSubResourceImpl(String id) {
-		this.id = id;
+	public StorageSubResourceImpl(UserAccount owner, String storageName) {
+		this.id = new StorageId(owner, storageName);
 	}
 
 	@Override
@@ -20,13 +23,9 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 	}
 
 	@Override
-	public DirectoriesSubResource getDirectories() {
-		return inject(new DirectoriesSubResourceImpl());
-	}
-
-	@Override
-	public FilesSubResource getFiles() {
-		return inject(new FilesSubResourceImpl());
+	public Response put(StorageUpdateRepresentation storageUpdate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

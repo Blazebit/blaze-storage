@@ -13,7 +13,7 @@ import com.blazebit.storage.core.model.jpa.BucketObject;
 public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDataAccess {
 
 	@Override
-	public Bucket getBucket(String bucketName) {
+	public Bucket findByName(String bucketName) {
 		try {
 			return cbf.create(em, Bucket.class)
 					.where("id").eq(bucketName)
@@ -25,7 +25,7 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 	}
 
 	@Override
-	public List<Bucket> getBuckets(long userAccountId) {
+	public List<Bucket> findByUserAccountId(long userAccountId) {
 		return cbf.create(em, Bucket.class)
 				.where("owner.id").eq(userAccountId)
 				.where("deleted").eqExpression("false")
@@ -33,7 +33,7 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 	}
 
 	@Override
-	public List<Bucket> getBuckets(long userAccountId, String storageName) {
+	public List<Bucket> findByUserAccountIdAndStorageName(long userAccountId, String storageName) {
 		return cbf.create(em, Bucket.class)
 				.from(BucketObject.class)
 				.where("id.bucket.owner.id").eq(userAccountId)

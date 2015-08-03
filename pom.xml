@@ -104,6 +104,7 @@
 		<module>core</module>
 		<module>rest</module>
 		<module>server</module>
+		<module>modules</module>
 		<module>examples</module>
 		<module>documentation</module>
 	</modules>
@@ -258,6 +259,27 @@
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
+			
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-storage-classpath</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-storage-nio2</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-storage-local</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-alert-email</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
 
 			<!-- Platform dependencies -->
 
