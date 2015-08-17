@@ -1,5 +1,6 @@
 package com.blazebit.storage.rest.model;
 
+import java.util.Map;
 
 public class AccountRepresentation extends AccountUpdateRepresentation {
 
@@ -12,6 +13,11 @@ public class AccountRepresentation extends AccountUpdateRepresentation {
 
 	public AccountRepresentation(String key, String name) {
 		super(name);
+		this.key = key;
+	}
+
+	public AccountRepresentation(String name, Map<String, String> tags, String key) {
+		super(name, tags);
 		this.key = key;
 	}
 

@@ -13,9 +13,9 @@ import com.blazebit.storage.core.model.jpa.StorageId;
 public class StorageDataAccessImpl extends AbstractDataAccess implements StorageDataAccess {
 
 	@Override
-	public List<Storage> findByUserAccountId(long userAccountId) {
+	public List<Storage> findByAccountId(long accountId) {
 		return cbf.create(em, Storage.class)
-				.where("id.owner.id").eq(userAccountId)
+				.where("id.owner.id").eq(accountId)
 				.getResultList();
 	}
 

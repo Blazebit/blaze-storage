@@ -8,7 +8,7 @@ public interface BucketDataAccess {
 	
 	public Bucket findByName(String bucketName);
 
-	public List<Bucket> findByUserAccountId(long userAccountId);
+	public List<Bucket> findByAccountId(long accountId);
 
-	public List<Bucket> findByUserAccountIdAndStorageName(long userAccountId, String storageName);
+	public List<Bucket> findByAccountIdAndStorageName(long accountId, String storageName);
 }

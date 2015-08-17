@@ -25,18 +25,18 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 	}
 
 	@Override
-	public List<Bucket> findByUserAccountId(long userAccountId) {
+	public List<Bucket> findByAccountId(long accountId) {
 		return cbf.create(em, Bucket.class)
-				.where("owner.id").eq(userAccountId)
+				.where("owner.id").eq(accountId)
 				.where("deleted").eqExpression("false")
 				.getResultList();
 	}
 
 	@Override
-	public List<Bucket> findByUserAccountIdAndStorageName(long userAccountId, String storageName) {
+	public List<Bucket> findByAccountIdAndStorageName(long accountId, String storageName) {
 		return cbf.create(em, Bucket.class)
 				.from(BucketObject.class)
-				.where("id.bucket.owner.id").eq(userAccountId)
+				.where("id.bucket.owner.id").eq(accountId)
 				.where("storage.id.name").eq(storageName)
 				.where("deleted").eqExpression("false")
 				.distinct()

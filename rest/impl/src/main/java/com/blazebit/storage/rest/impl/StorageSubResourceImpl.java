@@ -3,7 +3,7 @@ package com.blazebit.storage.rest.impl;
 import javax.ws.rs.core.Response;
 
 import com.blazebit.storage.core.model.jpa.StorageId;
-import com.blazebit.storage.core.model.jpa.UserAccount;
+import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.rest.api.StorageSubResource;
 import com.blazebit.storage.rest.model.StorageRepresentation;
 import com.blazebit.storage.rest.model.StorageUpdateRepresentation;
@@ -12,7 +12,7 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 	
 	private StorageId id;
 
-	public StorageSubResourceImpl(UserAccount owner, String storageName) {
+	public StorageSubResourceImpl(Account owner, String storageName) {
 		this.id = new StorageId(owner, storageName);
 	}
 

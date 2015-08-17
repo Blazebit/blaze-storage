@@ -88,7 +88,7 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 		foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_tags_fk_storage"),
 		joinColumns = {
 			@JoinColumn(name = "owner_id", referencedColumnName = "owner_id"),
-			@JoinColumn(name = "name", referencedColumnName = "storage_name")
+			@JoinColumn(name = "storage_name", referencedColumnName = "name")
 	})
 	@MapKeyColumn(name = "tag", nullable = false)
 	@Column(name = "value", nullable = false)

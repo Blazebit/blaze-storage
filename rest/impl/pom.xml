@@ -1,68 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.blazebit</groupId>
-        <artifactId>blaze-storage-rest</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+	<parent>
+		<groupId>com.blazebit</groupId>
+		<artifactId>blaze-storage-rest</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
-    <artifactId>blaze-storage-rest-impl</artifactId>
-    <packaging>jar</packaging>
+	<artifactId>blaze-storage-rest-impl</artifactId>
+	<packaging>jar</packaging>
 
-    <name>Blazebit Storage Rest Impl</name>
+	<name>Blazebit Storage Rest Impl</name>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
+			<scope>provided</scope>
 		</dependency>
-		
-        <!-- Project dependencies -->
-        
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>blaze-storage-rest-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>blaze-storage-core-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>blaze-common-utils</artifactId>
-        </dependency>
+
+		<!-- Project dependencies -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-rest-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-core-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-modules-authentication-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-common-utils</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-api</artifactId>
 		</dependency>
-        
-        <!-- Keycloak -->
-        
-		<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-adapter-core</artifactId>
-		</dependency>
-		
+
 		<!-- Resteasy client -->
 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
-			<version>${version.keycloak.resteasy-jaxrs}</version>
+			<version>${version.resteasy}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
-			<version>${version.keycloak.resteasy-jaxrs}</version>
+			<version>${version.resteasy}</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -74,15 +68,21 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
-			<version>${version.keycloak.resteasy-jaxrs}</version>
+			<version>${version.resteasy}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
-			<version>${version.keycloak.resteasy-jaxrs}</version>
+			<version>${version.resteasy}</version>
 			<scope>provided</scope>
 		</dependency>
-    </dependencies>
-    
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.5.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
 </project>

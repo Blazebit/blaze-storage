@@ -8,20 +8,17 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
-
+import com.blazebit.storage.core.api.context.UserContext;
 import com.blazebit.storage.core.model.security.Role;
 
 public class AuthorizationRequestFilter implements ContainerRequestFilter {
 	
 	@Inject
-	private KeycloakSecurityContext securityContext;
+	private UserContext userContext;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		AccessToken token = securityContext.getToken();
-		if (token == null || !token.getRealmAccess().getRoles().contains(Role.USER)) {
+		if (userContext.getUserRoles().contains(Role.USER)) {
 			throw new WebApplicationException("User cannot access the resource.", Response.Status.UNAUTHORIZED);
 		}
 	}

@@ -1,15 +1,15 @@
 package com.blazebit.storage.rest.impl;
 
-import com.blazebit.storage.core.model.jpa.UserAccount;
+import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.rest.api.StorageSubResource;
 import com.blazebit.storage.rest.api.StoragesSubResource;
 import com.blazebit.storage.rest.model.StorageListRepresentation;
 
 public class StoragesSubResourceImpl extends AbstractResource implements StoragesSubResource {
 
-	private UserAccount owner;
+	private Account owner;
 	
-	public StoragesSubResourceImpl(UserAccount owner) {
+	public StoragesSubResourceImpl(Account owner) {
 		this.owner = owner;
 	}
 

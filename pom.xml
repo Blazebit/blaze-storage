@@ -54,9 +54,10 @@
 		<version.blazeutils>0.1.10</version.blazeutils>
 		<version.blazepersistence>1.0.4</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
-		<version.hibernate>4.3.9.Final</version.hibernate>
+		<version.hibernate>4.3.10.Final</version.hibernate>
 		<version.junit>4.11</version.junit>
 
+		<version.resteasy>3.0.10.Final</version.resteasy>
 		<version.keycloak>1.1.0.Final</version.keycloak>
 		<version.keycloak.resteasy-jaxrs>3.0.10.Final</version.keycloak.resteasy-jaxrs>
 		<version.keycloak.jboss-servlet-api_3.0_spec>1.0.2.Final</version.keycloak.jboss-servlet-api_3.0_spec>
@@ -104,6 +105,7 @@
 		<module>core</module>
 		<module>rest</module>
 		<module>server</module>
+		<module>client</module>
 		<module>modules</module>
 		<module>examples</module>
 		<module>documentation</module>
@@ -143,28 +145,6 @@
 			<timezone>UTC+1</timezone>
 			<roles>
 				<role>Project Owner</role>
-				<role>Committer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>cchet</id>
-			<name>Thomas Herzog</name>
-			<email>t.herzog@curecomp.com</email>
-			<organization>Curecomp</organization>
-			<organizationUrl>http://www.curecomp.com</organizationUrl>
-			<timezone>UTC+1</timezone>
-			<roles>
-				<role>Committer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>Mobe91</id>
-			<name>Moritz Becker</name>
-			<email>m.becker@curecomp.com</email>
-			<organization>Curecomp</organization>
-			<organizationUrl>http://www.curecomp.com</organizationUrl>
-			<timezone>UTC+1</timezone>
-			<roles>
 				<role>Committer</role>
 			</roles>
 		</developer>
@@ -280,6 +260,44 @@
 	            <artifactId>blaze-storage-modules-alert-email</artifactId>
 				<version>${project.version}</version>
 	        </dependency>
+	        
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-authentication-api</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-authentication-basic</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-authentication-keycloak</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-client-core</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-client-basic</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-client-keycloak</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-integration-wildfly</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- Platform dependencies -->
 
@@ -310,22 +328,22 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
+		
 			<!-- Resteasy -->
 
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
-				<version>${version.keycloak.resteasy-jaxrs}</version>
+				<version>${version.resteasy}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>jaxrs-api</artifactId>
-				<version>${version.keycloak.resteasy-jaxrs}</version>
+				<version>${version.resteasy}</version>
 			</dependency>
 
 			<!-- Keycloak dependencies -->
-
+			
 			<dependency>
 				<groupId>org.keycloak</groupId>
 				<artifactId>keycloak-server</artifactId>
@@ -376,6 +394,11 @@
 				<artifactId>keycloak-forms-common-freemarker</artifactId>
 				<version>${version.keycloak}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+	    		<artifactId>keycloak-admin-client</artifactId>
+				<version>${version.keycloak}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.keycloak</groupId>

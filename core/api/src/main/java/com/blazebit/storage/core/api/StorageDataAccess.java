@@ -7,7 +7,7 @@ import com.blazebit.storage.core.model.jpa.StorageId;
 
 public interface StorageDataAccess {
 
-	public List<Storage> findByUserAccountId(long userAccountId);
+	public List<Storage> findByAccountId(long accountId);
 
 	public Storage findById(StorageId storageId);
 }

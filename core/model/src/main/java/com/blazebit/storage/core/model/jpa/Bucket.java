@@ -24,7 +24,7 @@ public class Bucket extends BaseEntity<String> {
 	private static final long serialVersionUID = 1L;
 
 	private Calendar creationDate;
-	private UserAccount owner;
+	private Account owner;
 	private Storage storage;
 	private Boolean deleted = false;
 	private ObjectStatistics statistics = new ObjectStatistics();
@@ -58,11 +58,11 @@ public class Bucket extends BaseEntity<String> {
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_fk_owner"))
-	public UserAccount getOwner() {
+	public Account getOwner() {
 		return owner;
 	}
 	
-	public void setOwner(UserAccount owner) {
+	public void setOwner(Account owner) {
 		this.owner = owner;
 	}
 	

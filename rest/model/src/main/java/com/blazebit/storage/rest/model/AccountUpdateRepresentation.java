@@ -18,6 +18,11 @@ public class AccountUpdateRepresentation implements Serializable {
 		this.name = name;
 	}
 
+	public AccountUpdateRepresentation(String name, Map<String, String> tags) {
+		this.name = name;
+		this.tags = tags;
+	}
+
 	public String getName() {
 		return name;
 	}

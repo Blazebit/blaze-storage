@@ -1,15 +1,15 @@
 package com.blazebit.storage.core.api.spi;
 
-import com.blazebit.storage.core.model.jpa.UserAccount;
+import com.blazebit.storage.core.model.jpa.Account;
 
 public interface AlertContext {
 
 	/**
-	 * The user account for which this alert is.
+	 * The account for which this alert is.
 	 * 
-	 * @return the user account
+	 * @return the account
 	 */
-	public UserAccount getUserAccount();
+	public Account getAccount();
 	
 	/**
 	 * The type of this alert.

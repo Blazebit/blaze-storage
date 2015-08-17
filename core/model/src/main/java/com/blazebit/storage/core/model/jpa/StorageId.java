@@ -16,13 +16,13 @@ public class StorageId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private UserAccount owner;
+	private Account owner;
 	private String name;
 	
 	public StorageId() {
 	}
 	
-	public StorageId(UserAccount owner, String name) {
+	public StorageId(Account owner, String name) {
 		this.owner = owner;
 		this.name = name;
 	}
@@ -30,11 +30,11 @@ public class StorageId implements Serializable {
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_owner"))
-	public UserAccount getOwner() {
+	public Account getOwner() {
 		return owner;
 	}
 	
-	public void setOwner(UserAccount owner) {
+	public void setOwner(Account owner) {
 		this.owner = owner;
 	}
 

@@ -9,6 +9,7 @@
 	<entity class="com.blazebit.storage.core.model.jpa.Storage"/>
 	<entity class="com.blazebit.storage.core.model.jpa.StorageQuotaModel"/>
 	<entity class="com.blazebit.storage.core.model.jpa.StorageQuotaPlan"/>
-	<entity class="com.blazebit.storage.core.model.jpa.UserAccount"/>
+	<entity class="com.blazebit.storage.core.model.jpa.Account"/>
+	<entity class="com.blazebit.storage.core.model.jpa.User"/>
 	
 </entity-mappings>
