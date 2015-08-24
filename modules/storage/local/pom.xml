@@ -26,6 +26,10 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>blaze-storage-modules-storage-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>blaze-storage-modules-storage-nio2</artifactId>
         </dependency>
 	</dependencies>

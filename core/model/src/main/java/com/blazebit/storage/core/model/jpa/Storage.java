@@ -29,6 +29,7 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 	private static final long serialVersionUID = 1L;
 	
 	private URI uri;
+	private Long ownerId;
 	private Calendar creationDate;
 	private StorageQuotaPlan quotaPlan;
 	private ObjectStatistics statistics = new ObjectStatistics();
@@ -50,6 +51,15 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 
 	public void setUri(URI uri) {
 		this.uri = uri;
+	}
+	
+	@Column(name = "owner_id", insertable = false, updatable = false)
+	public Long getOwnerId() {
+		return ownerId;
+	}
+	
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	@NotNull

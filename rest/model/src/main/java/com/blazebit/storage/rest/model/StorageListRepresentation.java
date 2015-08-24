@@ -8,7 +8,15 @@ public class StorageListRepresentation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private OwnerRepresentation owner;
-	private List<StorageRepresentation> storages;
+	private List<StorageListElementRepresentation> storages;
+
+	public StorageListRepresentation() {
+	}
+
+	public StorageListRepresentation(OwnerRepresentation owner, List<StorageListElementRepresentation> storages) {
+		this.owner = owner;
+		this.storages = storages;
+	}
 
 	public OwnerRepresentation getOwner() {
 		return owner;
@@ -18,11 +26,11 @@ public class StorageListRepresentation implements Serializable {
 		this.owner = owner;
 	}
 
-	public List<StorageRepresentation> getStorages() {
+	public List<StorageListElementRepresentation> getStorages() {
 		return storages;
 	}
 
-	public void setStorages(List<StorageRepresentation> storages) {
+	public void setStorages(List<StorageListElementRepresentation> storages) {
 		this.storages = storages;
 	}
 }

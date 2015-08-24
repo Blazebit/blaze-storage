@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/storage"
+	template="/WEB-INF/templates/template.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="account" value="#{storageAddPage.accountKey}"/>
+	</f:metadata>
+	
+	<ui:define name="title">Add new storage</ui:define>
+	
+	<ui:define name="content">
+		<ui:decorate template="/WEB-INF/fragment/contentForm.xhtml">
+			<ui:define name="header">
+				<p:link value="Back" outcome="/storage/index.xhtml">
+					<f:param name="account" value="#{storageAddPage.accountKey}"/>
+				</p:link>
+			</ui:define>
+			<ui:define name="content">
+				<p:outputLabel for="name" value="Name: " />
+				<p:inputText id="name" value="#{storageAddPage.name}" required="true" requiredMessage="Name is required." />
+				
+				<p:outputLabel for="type" value="Type: " />
+				<p:selectOneMenu id="type" value="#{storageAddPage.storage.type}" required="true" requiredMessage="Type is required.">
+					<p:ajax process="@this" update="@this configurationRow" listener="#{storageAddPage.onTypeChanged()}"/>
+					<f:selectItem itemValue="#{null}" itemLabel="Choose..." />
+					<f:selectItems value="#{storageTypeItems}"/>
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="configuration" value="Configuration: " />
+				<h:panelGroup id="configurationRow">
+					<h:outputText value="Select type first" rendered="#{storageAddPage.storage.type == null}"/>
+					<s:configurationInput id="configuration" value="#{storageAddPage.configurationHolder}" rendered="#{storageAddPage.storage.type != null}"/>
+				</h:panelGroup>
+				
+				<p:outputLabel for="quotaPlan" value="Quota plan: " />
+				<p:selectOneMenu id="quotaPlan" value="#{storageAddPage.storage.quotaPlan}" converter="#{storageQuotaPlanConverter}">
+					<f:selectItems value="#{storageQuotaPlanItems}"/>
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="tags" value="Tags:" />
+				<s:tagsInput id="tags" value="#{storageAddPage.tagsHolder}"/>
+			</ui:define>
+			<ui:define name="footer">
+				<p:commandButton value="Add" action="#{storageAddPage.add()}" ajax="false"/>
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	
+</ui:composition>

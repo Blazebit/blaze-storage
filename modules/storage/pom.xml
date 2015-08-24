@@ -15,6 +15,7 @@
     <name>Blazebit Storage Modules Storage</name>
 
     <modules>
+        <module>base</module>
         <module>classpath</module>
         <module>nio2</module>
 		<module>local</module>

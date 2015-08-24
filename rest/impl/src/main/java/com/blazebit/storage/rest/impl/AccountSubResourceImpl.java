@@ -3,7 +3,10 @@ package com.blazebit.storage.rest.impl;
 import java.net.URI;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.AccountDataAccess;
@@ -32,12 +35,17 @@ public class AccountSubResourceImpl extends AbstractResource implements AccountS
 
 	@Override
 	public AccountRepresentation get() {
-		return accountDataAccess.findByKey(key, EntityViewSetting.create(AccountRepresentationView.class));
+		AccountRepresentation result = accountDataAccess.findByKey(key, EntityViewSetting.create(AccountRepresentationView.class));
+		if (result == null) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Account not found").build());
+		}
+		
+		return result;
 	}
 
 	@Override
 	public Response put(AccountUpdateRepresentation accountUpdate) {
-		Account account = getAcountByKey(key);
+		Account account = getAccountByKey(key);
 		boolean isNew = account == null;
 		
 		if (isNew) {
@@ -63,10 +71,10 @@ public class AccountSubResourceImpl extends AbstractResource implements AccountS
 
 	@Override
 	public StoragesSubResource getStorages() {
-		return inject(new StoragesSubResourceImpl(getAcountByKey(key)));
+		return inject(new StoragesSubResourceImpl(getAccountByKey(key)));
 	}
 	
-	private Account getAcountByKey(String key) {
+	private Account getAccountByKey(String key) {
 		return accountDataAccess.findByKey(key);
 	}
 

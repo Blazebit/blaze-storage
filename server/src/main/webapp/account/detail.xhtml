@@ -9,27 +9,33 @@
 	template="/WEB-INF/templates/template.xhtml">
 	
 	<f:metadata>
-		<f:viewParam name="key" value="#{detailPage.key}"/>
-    	<f:viewAction action="#{detailPage.viewAction}"/>
+		<f:viewParam name="key" value="#{accountDetailPage.key}"/>
+    	<f:viewAction action="#{accountDetailPage.viewAction}"/>
 	</f:metadata>
 	
 	<ui:define name="title">Account detail</ui:define>
 	
 	<ui:define name="content">
 		<ui:decorate template="/WEB-INF/fragment/contentPanel.xhtml">
+			<ui:define name="header">
+				<h:link value="Back" outcome="/account/index.xhtml"/>
+			</ui:define>
 			<ui:define name="content">
 				<p:outputLabel for="key" value="Key:" />
-				<h:outputText id="key" value="#{detailPage.key}" required="true" requiredMessage="Name is required." />
+				<h:outputText id="key" value="#{accountDetailPage.account.key}"/>
 				
 				<p:outputLabel for="name" value="Name:" />
-				<h:outputText id="name" value="#{detailPage.account.name}" required="true" requiredMessage="Name is required." />
+				<h:outputText id="name" value="#{accountDetailPage.account.name}"/>
 				
 				<p:outputLabel for="tags" value="Tags:" />
-				<s:tagsOutput id="tags" value="#{detailPage.account.tags}"/>
+				<s:tagsOutput id="tags" value="#{accountDetailPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
 				<p:link value="Edit" outcome="/account/edit.xhtml">
-					<f:param name="key" value="#{detailPage.key}"/>
+					<f:param name="key" value="#{accountDetailPage.account.key}"/>
+				</p:link>
+				<p:link value="Show storages" outcome="/storage/index.xhtml">
+					<f:param name="account" value="#{accountDetailPage.account.key}"/>
 				</p:link>
 			</ui:define>
 		</ui:decorate>

@@ -10,13 +10,10 @@
 
 	<h:form id="form">
 	    <ui:insert name="header"/>
-	    <h:panelGrid id="grid" cellpadding="5" columns="2" style="margin-bottom:10px">
-	        <f:facet name="header">
-	            <p:messages id="msgs" />
-	        </f:facet>
-	 
+        <p:messages id="msgs" />
+	    <p:panelGrid id="grid" cellpadding="5" columns="2" style="margin-bottom:10px">	 
 	        <ui:insert name="content"/>
-	    </h:panelGrid>
+	    </p:panelGrid>
 	    <ui:insert name="footer"/>
 	</h:form>
 </ui:composition>

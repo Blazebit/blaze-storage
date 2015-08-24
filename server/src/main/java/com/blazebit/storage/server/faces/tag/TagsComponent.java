@@ -1,6 +1,4 @@
-package com.blazebit.storage.server.faces;
-
-import java.util.List;
+package com.blazebit.storage.server.faces.tag;
 
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIData;
@@ -12,11 +10,15 @@ public class TagsComponent extends UINamingContainer {
     private UIData table;
     
 	public void addTag() {
-		((List) getAttributes().get("value")).add(new TagEntry());
+		getValue().getTagEntries().add(new TagEntry());
 	}
 
     public void removeTag() {
-        ((List) getAttributes().get("value")).remove(table.getRowData());
+        getValue().getTagEntries().remove(table.getRowData());
+    }
+    
+    protected TagsHolder getValue() {
+    	return (TagsHolder) getAttributes().get("value");
     }
 
 	public UIData getTable() {

@@ -24,6 +24,19 @@ public class StorageQuotaPlan extends SequenceBaseEntity {
 	private Integer gigabyteLimit;
 	private Short alertPercent;
 
+	public StorageQuotaPlan() {
+		super();
+	}
+
+	public StorageQuotaPlan(Long id) {
+		super(id);
+	}
+
+	public StorageQuotaPlan(StorageQuotaModel quotaModel, Integer gigabyteLimit) {
+		this.quotaModel = quotaModel;
+		this.gigabyteLimit = gigabyteLimit;
+	}
+
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "quota_model_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_quota_plan_fk_quota_model"))

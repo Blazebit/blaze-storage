@@ -15,7 +15,6 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import com.blazebit.storage.rest.api.AccountsResource;
 import com.blazebit.storage.rest.api.BucketsResource;
 import com.blazebit.storage.rest.api.BucketsSubResource;
-import com.blazebit.storage.rest.api.MeResource;
 import com.blazebit.storage.rest.api.StorageQuotaModelsResource;
 import com.blazebit.storage.rest.api.StorageTypesResource;
 
@@ -61,11 +60,6 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 	@Override
 	public BucketsSubResource buckets() {
 		return target.proxy(BucketsResource.class).get();
-	}
-	
-	@Override
-	public MeResource me() {
-		return target.proxy(MeResource.class);
 	}
 	
 	@Override

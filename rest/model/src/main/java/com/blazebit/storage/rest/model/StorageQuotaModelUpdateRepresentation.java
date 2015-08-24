@@ -15,6 +15,12 @@ public class StorageQuotaModelUpdateRepresentation implements Serializable {
 	public StorageQuotaModelUpdateRepresentation() {
 	}
 
+	public StorageQuotaModelUpdateRepresentation(String name, String description, Set<Integer> limits) {
+		this.name = name;
+		this.description = description;
+		this.limits = limits;
+	}
+
 	public String getName() {
 		return name;
 	}

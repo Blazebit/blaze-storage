@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 
 import com.blazebit.storage.rest.model.StorageRepresentation;
 import com.blazebit.storage.rest.model.StorageUpdateRepresentation;
+import com.blazebit.storage.rest.model.config.StorageTypeConfigEntryRepresentation;
 
 public interface StorageSubResource {
 
@@ -22,6 +23,6 @@ public interface StorageSubResource {
 	
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response put(StorageUpdateRepresentation storageUpdate);
+	public Response put(StorageUpdateRepresentation<StorageTypeConfigEntryRepresentation> storageUpdate);
 	
 }

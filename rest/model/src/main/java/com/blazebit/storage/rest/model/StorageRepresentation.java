@@ -1,32 +1,29 @@
 package com.blazebit.storage.rest.model;
 
-import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 import com.blazebit.storage.rest.model.config.StorageTypeConfigElementRepresentation;
 
-public class StorageRepresentation implements Serializable {
+public class StorageRepresentation extends StorageUpdateRepresentation<StorageTypeConfigElementRepresentation> {
 
 	private static final long serialVersionUID = 1L;
 
-	private String type;
 	private String name;
 	private Calendar creationDate;
-	private StorageQuotaPlanRepresentation quotaPlan;
-	private Set<StorageTypeConfigElementRepresentation> configuration = new LinkedHashSet<>(0);
-	private Map<String, String> tags = new HashMap<String, String>(0);
 	private StatisticsRepresentation statistics;
 
-	public String getType() {
-		return type;
+	public StorageRepresentation() {
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public StorageRepresentation(String type, StorageQuotaPlanChoiceRepresentation quotaPlan,
+			Set<StorageTypeConfigElementRepresentation> configuration, Map<String, String> tags, String name,
+			Calendar creationDate, StatisticsRepresentation statistics) {
+		super(type, quotaPlan, configuration, tags);
+		this.name = name;
+		this.creationDate = creationDate;
+		this.statistics = statistics;
 	}
 
 	public String getName() {
@@ -43,30 +40,6 @@ public class StorageRepresentation implements Serializable {
 
 	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
-	}
-
-	public StorageQuotaPlanRepresentation getQuotaPlan() {
-		return quotaPlan;
-	}
-
-	public void setQuotaPlan(StorageQuotaPlanRepresentation quotaPlan) {
-		this.quotaPlan = quotaPlan;
-	}
-
-	public Set<StorageTypeConfigElementRepresentation> getConfiguration() {
-		return configuration;
-	}
-
-	public void setConfiguration(Set<StorageTypeConfigElementRepresentation> configuration) {
-		this.configuration = configuration;
-	}
-
-	public Map<String, String> getTags() {
-		return tags;
-	}
-
-	public void setTags(Map<String, String> tags) {
-		this.tags = tags;
 	}
 
 	public StatisticsRepresentation getStatistics() {

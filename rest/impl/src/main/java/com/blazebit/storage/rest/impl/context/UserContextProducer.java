@@ -1,5 +1,6 @@
 package com.blazebit.storage.rest.impl.context;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -60,6 +61,6 @@ public class UserContextProducer {
 			}
 		}
 			
-		return new UserContextImpl(user.getId(), userRoles, Locale.ENGLISH);
+		return new UserContextImpl(user.getId(), userRoles, Locale.ENGLISH, Collections.list(request.getLocales()));
 	}
 }

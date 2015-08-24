@@ -36,6 +36,12 @@
             <artifactId>blaze-storage-client-core</artifactId>
         </dependency>
         
+        <dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.9</version>
+  		</dependency>
+        
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>blaze-persistence-core-impl</artifactId>

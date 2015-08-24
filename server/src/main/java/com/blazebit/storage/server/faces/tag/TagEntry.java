@@ -1,4 +1,4 @@
-package com.blazebit.storage.server.faces;
+package com.blazebit.storage.server.faces.tag;
 
 import java.io.Serializable;
 

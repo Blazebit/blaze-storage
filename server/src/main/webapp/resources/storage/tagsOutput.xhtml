@@ -10,12 +10,12 @@
 	xmlns:s="http://java.sun.com/jsf/composite/storage">
 
 	<cc:interface>
-		<cc:attribute name="value" type="java.util.Map" />
+		<cc:attribute name="value" type="com.blazebit.storage.server.faces.tag.TagsHolder" />
 	</cc:interface>
 
 	<cc:implementation>
 		<div id="#{cc.clientId}">
-			<ui:repeat value="#{cc.attrs.value.entrySet()}" var="entry">
+			<ui:repeat value="#{cc.attrs.value.tagEntries}" var="entry">
 				<s:keyValueOutput key="#{entry.key}" value="#{entry.value}"/>
 			</ui:repeat>
 		</div>

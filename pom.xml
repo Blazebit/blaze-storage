@@ -52,7 +52,7 @@
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.10</version.blazeutils>
-		<version.blazepersistence>1.0.4</version.blazepersistence>
+		<version.blazepersistence>1.0.6-SNAPSHOT</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.hibernate>4.3.10.Final</version.hibernate>
 		<version.junit>4.11</version.junit>
@@ -240,6 +240,11 @@
 				<type>war</type>
 			</dependency>
 			
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-storage-base</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
 	        <dependency>
 	            <groupId>${project.groupId}</groupId>
 	            <artifactId>blaze-storage-modules-storage-classpath</artifactId>

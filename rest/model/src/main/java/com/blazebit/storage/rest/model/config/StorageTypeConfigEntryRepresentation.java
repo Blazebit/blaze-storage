@@ -12,6 +12,11 @@ public class StorageTypeConfigEntryRepresentation implements Serializable {
 	public StorageTypeConfigEntryRepresentation() {
 	}
 
+	public StorageTypeConfigEntryRepresentation(String key, String value) {
+		this.key = key;
+		this.value = value;
+	}
+
 	public String getKey() {
 		return key;
 	}

@@ -1,6 +1,7 @@
 package com.blazebit.storage.rest.impl.context;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -11,10 +12,12 @@ public class UserContextImpl implements UserContext {
 	private final String userId;
 	private final Set<String> userRoles;
 	private final Locale locale;
+	private final List<Locale> locales;
 	
-	public UserContextImpl(String userId, Set<String> userRoles, Locale locale) {
+	public UserContextImpl(String userId, Set<String> userRoles, Locale locale, List<Locale> locales) {
 		this.userId = userId;
 		this.locale = locale;
+		this.locales = locales;
 		
 		if (userRoles == null) {
 			this.userRoles = Collections.emptySet();
@@ -36,6 +39,11 @@ public class UserContextImpl implements UserContext {
 	@Override
 	public Locale getLocale() {
 		return locale;
+	}
+
+	@Override
+	public List<Locale> getLocales() {
+		return locales;
 	}
 
 }

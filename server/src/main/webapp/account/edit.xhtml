@@ -9,26 +9,29 @@
 	template="/WEB-INF/templates/template.xhtml">
 	
 	<f:metadata>
-		<f:viewParam name="key" value="#{editPage.key}"/>
-    	<f:viewAction action="#{editPage.viewAction}"/>
+		<f:viewParam name="key" value="#{accountEditPage.key}"/>
+    	<f:viewAction action="#{accountEditPage.viewAction}"/>
 	</f:metadata>
 	
-	<ui:define name="title">Account detail</ui:define>
+	<ui:define name="title">Account edit</ui:define>
 	
 	<ui:define name="content">
 		<ui:decorate template="/WEB-INF/fragment/contentForm.xhtml">
+			<ui:define name="header">
+				<h:link value="Back" outcome="/account/index.xhtml"/>
+			</ui:define>
 			<ui:define name="content">
 				<p:outputLabel for="key" value="Key:" />
-				<p:inputText id="key" value="#{editPage.key}" required="true" requiredMessage="Name is required." />
+				<h:outputText id="key" value="#{accountEditPage.key}" />
 				
 				<p:outputLabel for="name" value="Name:" />
-				<p:inputText id="name" value="#{editPage.account.name}" required="true" requiredMessage="Name is required." />
+				<p:inputText id="name" value="#{accountEditPage.account.name}" required="true" requiredMessage="Name is required." />
 				
 				<p:outputLabel for="tags" value="Tags:" />
-				<s:tagsInput id="tags" value="#{editPage.tagEntries}"/>
+				<s:tagsInput id="tags" value="#{accountEditPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
-				<p:commandButton value="Add" action="#{editPage.update()}"/>
+				<p:commandButton value="Update" action="#{accountEditPage.update()}" ajax="false"/>
 			</ui:define>
 		</ui:decorate>
 	</ui:define>

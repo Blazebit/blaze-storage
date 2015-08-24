@@ -10,12 +10,12 @@
 	xmlns:s="http://java.sun.com/jsf/composite/storage">
 
 	<cc:interface componentType="tagsComponent">
-		<cc:attribute name="value" type="java.util.List" />
+		<cc:attribute name="value" type="com.blazebit.storage.server.faces.tag.TagsHolder" />
 	</cc:interface>
 
 	<cc:implementation>
 		<div id="#{cc.clientId}">
-			<h:dataTable id="table" binding="#{cc.table}" value="#{cc.attrs.value}" var="entry">
+			<h:dataTable id="table" binding="#{cc.table}" value="#{cc.attrs.value.tagEntries}" var="entry">
 	            <h:column><p:inputText value="#{entry.key}"/></h:column>
 	            <h:column><p:inputText value="#{entry.value}"/></h:column>
 	            <h:column><p:commandButton value="remove" action="#{cc.removeTag()}" process=":#{cc.clientId}" update=":#{cc.clientId}"/></h:column>

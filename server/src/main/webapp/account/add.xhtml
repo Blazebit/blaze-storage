@@ -12,18 +12,21 @@
 	
 	<ui:define name="content">
 		<ui:decorate template="/WEB-INF/fragment/contentForm.xhtml">
+			<ui:define name="header">
+				<h:link value="Back" outcome="/account/index.xhtml"/>
+			</ui:define>
 			<ui:define name="content">
 				<p:outputLabel for="key" value="Key:" />
-				<p:inputText id="key" value="#{addPage.key}" required="true" requiredMessage="Key is required." />
+				<p:inputText id="key" value="#{accountAddPage.key}" required="true" requiredMessage="Key is required." />
 				
 				<p:outputLabel for="name" value="Name:" />
-				<p:inputText id="name" value="#{addPage.account.name}" required="true" requiredMessage="Name is required." />
+				<p:inputText id="name" value="#{accountAddPage.account.name}" required="true" requiredMessage="Name is required." />
 				
 				<p:outputLabel for="tags" value="Tags:" />
-				<s:tagsInput id="tags" value="#{addPage.tagEntries}"/>
+				<s:tagsInput id="tags" value="#{accountAddPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
-				<p:commandButton value="Add" action="#{addPage.add()}" ajax="false"/>
+				<p:commandButton value="Add" action="#{accountAddPage.add()}" ajax="false"/>
 			</ui:define>
 		</ui:decorate>
 	</ui:define>

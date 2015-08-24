@@ -3,6 +3,7 @@ package com.blazebit.storage.server.account;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -11,14 +12,15 @@ import com.blazebit.storage.rest.model.AccountListElementRepresentation;
 
 @Named
 @RequestScoped
-public class IndexPage {
+public class AccountIndexPage {
 
 	@Inject
-	private BlazeStorage storage;
+	private BlazeStorage client;
 	
+	@Produces
 	@Named("accountList")
 	@RequestScoped
 	public List<AccountListElementRepresentation> createAccountList() {
-		return storage.accounts().get();
+		return client.accounts().get();
 	}
 }

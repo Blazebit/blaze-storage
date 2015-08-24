@@ -1,19 +1,26 @@
 package com.blazebit.storage.rest.model;
 
+import java.util.Set;
+
 public class StorageQuotaModelRepresentation extends StorageQuotaModelUpdateRepresentation {
 
 	private static final long serialVersionUID = 1L;
 
-	private String key;
+	private String id;
 
 	public StorageQuotaModelRepresentation() {
 	}
 
-	public String getKey() {
-		return key;
+	public StorageQuotaModelRepresentation(String name, String description, Set<Integer> limits, String id) {
+		super(name, description, limits);
+		this.id = id;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

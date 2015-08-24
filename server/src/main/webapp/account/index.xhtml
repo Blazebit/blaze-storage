@@ -11,13 +11,25 @@
 	<ui:define name="title">Accounts</ui:define>
 	
 	<ui:define name="content">
+		<p:link value="Back" outcome="/index.xhtml"/>
+		<br/>
 		<p:link value="Add" outcome="/account/add.xhtml"/>
 		<p:dataTable value="#{accountList}" var="account">
 			<p:column headerText="Key">
-				#{account.key}
+				<p:link value="#{account.key}" outcome="/account/detail.xhtml">
+					<f:param name="key" value="#{account.key}"/>
+				</p:link>
 			</p:column>
 			<p:column headerText="Name">
 				#{account.name}
+			</p:column>
+			<p:column headerText="Actions">
+				<p:link value="Edit" outcome="/account/edit.xhtml">
+					<f:param name="key" value="#{account.key}"/>
+				</p:link>
+				<p:link value="Show storages" outcome="/storage/index.xhtml">
+					<f:param name="account" value="#{account.key}"/>
+				</p:link>
 			</p:column>
 		</p:dataTable>
 	</ui:define>
