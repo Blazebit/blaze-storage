@@ -3,7 +3,7 @@ package com.blazebit.storage.rest.model;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class FileListElementRepresentation implements Serializable {
+public class BucketObjectListElementRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,6 +11,16 @@ public class FileListElementRepresentation implements Serializable {
 	private Calendar lastModified;
 	private String eTag;
 	private long size;
+
+	public BucketObjectListElementRepresentation() {
+	}
+
+	public BucketObjectListElementRepresentation(String key, Calendar lastModified, String eTag, long size) {
+		this.key = key;
+		this.lastModified = lastModified;
+		this.eTag = eTag;
+		this.size = size;
+	}
 
 	public String getKey() {
 		return key;

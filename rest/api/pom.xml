@@ -15,11 +15,11 @@
     <name>Blazebit Storage Rest API</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.openejb</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
         <dependency>
         	<groupId>${project.groupId}</groupId>
         	<artifactId>blaze-storage-rest-model</artifactId>

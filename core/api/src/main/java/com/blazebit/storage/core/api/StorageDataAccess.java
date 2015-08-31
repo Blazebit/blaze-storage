@@ -13,5 +13,7 @@ public interface StorageDataAccess {
 
 	public Storage findById(StorageId storageId);
 
+	public Storage findByBucketId(String bucketId);
+
 	public <T> T findById(StorageId storageId, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
 }

@@ -1,6 +1,8 @@
 package com.blazebit.storage.core.model.jpa;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,6 +31,7 @@ public class Bucket extends BaseEntity<String> {
 	private Storage storage;
 	private Boolean deleted = false;
 	private ObjectStatistics statistics = new ObjectStatistics();
+	private Set<BucketObject> objects = new HashSet<>(0);
 	
 	public Bucket() {
 	}
@@ -100,6 +104,15 @@ public class Bucket extends BaseEntity<String> {
 		this.statistics = statistics;
 	}
 	
+	@OneToMany(mappedBy = "id.bucket")
+	public Set<BucketObject> getObjects() {
+		return objects;
+	}
+
+	public void setObjects(Set<BucketObject> objects) {
+		this.objects = objects;
+	}
+
 	@PrePersist
 	private void prePersist() {
 		if (creationDate == null) {

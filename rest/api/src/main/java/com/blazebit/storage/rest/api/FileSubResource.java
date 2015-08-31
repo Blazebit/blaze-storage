@@ -1,11 +1,13 @@
 package com.blazebit.storage.rest.api;
 
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,7 +44,14 @@ public interface FileSubResource {
 
 	@PUT
 	@Consumes({ MediaType.WILDCARD })
-	public Response put(InputStream inputStream);
+	public Response put(
+			@HeaderParam("Content-Type") String contentType, 
+			@HeaderParam("Content-Disposition") String contentDisposition,
+			@HeaderParam("Content-Length") long contentLength,
+			@HeaderParam("Content-MD5") String contentMD5, 
+			@HeaderParam("x-blz-storage-name") String storageName,
+//			@HeaderParam("x-blz-tags") Map<String, String> tags, 
+			InputStream inputStream);
 
 	// We might also want to add POST to allow direct uploads
 	// @POST

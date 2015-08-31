@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface RequestAuthenticator {
 
-	public String getUserId(HttpServletRequest request);
+	public String getAccountKey(HttpServletRequest request);
 	
-	public Set<String> getUserRoles(HttpServletRequest request, Set<String> allRoles);
+	public Set<String> getAccountRoles(HttpServletRequest request, Set<String> allRoles);
 }

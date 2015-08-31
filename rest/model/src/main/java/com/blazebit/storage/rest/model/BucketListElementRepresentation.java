@@ -10,6 +10,14 @@ public class BucketListElementRepresentation implements Serializable {
 	private String name;
 	private Calendar creationDate;
 
+	public BucketListElementRepresentation() {
+	}
+
+	public BucketListElementRepresentation(String name, Calendar creationDate) {
+		this.name = name;
+		this.creationDate = creationDate;
+	}
+
 	public String getName() {
 		return name;
 	}

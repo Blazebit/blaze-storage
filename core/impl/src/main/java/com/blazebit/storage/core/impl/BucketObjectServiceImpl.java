@@ -1,5 +1,8 @@
 package com.blazebit.storage.core.impl;
 
+import java.io.InputStream;
+import java.net.URI;
+
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -19,6 +22,11 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	private BucketObjectInternalService bucketObjectInternalService;
 	@Inject
 	private Event<BucketObjectDeletedEvent> bucketObjectDeleted;
+
+	@Override
+	public URI createContent(URI storageUri, String key, InputStream inputStream) {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 
 	@Override
 	public void put(BucketObject bucketObject) {

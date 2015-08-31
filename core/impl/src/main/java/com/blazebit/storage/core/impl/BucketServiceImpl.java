@@ -1,14 +1,20 @@
 package com.blazebit.storage.core.impl;
 
+import java.util.HashSet;
+
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import com.blazebit.storage.core.api.BucketNotFoundException;
 import com.blazebit.storage.core.api.BucketService;
-import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.event.BucketDeletedEvent;
+import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.core.model.jpa.Bucket;
+import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.ObjectStatistics;
+import com.blazebit.storage.core.model.jpa.Storage;
+import com.blazebit.storage.core.model.jpa.StorageId;
 
 @Stateless
 public class BucketServiceImpl extends AbstractService implements BucketService {
@@ -18,7 +24,15 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	
 	@Override
 	public void create(Bucket bucket) {
+		bucket.setDeleted(false);
+		bucket.setStatistics(new ObjectStatistics());
+		bucket.setObjects(new HashSet<BucketObject>(0));
+		bucket.setOwner(em.getReference(Account.class, bucket.getOwner().getId()));
+		bucket.setStorage(em.getReference(Storage.class, new StorageId(bucket.getOwner(), bucket.getStorage().getId().getName())));
+		
 		em.persist(bucket);
+		em.flush();
+		// TODO: translate JPA/SQL exceptions to not found exceptions 
 	}
 
 	@Override
@@ -33,7 +47,7 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 			.executeUpdate();
 		
 		if (updated != 1) {
-			throw new StorageException("Bucket statistics update failed. Expected to update 1 row but was " + updated);
+			throw new BucketNotFoundException("Bucket statistics update for '" + bucketId + "' failed. Expected to update 1 row but was " + updated);
 		}
 	}
 
@@ -44,6 +58,10 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 				+ "WHERE b.id = :bucketId")
 			.setParameter("bucketId", bucketId)
 			.executeUpdate();
+		
+		if (updated != 1) {
+			throw new BucketNotFoundException("Bucket deletion for '" + bucketId + "' failed. Expected to update 1 row but was " + updated);
+		}
 		
 		bucketDeleted.fire(new BucketDeletedEvent(bucketId));
 	}

@@ -6,9 +6,9 @@ import java.util.Set;
 
 public interface UserContext {
 	
-	public String getUserId();
+	public Long getAccountId();
 	
-	public Set<String> getUserRoles();
+	public Set<String> getAccountRoles();
 
 	public Locale getLocale();
 

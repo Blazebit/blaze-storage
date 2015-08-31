@@ -18,6 +18,7 @@ public class BucketObject extends EmbeddedIdBaseEntity<BucketObjectId> {
 	
 	public static final String DEFAULT_CONTENT_TYPE = "binary/octet-stream";
 	
+	private Bucket bucket;
 	private BucketObjectState state;
 	private String contentVersionUuid;
 	private BucketObjectVersion contentVersion;
@@ -28,6 +29,16 @@ public class BucketObject extends EmbeddedIdBaseEntity<BucketObjectId> {
 	
 	public BucketObject(BucketObjectId id) {
 		super(id);
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "bucket_id", insertable = false, updatable = false)
+	public Bucket getBucket() {
+		return bucket;
+	}
+	
+	public void setBucket(Bucket bucket) {
+		this.bucket = bucket;
 	}
 
 	@NotNull

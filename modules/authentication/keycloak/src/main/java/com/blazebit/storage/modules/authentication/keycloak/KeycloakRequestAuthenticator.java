@@ -14,7 +14,7 @@ import com.blazebit.storage.modules.authentication.api.RequestAuthenticator;
 public class KeycloakRequestAuthenticator implements RequestAuthenticator {
 
 	@Override
-	public String getUserId(HttpServletRequest request) {
+	public String getAccountKey(HttpServletRequest request) {
 		IDToken token = AdminClient.getIDToken(request);
 		
 		if (token == null) {
@@ -25,7 +25,7 @@ public class KeycloakRequestAuthenticator implements RequestAuthenticator {
 	}
 
 	@Override
-	public Set<String> getUserRoles(HttpServletRequest request, Set<String> allRoles) {
+	public Set<String> getAccountRoles(HttpServletRequest request, Set<String> allRoles) {
 		KeycloakSecurityContext context = getSecurityContext(request);
 		return context.getToken().getRealmAccess().getRoles();
 	}

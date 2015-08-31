@@ -7,7 +7,7 @@ public class BucketsResourceImpl extends AbstractResource implements BucketsReso
 
 	@Override
 	public BucketsSubResource get() {
-		return inject(new BucketsSubResourceImpl());
+		return inject(new BucketsSubResourceImpl(userContext.getAccountId()));
 	}
 
 }

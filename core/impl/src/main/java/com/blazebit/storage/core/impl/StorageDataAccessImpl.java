@@ -11,6 +11,7 @@ import com.blazebit.persistence.QueryBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.StorageDataAccess;
 import com.blazebit.storage.core.api.StorageProviderFactoryDataAccess;
+import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
 
@@ -33,6 +34,19 @@ public class StorageDataAccessImpl extends AbstractDataAccess implements Storage
 		try {
 			return cbf.create(em, Storage.class)
 					.where("id").eq(storageId)
+					.getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+
+	@Override
+	public Storage findByBucketId(String bucketId) {
+		try {
+			return cbf.create(em, Storage.class)
+					.from(Bucket.class)
+					.where("id").eq(bucketId)
+					.select("storage")
 					.getSingleResult();
 		} catch (NoResultException ex) {
 			return null;

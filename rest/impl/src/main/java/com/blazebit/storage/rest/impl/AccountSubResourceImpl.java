@@ -12,7 +12,6 @@ import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.AccountDataAccess;
 import com.blazebit.storage.core.api.AccountService;
 import com.blazebit.storage.core.model.jpa.Account;
-import com.blazebit.storage.core.model.jpa.User;
 import com.blazebit.storage.rest.api.AccountSubResource;
 import com.blazebit.storage.rest.api.AccountsResource;
 import com.blazebit.storage.rest.api.StoragesSubResource;
@@ -51,7 +50,6 @@ public class AccountSubResourceImpl extends AbstractResource implements AccountS
 		if (isNew) {
 			account = new Account();
 			account.setKey(key);
-			account.setOwner(new User(userContext.getUserId()));
 		}
 		
 		account.setName(accountUpdate.getName());

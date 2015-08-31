@@ -9,31 +9,31 @@ import com.blazebit.storage.core.api.context.UserContext;
 
 public class UserContextImpl implements UserContext {
 
-	private final String userId;
-	private final Set<String> userRoles;
+	private final Long accountId;
+	private final Set<String> accountRoles;
 	private final Locale locale;
 	private final List<Locale> locales;
 	
-	public UserContextImpl(String userId, Set<String> userRoles, Locale locale, List<Locale> locales) {
-		this.userId = userId;
+	public UserContextImpl(Long accountId, Set<String> accountRoles, Locale locale, List<Locale> locales) {
+		this.accountId = accountId;
 		this.locale = locale;
 		this.locales = locales;
 		
-		if (userRoles == null) {
-			this.userRoles = Collections.emptySet();
+		if (accountRoles == null) {
+			this.accountRoles = Collections.emptySet();
 		} else {
-			this.userRoles = userRoles;
+			this.accountRoles = accountRoles;
 		}
 	}
 
 	@Override
-	public String getUserId() {
-		return userId;
+	public Long getAccountId() {
+		return accountId;
 	}
 
 	@Override
-	public Set<String> getUserRoles() {
-		return userRoles;
+	public Set<String> getAccountRoles() {
+		return accountRoles;
 	}
 
 	@Override

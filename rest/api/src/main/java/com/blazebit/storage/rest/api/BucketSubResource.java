@@ -56,6 +56,6 @@ public interface BucketSubResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response put(BucketUpdateRepresentation bucketUpdate);
 	
-	@Path("{key: .*}")
+	@Path("{key: .+}")
 	public FileSubResource getFile(@PathParam("key") String key);
 }

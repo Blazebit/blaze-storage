@@ -13,7 +13,21 @@ public class BucketRepresentation implements Serializable {
 	private String marker;
 	private boolean isTruncated;
 	private StatisticsRepresentation statistics;
-	private List<FileListElementRepresentation> contents = new ArrayList<>(0);
+	private List<BucketObjectListElementRepresentation> contents = new ArrayList<>(0);
+
+	public BucketRepresentation() {
+	}
+	
+	public BucketRepresentation(String name, String prefix, Integer limit, String marker, boolean isTruncated, StatisticsRepresentation statistics, List<BucketObjectListElementRepresentation> contents) {
+		this.name = name;
+		this.prefix = prefix;
+		this.limit = limit;
+		this.marker = marker;
+		this.isTruncated = isTruncated;
+		this.statistics = statistics;
+		this.contents = contents;
+	}
+
 
 	public String getName() {
 		return name;
@@ -63,11 +77,11 @@ public class BucketRepresentation implements Serializable {
 		this.statistics = statistics;
 	}
 
-	public List<FileListElementRepresentation> getContents() {
+	public List<BucketObjectListElementRepresentation> getContents() {
 		return contents;
 	}
 
-	public void setContents(List<FileListElementRepresentation> contents) {
+	public void setContents(List<BucketObjectListElementRepresentation> contents) {
 		this.contents = contents;
 	}
 

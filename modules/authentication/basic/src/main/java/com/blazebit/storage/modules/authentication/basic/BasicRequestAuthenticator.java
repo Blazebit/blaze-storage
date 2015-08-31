@@ -11,7 +11,7 @@ import com.blazebit.storage.modules.authentication.api.RequestAuthenticator;
 public class BasicRequestAuthenticator implements RequestAuthenticator {
 
 	@Override
-	public String getUserId(HttpServletRequest request) {
+	public String getAccountKey(HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		
 		if (principal == null) {
@@ -22,7 +22,7 @@ public class BasicRequestAuthenticator implements RequestAuthenticator {
 	}
 
 	@Override
-	public Set<String> getUserRoles(HttpServletRequest request, Set<String> allRoles) {
+	public Set<String> getAccountRoles(HttpServletRequest request, Set<String> allRoles) {
 		Principal principal = request.getUserPrincipal();
 		
 		if (principal == null) {

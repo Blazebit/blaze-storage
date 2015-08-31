@@ -7,10 +7,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -23,11 +21,14 @@ public class Account extends SequenceBaseEntity {
 
 	private String key;
 	private String name;
-	private User owner;
 	private Map<String, String> tags = new HashMap<String, String>();
 	
 	public Account() {
 		super();
+	}
+
+	public Account(Long id) {
+		super(id);
 	}
 
 	@NotNull
@@ -47,17 +48,6 @@ public class Account extends SequenceBaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "account_fk_owner"))
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
 	}
 
 	@ElementCollection
