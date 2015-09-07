@@ -8,15 +8,19 @@ import javax.ws.rs.core.Response.Status;
 
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
+import com.blazebit.storage.core.api.AccountDataAccess;
 import com.blazebit.storage.core.api.BucketDataAccess;
 import com.blazebit.storage.core.api.BucketService;
 import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
+import com.blazebit.storage.core.model.security.Role;
 import com.blazebit.storage.rest.api.BucketSubResource;
 import com.blazebit.storage.rest.api.FileSubResource;
+import com.blazebit.storage.rest.impl.view.BucketHeadRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketRepresentationView;
+import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
 
@@ -25,6 +29,8 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 	private final long accountId;
 	private final String bucketId;
 	
+	@Inject
+	private AccountDataAccess accountDataAccess;
 	@Inject
 	private BucketDataAccess bucketDataAccess;
 	@Inject
@@ -44,7 +50,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 		if (result == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket not found").build());
 		}
-		if (!result.getOwnerId().equals(accountId)) {
+		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access bucket").build());
 		}
 		
@@ -52,16 +58,18 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 	}
 
 	@Override
-	public Response head() {
-		Bucket result = bucketDataAccess.findByName(bucketId);
+	public BucketHeadRepresentation head() {
+		EntityViewSetting<BucketHeadRepresentationView, CriteriaBuilder<BucketHeadRepresentationView>> setting;
+		setting = EntityViewSetting.create(BucketHeadRepresentationView.class);
+		BucketHeadRepresentationView result = bucketDataAccess.findByName(bucketId, setting);
 		if (result == null) {
-			return Response.status(Status.NOT_FOUND).build();
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).build());
 		}
-		if (!result.getOwner().getId().equals(accountId)) {
-			return Response.status(Status.FORBIDDEN).build();
+		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).build());
 		}
 		
-		return Response.ok().build();
+		return result;
 	}
 
 	@Override
@@ -69,12 +77,46 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 		throw new WebApplicationException(Response.status(Status.NOT_IMPLEMENTED).type(MediaType.TEXT_PLAIN).entity("Not yet implemented").build());
 	}
 
+//	@Override
+//	public Response put(BucketUpdateRepresentation bucketUpdate) {
+//		return put(bucketUpdate, userContext.getAccountKey());
+//	}
+
 	@Override
-	public Response put(BucketUpdateRepresentation bucketUpdate) {
+	public Response put(BucketUpdateRepresentation bucketUpdate, String ownerKey) {
 		Bucket bucket = new Bucket(bucketId);
-		bucket.setOwner(new Account(accountId));
-		bucket.setStorage(new Storage(new StorageId(bucket.getOwner(), bucketUpdate.getDefaultStorageName())));
-		bucketService.create(bucket);
+		
+		if (ownerKey == null || ownerKey.isEmpty() || ownerKey.equals(userContext.getAccountKey())) {
+			bucket.setOwner(new Account(accountId));
+		} else if (userContext.getAccountRoles().contains(Role.ADMIN)) {
+			Account owner = accountDataAccess.findByKey(ownerKey);
+			
+			if (owner == null) {
+				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
+			}
+			
+			bucket.setOwner(owner);
+		} else {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN_TYPE).entity("Only admins may change the owner").build());
+		}
+		
+		String storageOwnerKey = bucketUpdate.getDefaultStorageOwner();
+		Account storageOwner;
+
+		if (storageOwnerKey == null || storageOwnerKey.isEmpty() || storageOwnerKey.equals(userContext.getAccountKey())) {
+			storageOwner = new Account(userContext.getAccountId());
+		} else if (userContext.getAccountRoles().contains(Role.ADMIN)) {
+			storageOwner = accountDataAccess.findByKey(storageOwnerKey);
+			
+			if (storageOwner == null) {
+				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
+			}
+		} else {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN_TYPE).entity("Only admins may change the storage owner").build());
+		}
+		
+		bucket.setStorage(new Storage(new StorageId(storageOwner, bucketUpdate.getDefaultStorageName())));
+		bucketService.put(bucket);
 		return Response.ok().build();
 	}
 

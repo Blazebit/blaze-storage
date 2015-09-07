@@ -6,6 +6,7 @@ import com.blazebit.persistence.QueryBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.model.jpa.StorageQuotaModel;
 import com.blazebit.storage.core.model.jpa.StorageQuotaPlan;
+import com.blazebit.storage.core.model.jpa.StorageQuotaPlanId;
 
 public interface StorageQuotaModelDataAccess {
 
@@ -13,7 +14,7 @@ public interface StorageQuotaModelDataAccess {
 
 	public StorageQuotaModel findById(String id);
 
-	public StorageQuotaPlan findQuotaPlanByModelIdAndLimit(String modelId, Integer gigabyteLimit);
+	public StorageQuotaPlan findQuotaPlanById(StorageQuotaPlanId id);
 	
 	public <T> T findById(String id, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
 }

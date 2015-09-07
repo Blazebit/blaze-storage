@@ -6,9 +6,7 @@ import com.blazebit.storage.core.model.jpa.StorageId;
 
 public interface StorageService {
 
-	public void create(Storage storage);
-
-	public void update(Storage storage);
+	public void put(Storage storage);
 	
 	public void updateStatistics(StorageId storageId, ObjectStatistics deltaStatistics);
 

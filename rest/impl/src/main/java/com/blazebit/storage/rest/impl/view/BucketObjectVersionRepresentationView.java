@@ -17,7 +17,7 @@ public interface BucketObjectVersionRepresentationView {
 	@Mapping("storage.uri")
 	public URI getStorageUri();
 	
-	public URI getContentUri();
+	public String getContentKey();
 	
 	public Long getContentLength();
 	
@@ -27,7 +27,7 @@ public interface BucketObjectVersionRepresentationView {
 	
 	public String getContentDisposition();
 	
-	public String getETag();
+	public String getEntityTag();
 	
 	public Long getLastModified();
 	

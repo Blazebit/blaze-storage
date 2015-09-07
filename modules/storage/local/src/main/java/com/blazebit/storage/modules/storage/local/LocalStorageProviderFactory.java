@@ -47,7 +47,7 @@ public class LocalStorageProviderFactory implements StorageProviderFactory {
 	}
 
 	@Override
-	public StorageProvider createStorageProvider(Map<String, Object> properties) {
+	public StorageProvider createStorageProvider(Map<String, ? extends Object> properties) {
 		Object basePathValue = properties.get(LocalStorage.BASE_PATH_PROPERTY);
 		
 		if (basePathValue == null) {
@@ -59,6 +59,11 @@ public class LocalStorageProviderFactory implements StorageProviderFactory {
 		String basePath = ((String) basePathValue).trim();
 		if (basePath.isEmpty()) {
 			throw new StorageException("The given base path is empty!");
+		}
+		
+		// Remove leading slash on windows
+		if (System.getProperty("os.name").startsWith("Windows") && basePath.startsWith("/")) {
+			basePath = basePath.substring(1);
 		}
 		
 		Path path = Paths.get(basePath);

@@ -18,9 +18,9 @@ public abstract class BucketObjectListElementRepresentationView extends BucketOb
 	public BucketObjectListElementRepresentationView(
 			@Mapping("id") BucketObjectId id, 
 			@Mapping("lastModified") Calendar lastModified, 
-			@Mapping("eTag") String eTag, 
+			@Mapping("entityTag") String entityTag, 
 			@Mapping("size") Long size) {
-		super(id.getName(), lastModified, eTag, size);
+		super(id.getName(), lastModified, entityTag, size);
 	}
 
 	@JsonIgnore

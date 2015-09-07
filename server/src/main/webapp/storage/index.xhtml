@@ -15,7 +15,9 @@
 	<ui:define name="title">Storages</ui:define>
 	
 	<ui:define name="content">
-		<p:link value="Back" outcome="/index.xhtml"/>
+		<p:link value="Back" outcome="/account/detail.xhtml">
+			<f:param name="key" value="#{storageIndexPage.accountKey}"/>
+		</p:link>
 		<br/>
 		<p:link value="Add" outcome="/storage/add.xhtml">
 			<f:param name="account" value="#{storageIndexPage.accountKey}"/>

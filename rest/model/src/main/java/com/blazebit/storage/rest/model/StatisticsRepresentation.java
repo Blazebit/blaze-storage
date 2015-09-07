@@ -8,6 +8,14 @@ public class StatisticsRepresentation implements Serializable {
 	private long objectCount;
 	private long objectBytes;
 
+	public StatisticsRepresentation() {
+	}
+
+	public StatisticsRepresentation(long objectCount, long objectBytes) {
+		this.objectCount = objectCount;
+		this.objectBytes = objectBytes;
+	}
+
 	public long getObjectCount() {
 		return objectCount;
 	}

@@ -18,7 +18,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		if (userContext.getAccountRoles().contains(Role.USER)) {
+		if (!userContext.getAccountRoles().contains(Role.USER)) {
 			throw new WebApplicationException("User cannot access the resource.", Response.Status.UNAUTHORIZED);
 		}
 	}

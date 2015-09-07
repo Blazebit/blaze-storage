@@ -5,22 +5,31 @@ import java.net.URI;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.QueryBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.BucketObjectDataAccess;
+import com.blazebit.storage.core.api.StorageProviderFactoryDataAccess;
+import com.blazebit.storage.core.api.spi.StorageProvider;
+import com.blazebit.storage.core.api.spi.StorageProviderFactory;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.BucketObjectId;
 import com.blazebit.storage.core.model.jpa.BucketObjectState;
 
 @Stateless
 public class BucketObjectDataAccessImpl extends AbstractDataAccess implements BucketObjectDataAccess {
+	
+	@Inject
+	private StorageProviderFactoryDataAccess storageProviderFactoryDataAccess;
 
 	@Override
-	public InputStream getContent(URI storageUri, URI contentUri) {
-		throw new UnsupportedOperationException("Not yet implemented");
+	public InputStream getContent(URI storageUri, String contentKey) {
+		StorageProviderFactory factory = storageProviderFactoryDataAccess.findByScheme(storageUri.getScheme());
+		StorageProvider storageProvider = factory.createStorageProvider(factory.createConfiguration(storageUri));
+		return storageProvider.getObject(contentKey);
 	}
 	
 	@Override

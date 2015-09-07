@@ -9,24 +9,45 @@ import com.blazebit.storage.core.api.StorageService;
 import com.blazebit.storage.core.model.jpa.ObjectStatistics;
 import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
+import com.blazebit.storage.core.model.jpa.StorageQuotaPlan;
 
 @Stateless
 public class StorageServiceImpl extends AbstractService implements StorageService {
 	
+	private static final long GIGABYTE = 1L << 30;
+	
 	@Inject
 	private StorageQuotaModelDataAccess storageQuotaModelDataAccess;
 
-	@Override
-	public void create(Storage storage) {
+	private void create(Storage storage) {
 		if (storage.getQuotaPlan().getId() == null) {
-			storage.setQuotaPlan(storageQuotaModelDataAccess.findQuotaPlanByModelIdAndLimit(storage.getQuotaPlan().getQuotaModel().getId(), storage.getQuotaPlan().getGigabyteLimit()));
+			storage.setQuotaPlan(storageQuotaModelDataAccess.findQuotaPlanById(storage.getQuotaPlan().getId()));
 		}
+		
 		em.persist(storage);
+		em.flush();
 	}
 
 	@Override
-	public void update(Storage storage) {
-		throw new UnsupportedOperationException("Update of storages not yet supported!");
+	public void put(Storage storage) {
+		Storage currentStorage = em.find(Storage.class, storage.getId());
+		
+		if (currentStorage == null) {
+			create(storage);
+			return;
+		}
+
+		StorageQuotaPlan quotaPlan = storageQuotaModelDataAccess.findQuotaPlanById(storage.getQuotaPlan().getId());
+		
+		if (quotaPlan.getId().getGigabyteLimit() * GIGABYTE < storage.getStatistics().getObjectBytes()) {
+			throw new StorageException("Can not set a quota plan with a gigabyte limit(" + quotaPlan.getId().getGigabyteLimit() + ") lower than the current object bytes(" + storage.getStatistics().getObjectBytes() + ")!");
+		}
+
+		currentStorage.setUri(storage.getUri());
+		currentStorage.setQuotaPlan(quotaPlan);
+		currentStorage.setTags(storage.getTags());
+		em.merge(currentStorage);
+		em.flush();
 	}
 
 	@Override

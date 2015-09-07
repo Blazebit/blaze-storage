@@ -51,7 +51,6 @@ public class BucketObject extends EmbeddedIdBaseEntity<BucketObjectId> {
 		this.state = state;
 	}
 	
-	@NotNull
 	@Column(name = "content_version_uuid")
 	public String getContentVersionUuid() {
 		return contentVersionUuid;

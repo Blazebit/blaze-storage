@@ -1,7 +1,7 @@
 package com.blazebit.storage.core.model.jpa;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ public class StorageQuotaModel extends BaseEntity<String> {
 	
 	private String name;
 	private String description;
-	private List<StorageQuotaPlan> plans = new ArrayList<>();
+	private Set<StorageQuotaPlan> plans = new TreeSet<>();
 
 	public StorageQuotaModel() {
 		super(null);
@@ -50,12 +50,12 @@ public class StorageQuotaModel extends BaseEntity<String> {
 		this.description = description;
 	}
 
-	@OneToMany(mappedBy = "quotaModel", cascade = CascadeType.ALL)
-	public List<StorageQuotaPlan> getPlans() {
+	@OneToMany(mappedBy = "id.quotaModel", cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<StorageQuotaPlan> getPlans() {
 		return plans;
 	}
 
-	public void setPlans(List<StorageQuotaPlan> plans) {
+	public void setPlans(Set<StorageQuotaPlan> plans) {
 		this.plans = plans;
 	}
 

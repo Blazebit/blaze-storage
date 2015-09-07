@@ -4,47 +4,29 @@ import java.util.Map;
 
 import javax.ws.rs.ext.ParamConverter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class TagMapParamConverter implements ParamConverter<Map<String, String>> {
 
-	@Override
-	public Map<String, String> fromString(String value) {
-		return null;
-//		char[] chars = value.toCharArray();
-//		int i = 0;
-//		
-//		i = readSpaces(chars, i);
-//		i = readOpen(chars, i);
-//
-//		i = readSpaces(chars, i);
-//		i = readValue(chars, i);
-//		i = readSpaces(chars, i);
-//		i = readKeyValueSeparator(chars, i);
-//		i = readSpaces(chars, i);
-//		i = readValue(chars, i);
-//		i = readSpaces(chars, i);
-//		i = readElementSeparator(chars, i);
-//		i = readSpaces(chars, i);
-//		
-//		i = readClose(chars, i);
-//		for (; i < chars.length; i++) {
-//			
-//		}
-	}
+	private final ObjectMapper mapper = new ObjectMapper();
 	
-	private int readSpaces(char[] chars, int i) {
-		for (; i < chars.length; i++) {
-			if (!Character.isWhitespace(chars[i])) {
-				return i;
-			}
+	@Override
+	@SuppressWarnings("unchecked")
+	public Map<String, String> fromString(String value) {
+		try {
+			return mapper.readValue(value, Map.class);
+		} catch (Exception ex) {
+			throw new IllegalArgumentException(ex);
 		}
-		
-		return i;
 	}
 
 	@Override
 	public String toString(Map<String, String> value) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return mapper.writeValueAsString(value);
+		} catch (Exception ex) {
+			throw new IllegalArgumentException(ex);
+		}
 	}
 
 }

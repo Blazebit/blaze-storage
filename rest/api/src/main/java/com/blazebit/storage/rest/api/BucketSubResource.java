@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -12,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
 
@@ -34,7 +36,7 @@ public interface BucketSubResource {
 	 * @return
 	 */
 	@HEAD
-	public Response head();
+	public BucketHeadRepresentation head();
 
 	/**
 	 * This implementation of the DELETE operation deletes the bucket named in
@@ -52,9 +54,13 @@ public interface BucketSubResource {
 	 * @param bucketUpdate
 	 * @return
 	 */
+//	@PUT
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public Response put(BucketUpdateRepresentation bucketUpdate);
+	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response put(BucketUpdateRepresentation bucketUpdate);
+	public Response put(BucketUpdateRepresentation bucketUpdate, @HeaderParam("x-blz-owner-key") String ownerKey);
 	
 	@Path("{key: .+}")
 	public FileSubResource getFile(@PathParam("key") String key);

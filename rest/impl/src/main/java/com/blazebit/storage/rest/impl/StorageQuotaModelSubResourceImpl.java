@@ -1,9 +1,9 @@
 package com.blazebit.storage.rest.impl;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -70,12 +70,12 @@ public class StorageQuotaModelSubResourceImpl extends AbstractResource implement
 		return Response.created(uri).build();
 	}
 	
-	private List<StorageQuotaPlan> getPlans(StorageQuotaModel storageQuotaModel, Set<Integer> limits) {
-		List<StorageQuotaPlan> plans = new ArrayList<>(limits.size());
+	private SortedSet<StorageQuotaPlan> getPlans(StorageQuotaModel storageQuotaModel, Set<Integer> limits) {
+		SortedSet<StorageQuotaPlan> plans = new TreeSet<>();
 		for (Integer limit : limits) {
 			StorageQuotaPlan plan = new StorageQuotaPlan();
-			plan.setQuotaModel(storageQuotaModel);
-			plan.setGigabyteLimit(limit);
+			plan.getId().setQuotaModel(storageQuotaModel);
+			plan.getId().setGigabyteLimit(limit);
 			// TODO: We might need to allow setting that in the future
 			plan.setAlertPercent((short) 100);
 			plans.add(plan);

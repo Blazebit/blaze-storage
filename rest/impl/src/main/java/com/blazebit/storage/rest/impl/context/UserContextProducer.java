@@ -47,6 +47,7 @@ public class UserContextProducer {
 		if (account == null) {
 			account = new Account();
 			account.setKey(accountKey);
+			account.setName(accountKey);
 			
 			try {
 				accountService.create(account);
@@ -62,6 +63,6 @@ public class UserContextProducer {
 			}
 		}
 			
-		return new UserContextImpl(account.getId(), accountRoles, Locale.ENGLISH, Collections.list(request.getLocales()));
+		return new UserContextImpl(account.getId(), accountKey, accountRoles, Locale.ENGLISH, Collections.list(request.getLocales()));
 	}
 }

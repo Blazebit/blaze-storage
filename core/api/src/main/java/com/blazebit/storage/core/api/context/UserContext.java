@@ -8,6 +8,8 @@ public interface UserContext {
 	
 	public Long getAccountId();
 	
+	public String getAccountKey();
+	
 	public Set<String> getAccountRoles();
 
 	public Locale getLocale();

@@ -4,6 +4,7 @@ import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.storage.core.model.jpa.StorageQuotaPlan;
+import com.blazebit.storage.core.model.jpa.StorageQuotaPlanId;
 import com.blazebit.storage.rest.model.StorageQuotaPlanChoiceRepresentation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,12 +14,11 @@ public abstract class StorageQuotaPlanChoiceRepresentationView extends StorageQu
 	private static final long serialVersionUID = 1L;
 
 	public StorageQuotaPlanChoiceRepresentationView(
-			@Mapping("quotaModel.id") String modelId,
-			@Mapping("gigabyteLimit") Integer gigabyteLimit) {
-		super(modelId, gigabyteLimit);
+			@Mapping("id") StorageQuotaPlanId id) {
+		super(id.getQuotaModel().getId(), id.getGigabyteLimit());
 	}
 
 	@JsonIgnore
 	@IdMapping("id")
-	public abstract Long getId();
+	public abstract StorageQuotaPlanId getId();
 }

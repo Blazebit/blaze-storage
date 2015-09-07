@@ -1,14 +1,15 @@
 package com.blazebit.storage.rest.impl.view;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.blazebit.persistence.view.CollectionMapping;
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
-import com.blazebit.persistence.view.MappingParameter;
 import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.ObjectStatistics;
+import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.rest.model.BucketObjectListElementRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.StatisticsRepresentation;
@@ -22,12 +23,13 @@ public abstract class BucketRepresentationView extends BucketRepresentation {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public BucketRepresentationView(
 			@Mapping("id") String id,
-			@MappingParameter("prefix") String prefix,
-			@MappingParameter("limit") Integer limit,
-			@MappingParameter("marker") String marker,
+			@Mapping("owner.key") String ownerKey,
+			@Mapping("storage.owner.key") String storageOwner,
+			@Mapping("storage.id") StorageId storageId,
+			@Mapping("creationDate") Calendar creationDate,
 			@Mapping("statistics") ObjectStatistics statistics,
 			@Mapping("objects") @CollectionMapping(ignoreIndex = true) List<BucketObjectListElementRepresentationView> objects) {
-		super(id, prefix, limit, marker, false, toStatistics(statistics), (List<BucketObjectListElementRepresentation>) (List) objects);
+		super(storageOwner, storageId.getName(), id, ownerKey, creationDate, objects.isEmpty() ? null : objects.remove(objects.size() - 1).getKey(), toStatistics(statistics), (List<BucketObjectListElementRepresentation>) (List) objects);
 	}
 	
 	@JsonIgnore

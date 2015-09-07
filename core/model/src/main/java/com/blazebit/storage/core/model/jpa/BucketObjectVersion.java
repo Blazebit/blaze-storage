@@ -1,13 +1,11 @@
 package com.blazebit.storage.core.model.jpa;
 
-import java.net.URI;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,11 +17,10 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
-import com.blazebit.storage.core.model.jpa.converter.URIConverter;
 
 @Entity
 public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersionId> {
@@ -36,13 +33,13 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 	private Calendar creationDate;
 	private Storage storage;
 	
-	private URI contentUri;
+	private String contentKey;
 	private long contentLength;
 	private String contentType = DEFAULT_CONTENT_TYPE;
 	private String contentMD5;
 	private String contentDisposition;
-	private String eTag;
-	private long lastModified;
+	private String entityTag;
+	private Long lastModified;
 	private Map<String, String> tags = new HashMap<String, String>();
 
 	public BucketObjectVersion() {
@@ -91,14 +88,13 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 	}
 
 	@NotNull
-	@Convert(converter = URIConverter.class)
-	@Column(name = "content_uri")
-	public URI getContentUri() {
-		return contentUri;
+	@Column(name = "content_key")
+	public String getContentKey() {
+		return contentKey;
 	}
 
-	public void setContentUri(URI contentUri) {
-		this.contentUri = contentUri;
+	public void setContentKey(String contentKey) {
+		this.contentKey = contentKey;
 	}
 
 	@NotNull
@@ -121,7 +117,6 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 		this.contentType = contentType;
 	}
 
-	@NotNull
 	@Column(name = "content_md5")
 	public String getContentMD5() {
 		return contentMD5;
@@ -131,7 +126,6 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 		this.contentMD5 = contentMD5;
 	}
 
-	@NotNull
 	@Column(name = "content_disposition")
 	public String getContentDisposition() {
 		return contentDisposition;
@@ -142,22 +136,22 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 	}
 
 	@NotNull
-	@Column(name = "etag")
-	public String getETag() {
-		return eTag;
+	@Column(name = "entity_tag")
+	public String getEntityTag() {
+		return entityTag;
 	}
 
-	public void setETag(String eTag) {
-		this.eTag = eTag;
+	public void setEntityTag(String entityTag) {
+		this.entityTag = entityTag;
 	}
 
 	@NotNull
 	@Column(name = "last_modified")
-	public long getLastModified() {
+	public Long getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(long lastModified) {
+	public void setLastModified(Long lastModified) {
 		this.lastModified = lastModified;
 	}
 	
@@ -184,5 +178,13 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 		if (creationDate == null) {
 			creationDate = Calendar.getInstance();
 		}
+		if (lastModified == null) {
+			lastModified = System.currentTimeMillis();
+		}
+	}
+	
+	@PreUpdate
+	private void preUpdate() {
+		lastModified = System.currentTimeMillis();
 	}
 }

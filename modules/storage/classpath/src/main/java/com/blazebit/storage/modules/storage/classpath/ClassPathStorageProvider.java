@@ -14,28 +14,33 @@ public class ClassPathStorageProvider implements StorageProvider {
 		this.classLoader = classLoader;
 	}
 	
-	protected URL getResource(String path) {
-		return classLoader.getResource(path);
+	protected URL getResource(String externalKey) {
+		return classLoader.getResource(externalKey);
 	}
 
 	@Override
-	public InputStream getObject(String path) {
-		InputStream inputStream = classLoader.getResourceAsStream(path);
+	public InputStream getObject(String externalKey) {
+		InputStream inputStream = classLoader.getResourceAsStream(externalKey);
 		
 		if (inputStream == null) {
-			throw new StorageException("Object could not be found: " + path);
+			throw new StorageException("Object could not be found: " + externalKey);
 		}
 		
 		return inputStream;
 	}
 
 	@Override
-	public void deleteObject(String path) {
+	public void deleteObject(String externalKey) {
 		throw new UnsupportedOperationException("Delete is not supported on the classpath!");
 	}
 
 	@Override
-	public long putObject(String path, InputStream content) {
+	public String createObject(InputStream content) {
+		throw new UnsupportedOperationException("Put is not supported on the classpath!");
+	}
+
+	@Override
+	public long putObject(String externalKey, InputStream content) {
 		throw new UnsupportedOperationException("Put is not supported on the classpath!");
 	}
 

@@ -1,21 +1,23 @@
 package com.blazebit.storage.rest.api;
 
 import java.io.InputStream;
-import java.util.Map;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.blazebit.storage.rest.model.BucketObjectRepresentation;
+import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
+
 public interface FileSubResource {
 
 	@GET
-	public Response get();
+	public BucketObjectRepresentation get();
 
 	/**
 	 * The HEAD operation retrieves metadata from an object without returning
@@ -26,7 +28,7 @@ public interface FileSubResource {
 	 * @return
 	 */
 	@HEAD
-	public Response head();
+	public BucketObjectRepresentation head();
 
 	// This is for CORS, we can do that later
 	// @OPTIONS
@@ -44,17 +46,6 @@ public interface FileSubResource {
 
 	@PUT
 	@Consumes({ MediaType.WILDCARD })
-	public Response put(
-			@HeaderParam("Content-Type") String contentType, 
-			@HeaderParam("Content-Disposition") String contentDisposition,
-			@HeaderParam("Content-Length") long contentLength,
-			@HeaderParam("Content-MD5") String contentMD5, 
-			@HeaderParam("x-blz-storage-name") String storageName,
-//			@HeaderParam("x-blz-tags") Map<String, String> tags, 
-			InputStream inputStream);
+	public Response put(@BeanParam BucketObjectUpdateRepresentation bucketObjectUpdate, InputStream content);
 
-	// We might also want to add POST to allow direct uploads
-	// @POST
-	// @Path("{path}")
-	// public Response createFile(@PathParam("path") String path);
 }

@@ -19,6 +19,7 @@ import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.core.model.jpa.StorageQuotaModel;
 import com.blazebit.storage.core.model.jpa.StorageQuotaPlan;
+import com.blazebit.storage.core.model.jpa.StorageQuotaPlanId;
 import com.blazebit.storage.rest.api.AccountSubResource;
 import com.blazebit.storage.rest.api.AccountsResource;
 import com.blazebit.storage.rest.api.StorageSubResource;
@@ -55,14 +56,9 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 
 	@Override
 	public Response put(StorageUpdateRepresentation<StorageTypeConfigEntryRepresentation> storageUpdate) {
-		Storage storage = getStorageById(id);
-		boolean isNew = storage == null;
-		
-		if (isNew) {
-			storage = new Storage(id);
-		}
+		Storage storage = new Storage(id);
 
-		storage.setQuotaPlan(new StorageQuotaPlan(new StorageQuotaModel(storageUpdate.getQuotaPlan().getModelId()), storageUpdate.getQuotaPlan().getGigabyteLimit()));
+		storage.setQuotaPlan(new StorageQuotaPlan(new StorageQuotaPlanId(new StorageQuotaModel(storageUpdate.getQuotaPlan().getModelId()), storageUpdate.getQuotaPlan().getGigabyteLimit())));
 		storage.setTags(storageUpdate.getTags());
 		
 		Map<String, String> configurationMap = new LinkedHashMap<>(storageUpdate.getConfiguration().size());
@@ -71,12 +67,7 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 		}
 		
 		storage.setUri(storageProviderFactoryDataAccess.getConfigurationUri(storageUpdate.getType(), configurationMap));
-		
-		if (isNew) {
-			storageService.create(storage);
-		} else {
-			storageService.update(storage);
-		}
+		storageService.put(storage);
 		
 		URI uri = uriInfo.getRequestUriBuilder()
 			.path(AccountsResource.class, "get")
@@ -85,10 +76,6 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 			.build(storage.getId().getOwner().getId(), storage.getId().getName());
 		
 		return Response.created(uri).build();
-	}
-	
-	private Storage getStorageById(StorageId id) {
-		return storageDataAccess.findById(id);
 	}
 
 }

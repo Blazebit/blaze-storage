@@ -23,16 +23,30 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	private Event<BucketDeletedEvent> bucketDeleted;
 	
 	@Override
-	public void create(Bucket bucket) {
+	public void put(Bucket bucket) {
+		Bucket currentBucket = em.find(Bucket.class, bucket.getId());
+		
+		// Fallback to create
+		if (currentBucket == null) {
+			createObject(bucket);
+			return;
+		}
+
+		currentBucket.setStorage(em.getReference(Storage.class, new StorageId(new Account(bucket.getStorage().getId().getOwner().getId()), bucket.getStorage().getId().getName())));
+		em.merge(currentBucket);
+		em.flush();
+	}
+
+	private void createObject(Bucket bucket) {
 		bucket.setDeleted(false);
 		bucket.setStatistics(new ObjectStatistics());
 		bucket.setObjects(new HashSet<BucketObject>(0));
+		// TODO: translate JPA/SQL exceptions to not found exceptions 
 		bucket.setOwner(em.getReference(Account.class, bucket.getOwner().getId()));
-		bucket.setStorage(em.getReference(Storage.class, new StorageId(bucket.getOwner(), bucket.getStorage().getId().getName())));
+		bucket.setStorage(em.getReference(Storage.class, new StorageId(new Account(bucket.getStorage().getId().getOwner().getId()), bucket.getStorage().getId().getName())));
 		
 		em.persist(bucket);
 		em.flush();
-		// TODO: translate JPA/SQL exceptions to not found exceptions 
 	}
 
 	@Override

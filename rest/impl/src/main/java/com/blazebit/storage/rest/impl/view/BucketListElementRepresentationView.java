@@ -6,7 +6,9 @@ import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.storage.core.model.jpa.Bucket;
+import com.blazebit.storage.core.model.jpa.ObjectStatistics;
 import com.blazebit.storage.rest.model.BucketListElementRepresentation;
+import com.blazebit.storage.rest.model.StatisticsRepresentation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @EntityView(Bucket.class)
@@ -16,12 +18,21 @@ public abstract class BucketListElementRepresentationView extends BucketListElem
 
 	public BucketListElementRepresentationView(
 			@Mapping("id") String id,
-			@Mapping("creationDate") Calendar creationDate) {
-		super(id, creationDate);
+			@Mapping("owner.key") String ownerKey,
+			@Mapping("creationDate") Calendar creationDate,
+			@Mapping("statistics") ObjectStatistics statistics) {
+		super(id, ownerKey, creationDate, toStatistics(statistics));
 	}
 
 	@JsonIgnore
 	@IdMapping("id")
 	public abstract String getId();
+	
+	private static StatisticsRepresentation toStatistics(ObjectStatistics statistics) {
+		StatisticsRepresentation result = new StatisticsRepresentation();
+		result.setObjectBytes(statistics.getObjectBytes());
+		result.setObjectCount(result.getObjectCount());
+		return result;
+	}
 	
 }

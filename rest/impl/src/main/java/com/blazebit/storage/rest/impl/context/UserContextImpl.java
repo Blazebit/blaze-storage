@@ -10,12 +10,14 @@ import com.blazebit.storage.core.api.context.UserContext;
 public class UserContextImpl implements UserContext {
 
 	private final Long accountId;
+	private final String accountKey;
 	private final Set<String> accountRoles;
 	private final Locale locale;
 	private final List<Locale> locales;
 	
-	public UserContextImpl(Long accountId, Set<String> accountRoles, Locale locale, List<Locale> locales) {
+	public UserContextImpl(Long accountId, String accountKey, Set<String> accountRoles, Locale locale, List<Locale> locales) {
 		this.accountId = accountId;
+		this.accountKey = accountKey;
 		this.locale = locale;
 		this.locales = locales;
 		
@@ -29,6 +31,11 @@ public class UserContextImpl implements UserContext {
 	@Override
 	public Long getAccountId() {
 		return accountId;
+	}
+
+	@Override
+	public String getAccountKey() {
+		return accountKey;
 	}
 
 	@Override

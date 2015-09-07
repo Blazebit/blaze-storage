@@ -7,18 +7,19 @@ public class BucketObjectListElementRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// TODO: contentType?
 	private String key;
 	private Calendar lastModified;
-	private String eTag;
+	private String entityTag;
 	private long size;
 
 	public BucketObjectListElementRepresentation() {
 	}
 
-	public BucketObjectListElementRepresentation(String key, Calendar lastModified, String eTag, long size) {
+	public BucketObjectListElementRepresentation(String key, Calendar lastModified, String entityTag, long size) {
 		this.key = key;
 		this.lastModified = lastModified;
-		this.eTag = eTag;
+		this.entityTag = entityTag;
 		this.size = size;
 	}
 
@@ -38,12 +39,12 @@ public class BucketObjectListElementRepresentation implements Serializable {
 		this.lastModified = lastModified;
 	}
 
-	public String geteTag() {
-		return eTag;
+	public String getEntityTag() {
+		return entityTag;
 	}
 
-	public void seteTag(String eTag) {
-		this.eTag = eTag;
+	public void setEntityTag(String entityTag) {
+		this.entityTag = entityTag;
 	}
 
 	public long getSize() {

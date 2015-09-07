@@ -11,7 +11,7 @@ import com.blazebit.storage.core.model.jpa.BucketObjectId;
 
 public interface BucketObjectDataAccess {
 	
-	public InputStream getContent(URI storageUri, URI contentUri);
+	public InputStream getContent(URI storageUri, String contentKey);
 
 	public BucketObject findById(BucketObjectId bucketObjectId);
 

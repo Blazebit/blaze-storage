@@ -5,11 +5,13 @@ import java.io.InputStream;
 
 public interface StorageProvider {
 
-	public InputStream getObject(String path);
+	public InputStream getObject(String externalKey);
 	
-	public void deleteObject(String path);
+	public void deleteObject(String externalKey);
 	
-	public long putObject(String path, InputStream content);
+	public String createObject(InputStream content);
+	
+	public long putObject(String externalKey, InputStream content);
 	
 	public long getTotalSpace();
 	

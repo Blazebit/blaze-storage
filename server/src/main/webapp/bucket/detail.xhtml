@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/storage"
+	template="/WEB-INF/templates/template.xhtml">
+	
+	<f:metadata>
+		<f:viewParam name="name" value="#{bucketDetailPage.name}"/>
+    	<f:viewAction action="#{bucketDetailPage.viewAction}"/>
+	</f:metadata>
+	
+	<ui:define name="title">Bucket detail</ui:define>
+	
+	<ui:define name="content">
+		<ui:decorate template="/WEB-INF/fragment/contentPanel.xhtml">
+			<ui:define name="header">
+				<h:link value="Back" outcome="/bucket/index.xhtml"/>
+			</ui:define>
+			<ui:define name="content">
+				<p:outputLabel for="name" value="Name:" />
+				<h:outputText id="name" value="#{bucketDetailPage.bucket.name}"/>
+				
+				<p:outputLabel for="created" value="Created:" />
+				<h:outputText id="created" value="#{bucketDetailPage.bucket.creationDate.time}">
+					<f:convertDateTime dateStyle="medium"/>
+				</h:outputText>
+				
+				<p:outputLabel for="owner" value="Owner:" />
+				<h:outputText id="owner" value="#{bucketDetailPage.accountName}"/>
+				
+				<p:outputLabel for="defaultStorage" value="Default storage:" />
+				<p:link id="defaultStorage" value="#{bucketDetailPage.bucket.defaultStorageName}" outcome="/storage/detail.xhtml">
+					<f:param name="account" value="#{bucketDetailPage.bucket.defaultStorageOwner}"/>
+					<f:param name="name" value="#{bucketDetailPage.bucket.defaultStorageName}"/>
+				</p:link>
+				
+				<p:outputLabel for="objectCount" value="Objects:" />
+				<h:outputText id="objectCount" value="#{bucketDetailPage.bucket.statistics.objectCount}"/>
+
+				<p:outputLabel for="objectBytes" value="Bytes:" />
+				<h:outputText id="objectBytes" value="#{bucketDetailPage.bucket.statistics.objectBytes}"/>
+			</ui:define>
+			<ui:define name="footer">
+				<p:link value="Edit" outcome="/bucket/edit.xhtml">
+					<f:param name="name" value="#{bucketDetailPage.bucket.name}"/>
+				</p:link>
+<!-- 				<p:link value="Show contents" outcome="/object/index.xhtml"> -->
+<!-- 					<f:param name="bucket" value="#{bucketDetailPage.bucket.name}"/> -->
+<!-- 				</p:link> -->
+			</ui:define>
+		</ui:decorate>
+	</ui:define>
+	
+</ui:composition>

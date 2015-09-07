@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.PrePersist;
@@ -29,6 +30,7 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 	private static final long serialVersionUID = 1L;
 	
 	private URI uri;
+	private Account owner;
 	private Long ownerId;
 	private Calendar creationDate;
 	private StorageQuotaPlan quotaPlan;
@@ -51,6 +53,18 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 
 	public void setUri(URI uri) {
 		this.uri = uri;
+	}
+
+	// Unfortunately we need this in order to be able to fetch properties from the owner.
+	// Remove this when https://github.com/Blazebit/blaze-persistence/issues/107 is fixed
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "owner_id", insertable = false, updatable = false)
+	public Account getOwner() {
+		return owner;
+	}
+	
+	public void setOwner(Account owner) {
+		this.owner = owner;
 	}
 	
 	@Column(name = "owner_id", insertable = false, updatable = false)
@@ -75,7 +89,10 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 
 	@NotNull
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "quota_plan_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_quota_plan"))
+	@JoinColumns(value = {
+			@JoinColumn(name = "quota_plan_id", referencedColumnName = "quota_model_id"), 
+			@JoinColumn(name = "quota_plan_limit", referencedColumnName = "gigabyte_limit")
+		}, foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_quota_plan"))
 	public StorageQuotaPlan getQuotaPlan() {
 		return quotaPlan;
 	}

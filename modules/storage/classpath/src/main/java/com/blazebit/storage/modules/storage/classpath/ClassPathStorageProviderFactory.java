@@ -43,7 +43,7 @@ public class ClassPathStorageProviderFactory implements StorageProviderFactory {
 	}
 
 	@Override
-	public StorageProvider createStorageProvider(Map<String, Object> properties) {
+	public StorageProvider createStorageProvider(Map<String, ? extends Object> properties) {
 		Object classLoader = properties.get(ClassPathStorage.CLASS_LOADER_PROPERTY);
 		
 		if (classLoader == null) {

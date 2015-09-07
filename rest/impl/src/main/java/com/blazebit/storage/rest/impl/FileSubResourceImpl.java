@@ -2,17 +2,15 @@ package com.blazebit.storage.rest.impl;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import com.blazebit.persistence.CriteriaBuilder;
@@ -30,6 +28,9 @@ import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketObjectVersionRepresentationView;
+import com.blazebit.storage.rest.model.BucketObjectRepresentation;
+import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
+import com.blazebit.storage.rest.model.ContentDisposition;
 
 public class FileSubResourceImpl extends AbstractResource implements FileSubResource {
 
@@ -49,19 +50,21 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	public FileSubResourceImpl(long accountId, String bucketId, String key) {
 		this.accountId = accountId;
 		this.bucketObjectId = new BucketObjectId(new Bucket(bucketId), key);
+		// Needed so we can use this id for loading with em.find + locking
+		this.bucketObjectId.getBucket().setObjects(null);
 	}
 
 	@Override
-	public Response get() {
+	public BucketObjectRepresentation get() {
 		return getOrHead(true);
 	}
 
 	@Override
-	public Response head() {
+	public BucketObjectRepresentation head() {
 		return getOrHead(false);
 	}
 	
-	private Response getOrHead(boolean isGet) {
+	private BucketObjectRepresentation getOrHead(boolean isGet) {
 		EntityViewSetting<BucketObjectRepresentationView, CriteriaBuilder<BucketObjectRepresentationView>> setting;
 		setting = EntityViewSetting.create(BucketObjectRepresentationView.class);
 		BucketObjectRepresentationView result = bucketObjectDataAccess.findById(bucketObjectId, setting);
@@ -76,19 +79,22 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		// TODO: implement range parameter?
 		// TODO: implement If-Modified-Since, If-Unmodified-Since, If-Match, If-None-Match
 		BucketObjectVersionRepresentationView version = result.getContentVersion();
-		ResponseBuilder resonpose = Response.ok()
-			.type(version.getContentType())
-			.lastModified(new Date(version.getLastModified()))
-			.tag(version.getETag())
-			.header(HttpHeaders.CONTENT_LENGTH, version.getContentLength())
-			.header(HttpHeaders.CONTENT_DISPOSITION, version.getContentDisposition());
-
+		
+		BucketObjectRepresentation response = new BucketObjectRepresentation();
+		response.setContentType(version.getContentType());
+		response.setContentDisposition(ContentDisposition.fromString(version.getContentDisposition()));
+		Calendar lastModified = Calendar.getInstance();
+		lastModified.setTime(new Date(version.getLastModified()));
+		response.setLastModified(lastModified);
+		response.setEntityTag(version.getEntityTag());
+		response.setSize(version.getContentLength());
+		
 		if (isGet) {
-			InputStream is = bucketObjectDataAccess.getContent(version.getStorageUri(), version.getContentUri());
-			resonpose.entity(is);
+			InputStream is = bucketObjectDataAccess.getContent(version.getStorageUri(), version.getContentKey());
+			response.setContent(is);
 		}
 		
-		return resonpose.build();
+		return response;
 	}
 
 	@Override
@@ -97,31 +103,39 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	}
 
 	@Override
-	public Response put(String contentType, String contentDisposition, long contentLength, String contentMD5, String storageName, 
-//			Map<String, String> tags, 
-			InputStream inputStream) {
-		Storage storage = getStorage(accountId, bucketObjectId.getBucket().getId(), storageName);
-		URI storageUri = null; // Either from the given storage name or the bucket default
-		String key = bucketObjectId.getName();
-		// TODO: Check content md5
+	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate, InputStream content) {
+		Storage storage = getStorage(accountId, bucketObjectId.getBucket().getId(), bucketObjectUpdate.getStorageName());
+		URI storageUri = storage.getUri();
+		String externalContentKey = bucketObjectUpdate.getExternalContentKey();
+		String contentKey;
 		
-		// TODO: implement content uri retrieval without storage
-		URI contentUri = bucketObjectService.createContent(storageUri, key, inputStream);
+		if (externalContentKey != null && !externalContentKey.isEmpty()) {
+			contentKey = externalContentKey;
+			// TODO: Maybe check if the key is valid?
+		} else {
+			// TODO: Check content md5
+			contentKey = bucketObjectService.createContent(storageUri, content);
+		}
 		
 		BucketObject bucketObject = new BucketObject(bucketObjectId);
 		BucketObjectVersion version = new BucketObjectVersion();
 		bucketObject.setContentVersion(version);
 		
-		version.setContentDisposition(contentDisposition);
-		version.setContentLength(contentLength);
-		version.setContentMD5(contentMD5);
-		version.setContentType(contentType);
-		version.setContentUri(contentUri);
+		if (bucketObjectUpdate.getContentDisposition() != null) {
+			version.setContentDisposition(bucketObjectUpdate.getContentDisposition().toString());
+		}
 		
-//		version.setETag(eTag);
-//		version.setLastModified(lastModified);
+		version.setContentLength(bucketObjectUpdate.getSize());
+		// TODO: for what?
+		version.setContentMD5(bucketObjectUpdate.getContentMD5());
+		version.setContentType(bucketObjectUpdate.getContentType());
+		version.setContentKey(contentKey);
+		
+		// TODO: implement right
+//		version.setEntityTag(bucketObjectUpdate.getEntityTag());
+		version.setEntityTag("");
 		version.setStorage(storage);
-//		version.setTags(tags);
+		version.setTags(bucketObjectUpdate.getTags());
 		
 		bucketObjectService.put(bucketObject);
 		

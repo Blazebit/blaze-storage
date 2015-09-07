@@ -11,6 +11,6 @@ public interface StorageProviderFactory {
 
 	public URI createUri(Map<String, String> configuration);
 
-	public StorageProvider createStorageProvider(Map<String, Object> properties);
+	public StorageProvider createStorageProvider(Map<String, ? extends Object> properties);
 	
 }

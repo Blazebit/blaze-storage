@@ -8,7 +8,7 @@ import com.blazebit.storage.core.model.jpa.BucketObjectId;
 
 public interface BucketObjectService {
 
-	public URI createContent(URI storageUri, String key, InputStream inputStream);
+	public String createContent(URI storageUri, InputStream inputStream);
 
 	public void put(BucketObject bucketObject);
 	
