@@ -1,14 +1,15 @@
 package com.blazebit.storage.rest.client;
 
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+
 import org.keycloak.admin.client.Config;
 import org.keycloak.representations.AccessTokenResponse;
 
 public class KeycloakBlazeStorage {
 
 	public static BlazeStorage getInstance(String serverUrl, AccessTokenResponse accessToken, Config keycloakConfig) {
-		ResteasyClient client = new ResteasyClientBuilder().build();
+		Client client = ClientBuilder.newClient();
 		TokenManager tokenManager = new TokenManager(accessToken, keycloakConfig, client);
 		return BlazeStorageClient.getInstance(serverUrl, new BearerAuthFilter(tokenManager));
 	}

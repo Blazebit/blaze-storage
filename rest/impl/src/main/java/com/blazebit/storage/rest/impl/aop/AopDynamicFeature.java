@@ -11,6 +11,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.blazebit.annotation.AnnotationUtils;
 import com.blazebit.storage.rest.api.aop.Authenticated;
+import com.blazebit.storage.rest.api.aop.ResponseObject;
 
 @Provider
 public class AopDynamicFeature implements DynamicFeature {
@@ -19,6 +20,7 @@ public class AopDynamicFeature implements DynamicFeature {
 	
 	static {
 		annotationProviders.put(Authenticated.class, AuthorizationRequestFilter.class);
+		annotationProviders.put(ResponseObject.class, ResponseObjectResponseFilter.class);
 	}
 
 	@Override

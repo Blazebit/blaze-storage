@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.core.HttpHeaders;
 
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
+
 public class BucketObjectBaseRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;

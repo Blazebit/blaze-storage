@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.blazebit.storage.rest.api.aop.ResponseObject;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
@@ -36,6 +37,7 @@ public interface BucketSubResource {
 	 * @return
 	 */
 	@HEAD
+	@ResponseObject
 	public BucketHeadRepresentation head();
 
 	/**

@@ -5,43 +5,51 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.ext.MessageBodyReader;
 
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
 import com.blazebit.storage.rest.api.AccountsResource;
+import com.blazebit.storage.rest.api.AdminResource;
 import com.blazebit.storage.rest.api.BucketsResource;
 import com.blazebit.storage.rest.api.BucketsSubResource;
 import com.blazebit.storage.rest.api.StorageQuotaModelsResource;
 import com.blazebit.storage.rest.api.StorageTypesResource;
+import com.blazebit.storage.rest.model.convert.BucketRepresentationMessageBodyReader;
 
 public class BlazeStorageClient implements BlazeStorage, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final List<MessageBodyReader<?>> responseObjectMessageReader = Arrays.asList(
+			(MessageBodyReader<?>) new BucketRepresentationMessageBodyReader()
+	);
 	
 	private final String serverUrl;
 	private final ClientRequestFilter[] requestFilters;
-    private final transient ResteasyWebTarget target;
-    private final transient ResteasyClient client;
+    private final transient Client client;
     
 	private BlazeStorageClient(String serverUrl, ClientRequestFilter[] requestFilters) {
 		this.serverUrl = serverUrl;
 		this.requestFilters = requestFilters;
-		this.client = new ResteasyClientBuilder().build();
-        this.target = initTarget();
+		
+		this.client = ClientBuilder.newClient();
 	}
 	
-	private ResteasyWebTarget initTarget() {
-		ResteasyWebTarget clientTarget = client.target(serverUrl);
+	private WebTarget initTarget() {
+		WebTarget clientTarget = client.target(serverUrl);
         
         for (ClientRequestFilter filter : requestFilters) {
         	clientTarget = clientTarget.register(filter);
         }
         
-        return clientTarget;
+        return new ResponseObjectWebTarget(clientTarget, responseObjectMessageReader);
 	}
 
 	public static BlazeStorage getInstance(String serverUrl) {
@@ -53,23 +61,28 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 	}
 
 	@Override
+	public AdminResource admin() {
+		return WebResourceFactory.newResource(AdminResource.class, initTarget());
+	}
+
+	@Override
 	public AccountsResource accounts() {
-		return target.proxy(AccountsResource.class);
+		return WebResourceFactory.newResource(AccountsResource.class, initTarget());
 	}
 	
 	@Override
 	public BucketsSubResource buckets() {
-		return target.proxy(BucketsResource.class).get();
+		return WebResourceFactory.newResource(BucketsResource.class, initTarget()).get();
 	}
 	
 	@Override
 	public StorageQuotaModelsResource storageQuotaModels() {
-		return target.proxy(StorageQuotaModelsResource.class);
+		return WebResourceFactory.newResource(StorageQuotaModelsResource.class, initTarget());
 	}
 	
 	@Override
 	public StorageTypesResource storageTypes() {
-		return target.proxy(StorageTypesResource.class);
+		return WebResourceFactory.newResource(StorageTypesResource.class, initTarget());
 	}
 
     @Override
@@ -85,8 +98,7 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        set("client", new ResteasyClientBuilder().build());
-        set("target", initTarget());
+        set("client", ClientBuilder.newClient());
     }
     
     private void set(String fieldName, Object value) {

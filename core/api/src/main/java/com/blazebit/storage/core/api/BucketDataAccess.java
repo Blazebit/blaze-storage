@@ -17,4 +17,6 @@ public interface BucketDataAccess {
 	public <T> List<T> findByAccountId(long accountId, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
 
 	public <T> List<T> findByAccountIdAndStorageName(long accountId, String storageName, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
+
+	public <T> List<T> findAll(EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting);
 }

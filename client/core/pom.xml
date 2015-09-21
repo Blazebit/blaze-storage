@@ -27,39 +27,46 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>blaze-storage-rest-api</artifactId>
         </dependency>
+        
+        <!-- Jersery client -->
+        <dependency>
+        	<groupId>org.glassfish.jersey.ext</groupId>
+        	<artifactId>jersey-proxy-client</artifactId>
+        	<version>2.21</version>
+        </dependency>
 		
 		<!-- Resteasy client -->
 
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-client</artifactId>
-			<version>${version.resteasy}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>${version.resteasy}</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-io</artifactId>
-					<groupId>commons-io</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxb-provider</artifactId>
-			<version>${version.resteasy}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson-provider</artifactId>
-			<version>${version.resteasy}</version>
-			<scope>provided</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.jboss.resteasy</groupId> -->
+<!-- 			<artifactId>resteasy-client</artifactId> -->
+<!-- 			<version>${version.resteasy}</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.jboss.resteasy</groupId> -->
+<!-- 			<artifactId>resteasy-jaxrs</artifactId> -->
+<!-- 			<version>${version.resteasy}</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 					<artifactId>commons-io</artifactId> -->
+<!-- 					<groupId>commons-io</groupId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.jboss.resteasy</groupId> -->
+<!-- 			<artifactId>resteasy-jaxb-provider</artifactId> -->
+<!-- 			<version>${version.resteasy}</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.jboss.resteasy</groupId> -->
+<!-- 			<artifactId>resteasy-jackson-provider</artifactId> -->
+<!-- 			<version>${version.resteasy}</version> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
     </dependencies>
     
 </project>

@@ -9,11 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.keycloak.admin.client.Config;
 import org.keycloak.admin.client.resource.BasicAuthFilter;
 import org.keycloak.admin.client.token.TokenService;
@@ -26,14 +27,14 @@ public class TokenManager implements Serializable {
 	private AccessTokenResponse currentToken;
     private Date expirationTime;
     private final Config config;
-    private final transient ResteasyClient client;
+    private final transient Client client;
 
-    public TokenManager(Config config, ResteasyClient client){
+    public TokenManager(Config config, Client client){
         this.config = config;
         this.client = client;
     }
 
-    public TokenManager(AccessTokenResponse currentToken, Config config, ResteasyClient client){
+    public TokenManager(AccessTokenResponse currentToken, Config config, Client client){
         this.config = config;
         this.client = client;
         if (currentToken != null) {
@@ -55,7 +56,7 @@ public class TokenManager implements Serializable {
     }
 
     public AccessTokenResponse grantToken(){
-        ResteasyWebTarget target = client.target(config.getServerUrl());
+        WebTarget target = client.target(config.getServerUrl());
 
         Form form = new Form()
                 .param("grant_type", "password")
@@ -68,7 +69,7 @@ public class TokenManager implements Serializable {
             target.register(new BasicAuthFilter(config.getClientId(), config.getClientSecret()));
         }
 
-        TokenService tokenService = target.proxy(TokenService.class);
+        TokenService tokenService = WebResourceFactory.newResource(TokenService.class, target);
 
         AccessTokenResponse response = tokenService.grantToken(config.getRealm(), form.asMap());
 
@@ -77,7 +78,7 @@ public class TokenManager implements Serializable {
     }
 
     public AccessTokenResponse refreshToken(){
-        ResteasyWebTarget target = client.target(config.getServerUrl());
+    	WebTarget target = client.target(config.getServerUrl());
 
         Form form = new Form()
                 .param("grant_type", "refresh_token")
@@ -89,7 +90,7 @@ public class TokenManager implements Serializable {
             target.register(new BasicAuthFilter(config.getClientId(), config.getClientSecret()));
         }
 
-        TokenService tokenService = target.proxy(TokenService.class);
+        TokenService tokenService = WebResourceFactory.newResource(TokenService.class, target);
 
         try {
             AccessTokenResponse response = tokenService.refreshToken(config.getRealm(), form.asMap());
@@ -123,7 +124,7 @@ public class TokenManager implements Serializable {
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        set("client", new ResteasyClientBuilder().build());
+        set("client", ClientBuilder.newClient());
     }
     
     private void set(String fieldName, Object value) {

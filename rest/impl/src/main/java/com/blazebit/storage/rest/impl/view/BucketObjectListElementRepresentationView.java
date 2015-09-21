@@ -17,14 +17,23 @@ public abstract class BucketObjectListElementRepresentationView extends BucketOb
 
 	public BucketObjectListElementRepresentationView(
 			@Mapping("id") BucketObjectId id, 
-			@Mapping("lastModified") Calendar lastModified, 
-			@Mapping("entityTag") String entityTag, 
-			@Mapping("size") Long size) {
-		super(id.getName(), lastModified, entityTag, size);
+			@Mapping("contentVersion.lastModified") Long lastModified, 
+			@Mapping("contentVersion.entityTag") String entityTag, 
+			@Mapping("contentVersion.contentLength") Long size) {
+		super(id.getName(), fromTimestamp(lastModified), entityTag, size);
 	}
 
 	@JsonIgnore
 	@IdMapping("id")
 	public abstract BucketObjectId getId();
-	
+
+	private static Calendar fromTimestamp(Long timestamp) {
+		if (timestamp == null) {
+			return null;
+		}
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timestamp);
+		return calendar;
+	}
 }

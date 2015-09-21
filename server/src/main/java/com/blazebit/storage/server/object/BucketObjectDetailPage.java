@@ -1,4 +1,4 @@
-package com.blazebit.storage.server.bucket;
+package com.blazebit.storage.server.object;
 
 import java.util.logging.Logger;
 
@@ -11,10 +11,10 @@ import com.blazebit.storage.server.account.AccountSupport;
 
 @Named
 @RequestScoped
-public class BucketDetailPage extends BucketBasePage {
+public class BucketObjectDetailPage extends BucketObjectBasePage {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(BucketDetailPage.class.getName());
+	private static final Logger LOG = Logger.getLogger(BucketObjectDetailPage.class.getName());
 	
 	@Inject
 	private AccountSupport accountSupport;

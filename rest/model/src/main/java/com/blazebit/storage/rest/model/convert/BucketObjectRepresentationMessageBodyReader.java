@@ -17,7 +17,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
-import com.blazebit.storage.rest.model.ContentDisposition;
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
 @Provider
 @Consumes(MediaType.WILDCARD)

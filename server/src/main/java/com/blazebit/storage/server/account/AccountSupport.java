@@ -30,7 +30,7 @@ public class AccountSupport {
 	@Produces
 	@Named("accountItems")
 	@RequestScoped
-	public List<SelectItem> getStorageTypeItems(@Named("accounts") List<AccountListElementRepresentation> accounts) {
+	public List<SelectItem> getAccountItems(@Named("accounts") List<AccountListElementRepresentation> accounts) {
 		List<SelectItem> accountItems = new ArrayList<>(accounts.size());
 		
 		for (AccountListElementRepresentation account : accounts) {

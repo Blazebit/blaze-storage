@@ -18,7 +18,7 @@ import com.blazebit.storage.server.storage.StorageBasePage;
 public class AccountBasePage implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(StorageBasePage.class.getName());
+	private static final Logger LOG = Logger.getLogger(AccountBasePage.class.getName());
 
 	@Inject
 	protected BlazeStorage client;

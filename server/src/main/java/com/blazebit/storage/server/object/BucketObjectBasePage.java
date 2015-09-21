@@ -1,4 +1,4 @@
-package com.blazebit.storage.server.bucket;
+package com.blazebit.storage.server.object;
 
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -11,10 +11,10 @@ import javax.inject.Inject;
 import com.blazebit.storage.rest.client.BlazeStorage;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
 
-public class BucketBasePage implements Serializable {
+public class BucketObjectBasePage implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(BucketBasePage.class.getName());
+	private static final Logger LOG = Logger.getLogger(BucketObjectBasePage.class.getName());
 
 	@Inject
 	protected BlazeStorage client;

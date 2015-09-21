@@ -1,4 +1,4 @@
-package com.blazebit.storage.rest.model;
+package com.blazebit.storage.rest.model.rs;
 
 public class ContentDisposition {
 	

@@ -1,4 +1,4 @@
-package com.blazebit.storage.server.bucket;
+package com.blazebit.storage.server.object;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,10 +9,10 @@ import javax.inject.Named;
 
 @Named
 @ViewScoped
-public class BucketEditPage extends BucketAddPage {
+public class BucketObjectEditPage extends BucketObjectAddPage {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(BucketEditPage.class.getName());
+	private static final Logger LOG = Logger.getLogger(BucketObjectEditPage.class.getName());
 	
 	@Override
 	protected void init() {

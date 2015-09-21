@@ -1,6 +1,7 @@
 package com.blazebit.storage.rest.impl;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -11,13 +12,16 @@ import javax.ws.rs.core.Response.Status;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.AccountDataAccess;
 import com.blazebit.storage.core.api.AccountService;
+import com.blazebit.storage.core.api.BucketDataAccess;
 import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.rest.api.AccountSubResource;
 import com.blazebit.storage.rest.api.AccountsResource;
 import com.blazebit.storage.rest.api.StoragesSubResource;
 import com.blazebit.storage.rest.impl.view.AccountRepresentationView;
+import com.blazebit.storage.rest.impl.view.BucketListElementRepresentationView;
 import com.blazebit.storage.rest.model.AccountRepresentation;
 import com.blazebit.storage.rest.model.AccountUpdateRepresentation;
+import com.blazebit.storage.rest.model.BucketListElementRepresentation;
 
 public class AccountSubResourceImpl extends AbstractResource implements AccountSubResource {
 	
@@ -27,6 +31,8 @@ public class AccountSubResourceImpl extends AbstractResource implements AccountS
 	private AccountService accountService;
 	@Inject
 	private AccountDataAccess accountDataAccess;
+	@Inject
+	private BucketDataAccess bucketDataAccess;
 
 	public AccountSubResourceImpl(String key) {
 		this.key = key;
@@ -70,6 +76,12 @@ public class AccountSubResourceImpl extends AbstractResource implements AccountS
 	@Override
 	public StoragesSubResource getStorages() {
 		return inject(new StoragesSubResourceImpl(getAccountByKey(key)));
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<BucketListElementRepresentation> getBuckets() {
+		return (List<BucketListElementRepresentation>) (List<?>) bucketDataAccess.findByAccountId(getAccountByKey(key).getId(), EntityViewSetting.create(BucketListElementRepresentationView.class));
 	}
 	
 	private Account getAccountByKey(String key) {

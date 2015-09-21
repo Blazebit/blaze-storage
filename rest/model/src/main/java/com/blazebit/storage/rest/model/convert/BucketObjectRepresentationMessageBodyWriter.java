@@ -44,8 +44,6 @@ public class BucketObjectRepresentationMessageBodyWriter implements MessageBodyW
 	    while ((bytesRead = input.read(buffer)) != -1) {
 	    	entityStream.write(buffer, 0, bytesRead);
 	    }
-	    
-	    entityStream.flush();
 	}
 	
 	private void put(MultivaluedMap<String, Object> httpHeaders, String key, Object value) {

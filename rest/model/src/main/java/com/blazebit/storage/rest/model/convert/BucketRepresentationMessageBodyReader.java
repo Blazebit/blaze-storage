@@ -18,6 +18,7 @@ import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectListElementRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
+import com.blazebit.storage.rest.model.StatisticsRepresentation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,12 +47,17 @@ public class BucketRepresentationMessageBodyReader implements MessageBodyReader<
 		}
 		
 		result.setName(httpHeaders.getFirst(BlazeStorageHeaders.BUCKET_NAME));
+		result.setDefaultStorageName(httpHeaders.getFirst(BlazeStorageHeaders.DEFAULT_STORAGE_NAME));
+		result.setDefaultStorageOwner(httpHeaders.getFirst(BlazeStorageHeaders.DEFAULT_STORAGE_OWNER));
 		Calendar creationDate = Calendar.getInstance();
 		creationDate.setTimeInMillis(Long.valueOf(httpHeaders.getFirst(BlazeStorageHeaders.TIMESTAMP)));
 		result.setCreationDate(creationDate);
 		result.setNextMarker(httpHeaders.getFirst(BlazeStorageHeaders.NEXT_MARKER));
-		result.getStatistics().setObjectBytes(Long.valueOf(httpHeaders.getFirst(BlazeStorageHeaders.OBJECT_BYTES)));
-		result.getStatistics().setObjectCount(Long.valueOf(httpHeaders.getFirst(BlazeStorageHeaders.OBJECT_COUNT)));
+		
+		StatisticsRepresentation statisticts = new StatisticsRepresentation();
+		statisticts.setObjectBytes(Long.valueOf(httpHeaders.getFirst(BlazeStorageHeaders.OBJECT_BYTES)));
+		statisticts.setObjectCount(Long.valueOf(httpHeaders.getFirst(BlazeStorageHeaders.OBJECT_COUNT)));
+		result.setStatistics(statisticts);
 		return result;
 	}
 

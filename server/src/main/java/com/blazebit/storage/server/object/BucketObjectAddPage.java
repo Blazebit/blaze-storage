@@ -1,4 +1,4 @@
-package com.blazebit.storage.server.bucket;
+package com.blazebit.storage.server.object;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ import com.blazebit.storage.rest.model.StorageListElementRepresentation;
 
 @Named
 @ViewScoped
-public class BucketAddPage extends BucketBasePage {
+public class BucketObjectAddPage extends BucketObjectBasePage {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOG = Logger.getLogger(BucketAddPage.class.getName());
+	private static final Logger LOG = Logger.getLogger(BucketObjectAddPage.class.getName());
 
 	private List<SelectItem> storageItems;
 

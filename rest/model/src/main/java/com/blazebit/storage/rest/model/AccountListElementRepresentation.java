@@ -11,11 +11,6 @@ public class AccountListElementRepresentation extends AccountUpdateRepresentatio
 	public AccountListElementRepresentation() {
 	}
 
-	public AccountListElementRepresentation(String key, String name) {
-		super(name);
-		this.key = key;
-	}
-
 	public AccountListElementRepresentation(String name, Map<String, String> tags, String key) {
 		super(name, tags);
 		this.key = key;

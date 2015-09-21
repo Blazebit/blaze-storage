@@ -1,6 +1,4 @@
-package com.blazebit.storage.server.bucket;
-
-import java.util.List;
+package com.blazebit.storage.server.object;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -8,12 +6,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.blazebit.storage.rest.client.BlazeStorage;
-import com.blazebit.storage.rest.model.BucketListElementRepresentation;
+import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.server.account.AccountSupport;
 
 @Named
 @RequestScoped
-public class BucketIndexPage {
+public class BucketObjectIndexPage {
 
 	@Inject
 	private BlazeStorage client;
@@ -21,34 +19,35 @@ public class BucketIndexPage {
 	@Inject
 	private AccountSupport accountSupport;
 	
-	private boolean admin;
+	private String bucket;
+	private String parent;
 	private String account;
 	
 	@Produces
-	@Named("bucketList")
+	@Named("bucketObjectResult")
 	@RequestScoped
-	public List<BucketListElementRepresentation> createBucketList() {
-		if (admin) {
-			return client.admin().getBuckets();
-		} else {
-			if (account != null) {
-				return client.accounts().get(account).getBuckets();
-			} else {
-				return client.buckets().get();
-			}
-		}
+	public BucketRepresentation createBucketObjectList() {
+		return client.buckets().get(bucket).get(parent, null, null);
 	}
 	
 	public String getAccountName(String ownerKey) {
 		return accountSupport.getAccountName(ownerKey);
 	}
 
-	public boolean isAdmin() {
-		return admin;
+	public String getBucket() {
+		return bucket;
 	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public void setBucket(String bucket) {
+		this.bucket = bucket;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
 	}
 
 	public String getAccount() {

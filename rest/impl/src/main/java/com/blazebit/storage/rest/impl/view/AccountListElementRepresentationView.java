@@ -15,10 +15,10 @@ public abstract class AccountListElementRepresentationView extends AccountListEl
 	private static final long serialVersionUID = 1L;
 
 	public AccountListElementRepresentationView(
-			@Mapping("key") String key,
+			@Mapping("name") String name,
 			@Mapping("tags") Map<String, String> tags,
-			@Mapping("name") String name) {
-		super(key, tags, name);
+			@Mapping("key") String key) {
+		super(name, tags, key);
 	}
 
 	@JsonIgnore

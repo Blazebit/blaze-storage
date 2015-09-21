@@ -7,6 +7,10 @@ public final class BlazeStorageHeaders {
 	public static final String NEXT_MARKER = "x-blz-next-marker";
 	public static final String OBJECT_BYTES = "x-blz-object-bytes";
 	public static final String OBJECT_COUNT = "x-blz-object-count";
+
+	public static final String OWNER_KEY = "x-blz-owner-key";
+	public static final String DEFAULT_STORAGE_OWNER = "x-blz-default-storage-owner";
+	public static final String DEFAULT_STORAGE_NAME = "x-blz-default-storage-name";
 	
 	private BlazeStorageHeaders() {
 	}

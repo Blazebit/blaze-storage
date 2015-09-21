@@ -7,7 +7,7 @@ import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.jboss.resteasy.util.Base64;
+import org.glassfish.jersey.internal.util.Base64;
 
 public class BasicAuthFilter implements ClientRequestFilter, Serializable {
 
@@ -24,7 +24,7 @@ public class BasicAuthFilter implements ClientRequestFilter, Serializable {
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {
         String pair = username + ":" + password;
-        String authHeader = "Basic " + new String(Base64.encodeBytes(pair.getBytes()));
+        String authHeader = "Basic " + Base64.encodeAsString(pair.getBytes());
         requestContext.getHeaders().add(HttpHeaders.AUTHORIZATION, authHeader);
     }
     

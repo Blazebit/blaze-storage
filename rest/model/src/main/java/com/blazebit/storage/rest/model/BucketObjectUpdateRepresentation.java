@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.ws.rs.HeaderParam;
 
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
+
 public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresentation {
 
 	private static final long serialVersionUID = 1L;

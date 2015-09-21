@@ -30,7 +30,7 @@ import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketObjectVersionRepresentationView;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
-import com.blazebit.storage.rest.model.ContentDisposition;
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
 public class FileSubResourceImpl extends AbstractResource implements FileSubResource {
 

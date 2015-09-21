@@ -36,6 +36,8 @@ public class BucketRepresentationMessageBodyWriter implements MessageBodyWriter<
 	@Override
 	public void writeTo(BucketHeadRepresentation t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
 		put(httpHeaders, BlazeStorageHeaders.BUCKET_NAME, t.getName());
+		put(httpHeaders, BlazeStorageHeaders.DEFAULT_STORAGE_NAME, t.getDefaultStorageName());
+		put(httpHeaders, BlazeStorageHeaders.DEFAULT_STORAGE_OWNER, t.getDefaultStorageOwner());
 		put(httpHeaders, BlazeStorageHeaders.TIMESTAMP, t.getCreationDate().getTimeInMillis());
 		put(httpHeaders, BlazeStorageHeaders.NEXT_MARKER, t.getNextMarker());
 		put(httpHeaders, BlazeStorageHeaders.OBJECT_BYTES, t.getStatistics().getObjectBytes());
@@ -44,8 +46,6 @@ public class BucketRepresentationMessageBodyWriter implements MessageBodyWriter<
 		if (t instanceof BucketRepresentation) {
 			mapper.writeValue(entityStream, ((BucketRepresentation) t).getContents());
 		}
-		
-	    entityStream.flush();
 	}
 	
 	private void put(MultivaluedMap<String, Object> httpHeaders, String key, Object value) {

@@ -8,12 +8,19 @@
 	xmlns:s="http://java.sun.com/jsf/composite/storage"
 	template="/WEB-INF/templates/template.xhtml">
 	
+	<f:metadata>
+		<f:viewParam name="admin" value="#{bucketIndexPage.admin}"/>
+		<f:viewParam name="account" value="#{bucketIndexPage.account}"/>
+	</f:metadata>
+	
 	<ui:define name="title">Buckets</ui:define>
 	
 	<ui:define name="content">
 		<p:link value="Back" outcome="/index.xhtml"/>
 		<br/>
-		<p:link value="Add" outcome="/bucket/add.xhtml"/>
+		<p:link value="Add" outcome="/bucket/add.xhtml">
+			<f:param name="account" value="#{bucketIndexPage.account}"/>
+		</p:link>
 		<p:dataTable value="#{bucketList}" var="bucket">
 			<p:column headerText="Name">
 				<p:link value="#{bucket.name}" outcome="/bucket/detail.xhtml">

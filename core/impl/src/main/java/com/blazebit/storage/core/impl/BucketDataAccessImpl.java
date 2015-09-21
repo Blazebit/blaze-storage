@@ -86,4 +86,11 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 		return evm.applySetting(setting, cb).getResultList();
 	}
 
+	@Override
+	public <T> List<T> findAll(EntityViewSetting<T, ? extends QueryBuilder<T, ?>> setting) {
+		CriteriaBuilder<Bucket> cb = cbf.create(em, Bucket.class)
+				.where("deleted").eqExpression("false");
+		return evm.applySetting(setting, cb).getResultList();
+	}
+
 }

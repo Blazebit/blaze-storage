@@ -12,6 +12,10 @@
 	<ui:define name="content">
 		<h:link value="Accounts" outcome="/account/index.xhtml"/>
 		<br/>
+		<h:link value="All Buckets(admin only)" outcome="/bucket/index.xhtml">
+			<f:param name="admin" value="true"/>
+		</h:link>
+		<br/>
 		<h:link value="Buckets" outcome="/bucket/index.xhtml"/>
 		<br/>
 		<h:link value="Quota" outcome="/quota/index.xhtml"/>

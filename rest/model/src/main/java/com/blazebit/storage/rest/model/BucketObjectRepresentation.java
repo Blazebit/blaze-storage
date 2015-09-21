@@ -3,6 +3,8 @@ package com.blazebit.storage.rest.model;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
+
 public class BucketObjectRepresentation extends BucketObjectBaseRepresentation {
 
 	private static final long serialVersionUID = 1L;
