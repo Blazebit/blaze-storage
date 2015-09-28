@@ -11,6 +11,8 @@ public final class BlazeStorageHeaders {
 	public static final String OWNER_KEY = "x-blz-owner-key";
 	public static final String DEFAULT_STORAGE_OWNER = "x-blz-default-storage-owner";
 	public static final String DEFAULT_STORAGE_NAME = "x-blz-default-storage-name";
+	public static final String STORAGE_OWNER = "x-blz-storage-owner";
+	public static final String STORAGE_NAME = "x-blz-storage-name";
 	
 	private BlazeStorageHeaders() {
 	}

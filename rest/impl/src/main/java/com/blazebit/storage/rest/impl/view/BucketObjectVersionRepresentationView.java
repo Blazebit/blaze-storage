@@ -1,6 +1,7 @@
 package com.blazebit.storage.rest.impl.view;
 
 import java.net.URI;
+import java.util.Map;
 
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
@@ -13,6 +14,12 @@ public interface BucketObjectVersionRepresentationView {
 	
 	@IdMapping("id")
 	public BucketObjectVersionId getId();
+
+	@Mapping("storage.id.name")
+	public String getStorageName();
+
+	@Mapping("storage.owner.key")
+	public String getStorageOwnerKey();
 
 	@Mapping("storage.uri")
 	public URI getStorageUri();
@@ -30,5 +37,7 @@ public interface BucketObjectVersionRepresentationView {
 	public String getEntityTag();
 	
 	public Long getLastModified();
+	
+	public Map<String, String> getTags();
 	
 }

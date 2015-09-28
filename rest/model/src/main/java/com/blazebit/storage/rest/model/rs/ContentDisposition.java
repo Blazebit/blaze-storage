@@ -25,6 +25,14 @@ public class ContentDisposition {
 			}
 		}
 	}
+	
+	public String getDisposition() {
+		return disposition;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
 
 	public static ContentDisposition inline(String filename) {
 		return new ContentDisposition(INLINE, filename);

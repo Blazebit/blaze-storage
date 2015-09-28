@@ -9,48 +9,75 @@
 	template="/WEB-INF/templates/template.xhtml">
 	
 	<f:metadata>
-		<f:viewParam name="name" value="#{bucketDetailPage.name}"/>
-    	<f:viewAction action="#{bucketDetailPage.viewAction}"/>
+		<f:viewParam name="bucket" value="#{bucketObjectDetailPage.bucket}"/>
+		<f:viewParam name="key" value="#{bucketObjectDetailPage.key}"/>
+    	<f:viewAction action="#{bucketObjectDetailPage.viewAction}"/>
 	</f:metadata>
 	
-	<ui:define name="title">Bucket detail</ui:define>
+	<ui:define name="title">Bucket object detail</ui:define>
+	
+	<ui:define name="head">
+		<script type="text/javascript">
+		function start() {
+		    PF('statusDialog').show();
+		}
+		 
+		function stop() {
+		    PF('statusDialog').hide();
+		}
+		</script>
+	</ui:define>
 	
 	<ui:define name="content">
 		<ui:decorate template="/WEB-INF/fragment/contentPanel.xhtml">
 			<ui:define name="header">
-				<h:link value="Back" outcome="/bucket/index.xhtml"/>
+				<h:link value="Back" outcome="/object/index.xhtml">
+					<f:param name="bucket" value="#{bucketObjectDetailPage.bucket}"/>
+					<f:param name="parent" value="#{bucketObjectDetailPage.parent}"/>
+				</h:link>
 			</ui:define>
 			<ui:define name="content">
 				<p:outputLabel for="name" value="Name:" />
-				<h:outputText id="name" value="#{bucketDetailPage.bucket.name}"/>
+				<h:outputText id="name" value="#{bucketObjectDetailPage.key}"/>
 				
-				<p:outputLabel for="created" value="Created:" />
-				<h:outputText id="created" value="#{bucketDetailPage.bucket.creationDate.time}">
+				<p:outputLabel for="lastModified" value="Last modified:" />
+				<h:outputText id="lastModified" value="#{bucketObjectDetailPage.bucketObject.lastModified.time}">
 					<f:convertDateTime dateStyle="medium"/>
 				</h:outputText>
 				
-				<p:outputLabel for="owner" value="Owner:" />
-				<h:outputText id="owner" value="#{bucketDetailPage.accountName}"/>
+				<p:outputLabel for="size" value="Size:" />
+				<h:outputText id="size" value="#{bucketObjectDetailPage.bucketObject.size}"/>
 				
-				<p:outputLabel for="defaultStorage" value="Default storage:" />
-				<p:link id="defaultStorage" value="#{bucketDetailPage.bucket.defaultStorageName}" outcome="/storage/detail.xhtml">
-					<f:param name="account" value="#{bucketDetailPage.bucket.defaultStorageOwner}"/>
-					<f:param name="name" value="#{bucketDetailPage.bucket.defaultStorageName}"/>
+				<p:outputLabel for="contentType" value="Content type:" />
+				<h:outputText id="contentType" value="#{bucketObjectDetailPage.bucketObject.contentType}"/>
+				
+				<p:outputLabel for="contentDisposition" value="Content disposition: " />
+				<h:outputText id="contentDisposition" value="#{bucketObjectDetailPage.bucketObject.contentDisposition.toString()}"/>
+				
+				<p:outputLabel for="entityTag" value="Entity tag: " />
+				<h:outputText id="entityTag" value="#{bucketObjectDetailPage.bucketObject.entityTag}"/>
+				
+				<p:outputLabel for="storage" value="Storage:" />
+				<p:link id="storage" value="#{bucketObjectDetailPage.bucketObject.storageName}" outcome="/storage/detail.xhtml">
+					<f:param name="account" value="#{bucketObjectDetailPage.bucketObject.storageOwner}"/>
+					<f:param name="name" value="#{bucketObjectDetailPage.bucketObject.storageName}"/>
 				</p:link>
 				
-				<p:outputLabel for="objectCount" value="Objects:" />
-				<h:outputText id="objectCount" value="#{bucketDetailPage.bucket.statistics.objectCount}"/>
+				<p:outputLabel for="content" value="Content:" />
+				<h:panelGroup id="contentGroup">
+					<p:commandButton id="content" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+						<p:fileDownload value="#{bucketObjectDetailPage.streamContent}" contentDisposition="attachement"/>
+					</p:commandButton>
+				</h:panelGroup>
 
-				<p:outputLabel for="objectBytes" value="Bytes:" />
-				<h:outputText id="objectBytes" value="#{bucketDetailPage.bucket.statistics.objectBytes}"/>
+				<p:outputLabel for="tags" value="Tags:" />
+				<s:tagsOutput id="tags" value="#{bucketObjectDetailPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
 				<p:link value="Edit" outcome="/bucket/edit.xhtml">
-					<f:param name="name" value="#{bucketDetailPage.bucket.name}"/>
+					<f:param name="bucket" value="#{bucketObjectDetailPage.bucket}"/>
+					<f:param name="key" value="#{bucketObjectDetailPage.key}"/>
 				</p:link>
-<!-- 				<p:link value="Show contents" outcome="/object/index.xhtml"> -->
-<!-- 					<f:param name="bucket" value="#{bucketDetailPage.bucket.name}"/> -->
-<!-- 				</p:link> -->
 			</ui:define>
 		</ui:decorate>
 	</ui:define>

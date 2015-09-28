@@ -9,45 +9,83 @@
 	template="/WEB-INF/templates/template.xhtml">
 	
 	<f:metadata>
-		<f:viewParam name="account" value="#{bucketAddPage.account}"/>
-    	<f:viewAction action="#{bucketAddPage.onAccountChanged()}"/>
+		<f:viewParam name="bucket" value="#{bucketObjectAddPage.bucket}"/>
 	</f:metadata>
 	
-	<ui:define name="title">Add new bucket</ui:define>
+	<ui:define name="title">Add new bucket object</ui:define>
+	
+	<ui:define name="head">
+		<script type="text/javascript">
+		function start() {
+		    PF('statusDialog').show();
+		}
+		 
+		function stop() {
+		    PF('statusDialog').hide();
+		}
+		</script>
+	</ui:define>
 	
 	<ui:define name="content">
 		<ui:decorate template="/WEB-INF/fragment/contentForm.xhtml">
 			<ui:define name="header">
-				<h:link value="Back" outcome="/bucket/index.xhtml"/>
+				<h:link value="Back" outcome="/object/index.xhtml">
+					<f:param name="bucket" value="#{bucketObjectAddPage.bucket}"/>
+				</h:link>
 			</ui:define>
 			<ui:define name="content">
 				<p:outputLabel for="name" value="Name:" />
-				<p:inputText id="name" value="#{bucketAddPage.name}" required="true" requiredMessage="Name is required." />
+				<p:inputText id="name" value="#{bucketObjectAddPage.key}" required="true" requiredMessage="Name is required." />
 				
-				<p:outputLabel for="owner" value="Owner:" />
-				<p:selectOneMenu id="owner" value="#{bucketAddPage.account}" required="true" requiredMessage="Owner account is required.">
+				<p:outputLabel for="contentType" value="Content type:" />
+				<p:inputText id="contentType" value="#{bucketObjectAddPage.bucketObject.contentType}" required="true" requiredMessage="Content type is required." />
+				
+				<p:outputLabel for="externalContentKey" value="External content key:" />
+				<p:inputText id="externalContentKey" value="#{bucketObjectAddPage.bucketObject.externalContentKey}" />
+				
+				<p:outputLabel for="contentDisposition" value="Content disposition:" />
+				<p:selectOneMenu id="contentDisposition" value="#{bucketObjectAddPage.contentDisposition}">
+					<p:ajax process="@this" update="@this contentDispositionFilenameRow"/>
+					<f:selectItem itemValue="#{null}" itemLabel="None" />
+					<f:selectItem itemValue="inline" itemLabel="Inline" />
+					<f:selectItem itemValue="attachement" itemLabel="Attachement" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="contentDispositionFilename" value="Content disposition filename: " />
+				<h:panelGroup id="contentDispositionFilenameRow">
+					<h:outputText value="Filename is only possible with content disposition" rendered="#{bucketObjectAddPage.contentDisposition == null}"/>
+					<p:inputText id="contentDispositionFilename" value="#{bucketObjectAddPage.contentDispositionFilename}" required="true" requiredMessage="Content disposition filename is required." rendered="#{bucketObjectAddPage.contentDisposition != null}"/>
+				</h:panelGroup>
+				
+				<p:outputLabel for="storageOwner" value="Storage owner: " />
+				<p:selectOneMenu id="storageOwner" value="#{bucketObjectAddPage.bucketObject.storageOwner}" required="true" requiredMessage="Storage owner is required.">
+					<p:ajax process="@this" update="@this storageRow" listener="#{bucketObjectAddPage.onAccountChanged()}"/>
 					<f:selectItem itemValue="#{null}" itemLabel="Choose..." />
 					<f:selectItems value="#{accountItems}"/>
 				</p:selectOneMenu>
 				
-				<p:outputLabel for="account" value="Account: " />
-				<p:selectOneMenu id="account" value="#{bucketAddPage.bucket.defaultStorageOwner}" required="true" requiredMessage="Account is required.">
-					<p:ajax process="@this" update="@this defaultStorageRow" listener="#{bucketAddPage.onAccountChanged()}"/>
-					<f:selectItem itemValue="#{null}" itemLabel="Choose..." />
-					<f:selectItems value="#{accountItems}"/>
-				</p:selectOneMenu>
-				
-				<p:outputLabel for="defaultStorage" value="Default storage: " />
-				<h:panelGroup id="defaultStorageRow">
-					<h:outputText value="Select account first" rendered="#{bucketAddPage.bucket.defaultStorageOwner == null}"/>
-					<p:selectOneMenu id="defaultStorage" value="#{bucketAddPage.bucket.defaultStorageName}" required="true" requiredMessage="Default storage is required." rendered="#{bucketAddPage.bucket.defaultStorageOwner != null}">
+				<p:outputLabel for="storage" value="Storage: " />
+				<h:panelGroup id="storageRow">
+					<h:outputText value="Select account first" rendered="#{bucketObjectAddPage.bucketObject.storageOwner == null}"/>
+					<p:selectOneMenu id="storage" value="#{bucketObjectAddPage.bucketObject.storageName}" required="true" requiredMessage="Storage is required." rendered="#{bucketObjectAddPage.bucketObject.storageOwner != null}">
 						<f:selectItem itemValue="#{null}" itemLabel="Choose..." />
-						<f:selectItems value="#{bucketAddPage.storageItems}"/>
+						<f:selectItems value="#{bucketObjectAddPage.storageItems}"/>
 					</p:selectOneMenu>
 				</h:panelGroup>
+				
+				<p:outputLabel for="content" value="Content:" />
+				<h:panelGroup id="contentGroup">
+					<p:commandButton id="currentContent" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" rendered="#{bucketObjectAddPage.content != null}">
+						<p:fileDownload value="#{bucketObjectAddPage.streamContent}" contentDisposition="attachement"/>
+					</p:commandButton>
+					<p:fileUpload id="content" fileUploadListener="#{bucketObjectAddPage.handleFileUpload}" fileLimit="1" mode="advanced" dragDropSupport="true" update="contentGroup" />
+				</h:panelGroup>
+				
+				<p:outputLabel for="tags" value="Tags:" />
+				<s:tagsInput id="tags" value="#{bucketObjectAddPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
-				<p:commandButton value="Add" action="#{bucketAddPage.add()}" ajax="false"/>
+				<p:commandButton value="Add" action="#{bucketObjectAddPage.add()}" ajax="false"/>
 			</ui:define>
 		</ui:decorate>
 	</ui:define>

@@ -2,28 +2,24 @@ package com.blazebit.storage.rest.model;
 
 import java.util.Map;
 
-import javax.ws.rs.HeaderParam;
-
 import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
 public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresentation {
 
 	private static final long serialVersionUID = 1L;
 	
-	@HeaderParam("Content-MD5")
+//	@HeaderParam("Content-MD5")
 	private String contentMD5; 
-	@HeaderParam("x-blz-storage-name")
-	private String storageName;
-	@HeaderParam("x-blz-content-key") 
+//	@HeaderParam("x-blz-content-key") 
 	private String externalContentKey;
-	@HeaderParam("x-blz-tags") 
-	private Map<String, String> tags; 
 	
 	public BucketObjectUpdateRepresentation() {
 	}
 
-	public BucketObjectUpdateRepresentation(String contentType, ContentDisposition contentDisposition, long size) {
-		super(contentType, contentDisposition, size);
+	public BucketObjectUpdateRepresentation(String contentType, ContentDisposition contentDisposition, long size, String storageName, String storageOwner, Map<String, String> tags, String contentMD5, String externalContentKey) {
+		super(contentType, contentDisposition, size, storageName, storageOwner, tags);
+		this.contentMD5 = contentMD5;
+		this.externalContentKey = externalContentKey;
 	}
 
 	public String getContentMD5() {
@@ -34,27 +30,11 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 		this.contentMD5 = contentMD5;
 	}
 
-	public String getStorageName() {
-		return storageName;
-	}
-
-	public void setStorageName(String storageName) {
-		this.storageName = storageName;
-	}
-
 	public String getExternalContentKey() {
 		return externalContentKey;
 	}
 
 	public void setExternalContentKey(String externalContentKey) {
 		this.externalContentKey = externalContentKey;
-	}
-
-	public Map<String, String> getTags() {
-		return tags;
-	}
-
-	public void setTags(Map<String, String> tags) {
-		this.tags = tags;
 	}
 }

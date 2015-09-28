@@ -28,6 +28,7 @@ import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketObjectVersionRepresentationView;
+import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.rest.model.rs.ContentDisposition;
@@ -56,15 +57,15 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	@Override
 	public BucketObjectRepresentation get() {
-		return getOrHead(true);
+		return (BucketObjectRepresentation) getOrHead(true);
 	}
 
 	@Override
-	public BucketObjectRepresentation head() {
+	public BucketObjectHeadRepresentation head() {
 		return getOrHead(false);
 	}
 	
-	private BucketObjectRepresentation getOrHead(boolean isGet) {
+	private BucketObjectHeadRepresentation getOrHead(boolean isGet) {
 		EntityViewSetting<BucketObjectRepresentationView, CriteriaBuilder<BucketObjectRepresentationView>> setting;
 		setting = EntityViewSetting.create(BucketObjectRepresentationView.class);
 		BucketObjectRepresentationView result = bucketObjectDataAccess.findById(bucketObjectId, setting);
@@ -79,8 +80,13 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		// TODO: implement range parameter?
 		// TODO: implement If-Modified-Since, If-Unmodified-Since, If-Match, If-None-Match
 		BucketObjectVersionRepresentationView version = result.getContentVersion();
+		BucketObjectHeadRepresentation response;
+		if (isGet) {
+			response = new BucketObjectRepresentation();
+		} else {
+			response = new BucketObjectHeadRepresentation();
+		}
 		
-		BucketObjectRepresentation response = new BucketObjectRepresentation();
 		response.setContentType(version.getContentType());
 		response.setContentDisposition(ContentDisposition.fromString(version.getContentDisposition()));
 		Calendar lastModified = Calendar.getInstance();
@@ -88,10 +94,13 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		response.setLastModified(lastModified);
 		response.setEntityTag(version.getEntityTag());
 		response.setSize(version.getContentLength());
+		response.setStorageName(version.getStorageName());
+		response.setStorageOwner(version.getStorageOwnerKey());
+		response.setTags(version.getTags());
 		
 		if (isGet) {
 			InputStream is = bucketObjectDataAccess.getContent(version.getStorageUri(), version.getContentKey());
-			response.setContent(is);
+			((BucketObjectRepresentation) response).setContent(is);
 		}
 		
 		return response;

@@ -22,13 +22,14 @@ import com.blazebit.storage.rest.api.BucketsResource;
 import com.blazebit.storage.rest.api.BucketsSubResource;
 import com.blazebit.storage.rest.api.StorageQuotaModelsResource;
 import com.blazebit.storage.rest.api.StorageTypesResource;
+import com.blazebit.storage.rest.model.convert.BucketObjectRepresentationMessageBodyReader;
 import com.blazebit.storage.rest.model.convert.BucketRepresentationMessageBodyReader;
 
 public class BlazeStorageClient implements BlazeStorage, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final List<MessageBodyReader<?>> responseObjectMessageReader = Arrays.asList(
-			(MessageBodyReader<?>) new BucketRepresentationMessageBodyReader()
+			(MessageBodyReader<?>) new BucketRepresentationMessageBodyReader(), (MessageBodyReader<?>) new BucketObjectRepresentationMessageBodyReader()
 	);
 	
 	private final String serverUrl;

@@ -30,7 +30,7 @@ public class QuotaBasePage implements Serializable {
 	
 	public String viewAction() {
 		try {
-			if (id != null || id.isEmpty()) {
+			if (id != null && !id.isEmpty()) {
 				quota = client.storageQuotaModels().get(id).get();
 				if (quota == null) {
 					limitsHolder.setLimitEntries(new ArrayList<LimitEntry>());

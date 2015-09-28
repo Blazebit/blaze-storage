@@ -27,7 +27,7 @@ public class BucketBasePage implements Serializable {
 
 	public String viewAction() {
 		try {
-			if (name != null || name.isEmpty()) {
+			if (name != null && !name.isEmpty()) {
 				bucket = client.buckets().get(name).head();
 				if (bucket == null) {
 					facesContext.addMessage(null, new FacesMessage("No bucket found for name " + name));

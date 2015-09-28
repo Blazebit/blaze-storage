@@ -29,8 +29,9 @@
 		<h:outputText value="#{bucketIndexPage.getAccountName(bucketObjectResult.ownerKey)}"/>
 		<p:dataTable value="#{bucketObjectResult.contents}" var="bucketObject">
 			<p:column headerText="Name">
-				<p:link value="#{bucketObject.key}" outcome="/bucket/detail.xhtml">
-					<f:param name="name" value="#{bucket.name}"/>
+				<p:link value="#{bucketObject.key}" outcome="/object/detail.xhtml">
+					<f:param name="bucket" value="#{bucketObjectIndexPage.bucket}"/>
+					<f:param name="key" value="#{bucketObject.key}"/>
 				</p:link>
 			</p:column>
 			<p:column headerText="Last modified">

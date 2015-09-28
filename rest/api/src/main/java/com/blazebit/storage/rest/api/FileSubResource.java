@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 
@@ -28,7 +29,7 @@ public interface FileSubResource {
 	 * @return
 	 */
 	@HEAD
-	public BucketObjectRepresentation head();
+	public BucketObjectHeadRepresentation head();
 
 	// This is for CORS, we can do that later
 	// @OPTIONS

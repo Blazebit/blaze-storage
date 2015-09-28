@@ -13,7 +13,6 @@ import com.blazebit.storage.rest.client.BlazeStorage;
 import com.blazebit.storage.rest.model.AccountUpdateRepresentation;
 import com.blazebit.storage.server.faces.tag.TagEntry;
 import com.blazebit.storage.server.faces.tag.TagsHolder;
-import com.blazebit.storage.server.storage.StorageBasePage;
 
 public class AccountBasePage implements Serializable {
 	
@@ -31,7 +30,7 @@ public class AccountBasePage implements Serializable {
 
 	public String viewAction() {
 		try {
-			if (key != null || key.isEmpty()) {
+			if (key != null && !key.isEmpty()) {
 				account = client.accounts().get(key).get();
 				if (account == null) {
 					tagsHolder.setTagEntries(new ArrayList<TagEntry>());

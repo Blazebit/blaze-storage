@@ -47,6 +47,7 @@ public class BucketRepresentationMessageBodyReader implements MessageBodyReader<
 		}
 		
 		result.setName(httpHeaders.getFirst(BlazeStorageHeaders.BUCKET_NAME));
+		result.setOwnerKey(httpHeaders.getFirst(BlazeStorageHeaders.OWNER_KEY));
 		result.setDefaultStorageName(httpHeaders.getFirst(BlazeStorageHeaders.DEFAULT_STORAGE_NAME));
 		result.setDefaultStorageOwner(httpHeaders.getFirst(BlazeStorageHeaders.DEFAULT_STORAGE_OWNER));
 		Calendar creationDate = Calendar.getInstance();

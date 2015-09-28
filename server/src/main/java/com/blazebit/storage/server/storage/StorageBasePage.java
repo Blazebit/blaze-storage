@@ -35,7 +35,7 @@ public class StorageBasePage implements Serializable {
 	
 	public String viewAction() {
 		try {
-			if (name != null || name.isEmpty()) {
+			if (name != null && !name.isEmpty()) {
 				storage = client.accounts().get(accountKey).getStorages().get(name).get();
 				if (storage == null) {
 					tagsHolder.setTagEntries(new ArrayList<TagEntry>());

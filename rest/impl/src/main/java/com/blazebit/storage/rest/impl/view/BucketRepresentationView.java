@@ -29,7 +29,7 @@ public abstract class BucketRepresentationView extends BucketRepresentation {
 			@Mapping("creationDate") Calendar creationDate,
 			@Mapping("statistics") ObjectStatistics statistics,
 			@Mapping("objects") @CollectionMapping(ignoreIndex = true) List<BucketObjectListElementRepresentationView> objects) {
-		super(storageOwner, storageId.getName(), id, ownerKey, creationDate, objects.isEmpty() ? null : objects.remove(objects.size() - 1).getKey(), toStatistics(statistics), (List<BucketObjectListElementRepresentation>) (List) objects);
+		super(storageOwner, storageId.getName(), id, ownerKey, creationDate, objects.size() > 1000 ? objects.remove(objects.size() - 1).getKey() : null, toStatistics(statistics), (List<BucketObjectListElementRepresentation>) (List) objects);
 	}
 	
 	@JsonIgnore
