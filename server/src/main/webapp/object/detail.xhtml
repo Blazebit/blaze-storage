@@ -63,18 +63,20 @@
 					<f:param name="name" value="#{bucketObjectDetailPage.bucketObject.storageName}"/>
 				</p:link>
 				
-				<p:outputLabel for="content" value="Content:" />
+				<p:outputLabel for="downloadForm:content" value="Content:" />
 				<h:panelGroup id="contentGroup">
-					<p:commandButton id="content" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-						<p:fileDownload value="#{bucketObjectDetailPage.streamContent}" contentDisposition="attachement"/>
-					</p:commandButton>
+					<h:form id="downloadForm">
+						<p:commandButton id="content" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+							<p:fileDownload value="#{bucketObjectDetailPage.streamContent}" contentDisposition="attachement"/>
+						</p:commandButton>
+					</h:form>
 				</h:panelGroup>
 
 				<p:outputLabel for="tags" value="Tags:" />
 				<s:tagsOutput id="tags" value="#{bucketObjectDetailPage.tagsHolder}"/>
 			</ui:define>
 			<ui:define name="footer">
-				<p:link value="Edit" outcome="/bucket/edit.xhtml">
+				<p:link value="Edit" outcome="/object/edit.xhtml">
 					<f:param name="bucket" value="#{bucketObjectDetailPage.bucket}"/>
 					<f:param name="key" value="#{bucketObjectDetailPage.key}"/>
 				</p:link>

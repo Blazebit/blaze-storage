@@ -5,6 +5,17 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAcceptableException;
+import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.RedirectionException;
+import javax.ws.rs.ServerErrorException;
+import javax.ws.rs.ServiceUnavailableException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.InvocationCallback;
@@ -16,7 +27,7 @@ public class ResponseObjectInvocation implements Invocation {
 
 	private final List<MessageBodyReader<?>> responseObjectMessageReader;
 	private Invocation delegate;
-	
+
 	public ResponseObjectInvocation(Invocation delegate, List<MessageBodyReader<?>> responseObjectMessageReader) {
 		this.delegate = delegate;
 		this.responseObjectMessageReader = responseObjectMessageReader;
@@ -26,10 +37,10 @@ public class ResponseObjectInvocation implements Invocation {
 		if (delegate != newInvocation) {
 			return new ResponseObjectInvocation(newInvocation, responseObjectMessageReader);
 		}
-		
+
 		return this;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private <T> MessageBodyReader<T> getMessageReader(Class<T> responseType) {
 		for (MessageBodyReader<?> reader : responseObjectMessageReader) {
@@ -37,18 +48,67 @@ public class ResponseObjectInvocation implements Invocation {
 				return (MessageBodyReader<T>) reader;
 			}
 		}
-		
+
 		return null;
 	}
 
 	private <T> T getResponseObject(MessageBodyReader<T> reader, Class<T> responseType, Response response) {
+		int status = response.getStatus();
+		if (status >= 200 && status < 300) {
+			try {
+				return reader.readFrom(responseType, null, null, null, response.getStringHeaders(), response.readEntity(InputStream.class));
+			} catch (IOException e) {
+				throw new WebApplicationException(e);
+			} catch (RuntimeException e) {
+				throw new WebApplicationException(e);
+			}
+		}
 		try {
-			return reader.readFrom(responseType, null, null, null, response.getStringHeaders(), response.readEntity(InputStream.class));
-		} catch (IOException e) {
-			throw new WebApplicationException(e);
+			if (status >= 300 && status < 400) {
+				throw new RedirectionException(response);
+			}
+
+			return handleErrorStatus(response);
+		} finally {
+			// close if no content
+			if (response.getMediaType() == null) {
+				response.close();
+			}
 		}
 	}
-	
+
+	private static <T> T handleErrorStatus(Response response) {
+		final int status = response.getStatus();
+		switch (status) {
+		case 400:
+			throw new BadRequestException(response);
+		case 401:
+			throw new NotAuthorizedException(response);
+		case 404:
+			throw new NotFoundException(response);
+		case 405:
+			throw new NotAllowedException(response);
+		case 406:
+			throw new NotAcceptableException(response);
+		case 415:
+			throw new NotSupportedException(response);
+		case 500:
+			throw new InternalServerErrorException(response);
+		case 503:
+			throw new ServiceUnavailableException(response);
+		default:
+			break;
+		}
+
+		if (status >= 400 && status < 500){
+			throw new ClientErrorException(response);
+		} else if (status >= 500) {
+			throw new ServerErrorException(response);
+		}
+
+		throw new WebApplicationException(response);
+	}
+
 	/*
 	 * Wrap for response object support
 	 */
@@ -59,11 +119,11 @@ public class ResponseObjectInvocation implements Invocation {
 
 	public <T> T invoke(Class<T> responseType) {
 		MessageBodyReader<T> reader = getMessageReader(responseType);
-		
+
 		if (reader != null) {
 			return getResponseObject(reader, responseType, delegate.invoke());
 		}
-		
+
 		return delegate.invoke(responseType);
 	}
 
@@ -71,11 +131,12 @@ public class ResponseObjectInvocation implements Invocation {
 		@SuppressWarnings("unchecked")
 		Class<T> responseClass = (Class<T>) responseType.getRawType();
 		MessageBodyReader<T> reader = getMessageReader(responseClass);
-		
+
 		if (reader != null) {
-			return getResponseObject(reader, responseClass, delegate.invoke());
+			Response response = delegate.invoke();
+			return getResponseObject(reader, responseClass, response);
 		}
-		
+
 		return delegate.invoke(responseType);
 	}
 
@@ -99,9 +160,9 @@ public class ResponseObjectInvocation implements Invocation {
 	}
 
 	/*
-	 * Wrapping delegates 
+	 * Wrapping delegates
 	 */
-	
+
 	public Invocation property(String name, Object value) {
 		return getOrCreateDelegate(delegate.property(name, value));
 	}

@@ -9,6 +9,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
 @Named
 @RequestScoped
@@ -22,10 +23,11 @@ public class BucketObjectDetailPage extends BucketObjectBasePage {
 	@Override
 	protected void init() {
 		super.init();
-		if (bucketObject == null || key == null || key.isEmpty() || key.endsWith("/")) {
+		int slashIndex;
+		if (bucketObject == null || key == null || key.isEmpty() || key.endsWith("/") || (slashIndex = key.lastIndexOf('/')) < 0) {
 			this.parent = "";
 		} else {
-			this.parent = key.substring(0, key.lastIndexOf('/'));
+			this.parent = key.substring(0, slashIndex);
 		}
 	}
 	
@@ -41,7 +43,15 @@ public class BucketObjectDetailPage extends BucketObjectBasePage {
 		if (bucketObject == null) {
 			return null;
 		} else {
-			return new DefaultStreamedContent(getContent(), bucketObject.getContentType(), bucketObject.getContentDisposition().getFilename(), null);
+			String filename;
+			ContentDisposition disposition = bucketObject.getContentDisposition();
+			if (disposition != null && disposition.getFilename() != null) {
+				filename = disposition.getFilename();
+			} else {
+				filename = key.substring(key.lastIndexOf('/') + 1);
+			}
+			
+			return new DefaultStreamedContent(getContent(), bucketObject.getContentType(), filename, null);
 		}
 	}
 	

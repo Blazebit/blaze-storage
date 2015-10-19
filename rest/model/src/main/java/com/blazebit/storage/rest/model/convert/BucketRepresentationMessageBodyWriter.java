@@ -5,21 +5,18 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.ext.MessageBodyWriter;
-import javax.ws.rs.ext.Provider;
+import javax.ws.rs.core.Response;
 
 import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Provider
-@Produces(MediaType.WILDCARD)
-public class BucketRepresentationMessageBodyWriter implements MessageBodyWriter<BucketHeadRepresentation> {
+public class BucketRepresentationMessageBodyWriter implements ResponseObjectAwareMessageBodyWriter<BucketHeadRepresentation> {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 	
@@ -34,7 +31,17 @@ public class BucketRepresentationMessageBodyWriter implements MessageBodyWriter<
 	}
 
 	@Override
+	public int getStatusCode(BucketHeadRepresentation t, Class<?> type) {
+		if (t instanceof BucketRepresentation) {
+			return Response.Status.OK.getStatusCode();
+		}
+		
+		return Response.Status.NO_CONTENT.getStatusCode();
+	}
+
+	@Override
 	public void writeTo(BucketHeadRepresentation t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
+		put(httpHeaders, HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
 		put(httpHeaders, BlazeStorageHeaders.BUCKET_NAME, t.getName());
 		put(httpHeaders, BlazeStorageHeaders.OWNER_KEY, t.getOwnerKey());
 		put(httpHeaders, BlazeStorageHeaders.DEFAULT_STORAGE_NAME, t.getDefaultStorageName());

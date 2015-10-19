@@ -22,6 +22,10 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 		this.externalContentKey = externalContentKey;
 	}
 
+	public BucketObjectUpdateRepresentation(BucketObjectBaseRepresentation bucketObject) {
+		this(bucketObject.getContentType(), bucketObject.getContentDisposition(), bucketObject.getSize(), bucketObject.getStorageName(), bucketObject.getStorageOwner(), bucketObject.getTags(), null, null);
+	}
+
 	public String getContentMD5() {
 		return contentMD5;
 	}

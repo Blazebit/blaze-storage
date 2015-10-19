@@ -7,6 +7,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.server.util.BucketObjectInputStream;
 
 @Named
@@ -21,16 +22,18 @@ public class BucketObjectEditPage extends BucketObjectAddPage {
 	@Override
 	protected void init() {
 		if (bucketObject != null) {
+			bucketObject = new BucketObjectUpdateRepresentation(bucketObject);
 			onAccountChanged();
 			content = new BucketObjectInputStream(client, bucket, key);
 		} else {
 			content = null;
 		}
-		
-		if (bucketObject == null || key == null || key.isEmpty() || key.endsWith("/")) {
+
+		int slashIndex;
+		if (bucketObject == null || key == null || key.isEmpty() || key.endsWith("/") || (slashIndex = key.lastIndexOf('/')) < 0) {
 			this.parent = null;
 		} else {
-			this.parent = key.substring(0, key.lastIndexOf('/'));
+			this.parent = key.substring(0, slashIndex);
 		}
 	}
 	

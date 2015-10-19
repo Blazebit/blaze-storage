@@ -34,9 +34,12 @@
 			<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
 				<p:graphicImage name="/demo/images/ajaxloadingbar.gif" />
 			</p:dialog>
-				<h:link value="Back" outcome="/object/index.xhtml">
+				<h:link value="Back" outcome="/object/index.xhtml" rendered="#{bucketObjectEditPage.parent != null}">
 					<f:param name="bucket" value="#{bucketObjectEditPage.bucket}"/>
 					<f:param name="parent" value="#{bucketObjectEditPage.parent}"/>
+				</h:link>
+				<h:link value="Back" outcome="/object/index.xhtml" rendered="#{bucketObjectEditPage.parent == null}">
+					<f:param name="bucket" value="#{bucketObjectEditPage.bucket}"/>
 				</h:link>
 			</ui:define>
 			<ui:define name="content">
@@ -81,7 +84,7 @@
 				
 				<p:outputLabel for="content" value="Content:" />
 				<h:panelGroup id="contentGroup">
-					<p:commandButton id="currentContent" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+					<p:commandButton id="currentContent" value="Download" ajax="false" immediate="true" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
 						<p:fileDownload value="#{bucketObjectEditPage.streamContent}" contentDisposition="attachement"/>
 					</p:commandButton>
 					<p:fileUpload id="content" fileUploadListener="#{bucketObjectEditPage.handleFileUpload}" fileLimit="1" mode="advanced" dragDropSupport="true" update="contentGroup" />

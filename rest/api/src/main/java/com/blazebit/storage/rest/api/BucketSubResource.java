@@ -8,7 +8,6 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,7 +20,7 @@ import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
 public interface BucketSubResource {
 
 	@GET
-	@Produces({ MediaType.APPLICATION_JSON })
+	@ResponseObject
 	public BucketRepresentation get(
 			@QueryParam("prefix") String prefix, 
 			@QueryParam("limit") Integer limit, 

@@ -99,7 +99,15 @@ public class BucketObjectAddPage extends BucketObjectBasePage {
 		if (content == null) {
 			return null;
 		} else {
-			return new DefaultStreamedContent(content, bucketObject.getContentType(), bucketObject.getContentDisposition().getFilename(), null);
+			String filename;
+			ContentDisposition disposition = bucketObject.getContentDisposition();
+			if (disposition != null && disposition.getFilename() != null) {
+				filename = disposition.getFilename();
+			} else {
+				filename = key.substring(key.lastIndexOf('/') + 1);
+			}
+			
+			return new DefaultStreamedContent(content, bucketObject.getContentType(), filename, null);
 		}
 	}
 	

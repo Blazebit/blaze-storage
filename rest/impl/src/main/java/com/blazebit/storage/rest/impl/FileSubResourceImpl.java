@@ -25,6 +25,7 @@ import com.blazebit.storage.core.model.jpa.BucketObjectId;
 import com.blazebit.storage.core.model.jpa.BucketObjectVersion;
 import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
+import com.blazebit.storage.core.model.security.Role;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketObjectVersionRepresentationView;
@@ -73,7 +74,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		if (result == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket object not found").build());
 		}
-		if (!result.getOwnerId().equals(accountId)) {
+		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access bucket object").build());
 		}
 		
@@ -162,7 +163,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		if (storage == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Storage not found").build());
 		}
-		if (!storage.getOwnerId().equals(accountId)) {
+		if (!storage.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access storage").build());
 		}
 		

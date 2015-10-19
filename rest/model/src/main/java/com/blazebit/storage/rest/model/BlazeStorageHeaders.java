@@ -13,6 +13,7 @@ public final class BlazeStorageHeaders {
 	public static final String DEFAULT_STORAGE_NAME = "x-blz-default-storage-name";
 	public static final String STORAGE_OWNER = "x-blz-storage-owner";
 	public static final String STORAGE_NAME = "x-blz-storage-name";
+	public static final String TAG_PREFIX = "x-blz-storage-tag-";
 	
 	private BlazeStorageHeaders() {
 	}

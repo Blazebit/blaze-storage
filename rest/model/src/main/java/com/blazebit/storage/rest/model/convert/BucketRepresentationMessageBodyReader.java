@@ -7,12 +7,10 @@ import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
-import javax.ws.rs.ext.Provider;
 
 import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
@@ -22,8 +20,6 @@ import com.blazebit.storage.rest.model.StatisticsRepresentation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Provider
-@Consumes(MediaType.WILDCARD)
 public class BucketRepresentationMessageBodyReader implements MessageBodyReader<BucketHeadRepresentation> {
 
 	private final ObjectMapper mapper = new ObjectMapper();
