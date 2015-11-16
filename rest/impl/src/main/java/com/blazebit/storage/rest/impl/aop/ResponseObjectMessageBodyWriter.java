@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import javax.enterprise.inject.Vetoed;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +16,7 @@ import javax.ws.rs.ext.Provider;
 import com.blazebit.storage.rest.api.aop.ResponseObject;
 import com.blazebit.storage.rest.model.convert.ResponseObjectAwareMessageBodyWriter;
 
+@Vetoed
 @Provider
 @Produces(MediaType.WILDCARD)
 public class ResponseObjectMessageBodyWriter implements MessageBodyWriter<Object> {

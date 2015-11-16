@@ -14,6 +14,9 @@ public final class BlazeStorageHeaders {
 	public static final String STORAGE_OWNER = "x-blz-storage-owner";
 	public static final String STORAGE_NAME = "x-blz-storage-name";
 	public static final String TAG_PREFIX = "x-blz-storage-tag-";
+	public static final String ERROR_CODE = "x-blz-error-code";
+	public static final String CONTENT_KEY = "x-blz-content-key";
+	public static final String CONTENT_MD5 = "x-blz-content-md5";
 	
 	private BlazeStorageHeaders() {
 	}

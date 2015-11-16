@@ -1,8 +1,5 @@
 package com.blazebit.storage.rest.api;
 
-import java.io.InputStream;
-
-import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -50,6 +47,6 @@ public interface FileSubResource {
 
 	@PUT
 	@Consumes({ MediaType.WILDCARD })
-	public Response put(@BeanParam BucketObjectUpdateRepresentation bucketObjectUpdate, InputStream content);
+	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate);
 
 }

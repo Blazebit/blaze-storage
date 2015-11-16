@@ -63,6 +63,7 @@ public class BucketObjectBasePage implements Serializable {
 	public void put() {
 		BucketObjectUpdateRepresentation oldBucketObject = (BucketObjectUpdateRepresentation) bucketObject;
 		BucketObjectUpdateRepresentation newBucketObject = new BucketObjectUpdateRepresentation();
+		newBucketObject.setContent(getContent());
 		newBucketObject.setContentDisposition(oldBucketObject.getContentDisposition());
 		newBucketObject.setContentMD5(oldBucketObject.getContentMD5());
 		newBucketObject.setContentType(oldBucketObject.getContentType());
@@ -71,7 +72,7 @@ public class BucketObjectBasePage implements Serializable {
 		newBucketObject.setStorageName(oldBucketObject.getStorageName());
 		newBucketObject.setStorageOwner(oldBucketObject.getStorageOwner());
 		newBucketObject.setTags(tagsHolder.getTags());
-		client.buckets().get(bucket).getFile(key).put(newBucketObject, getContent());
+		client.buckets().get(bucket).getFile(key).put(newBucketObject);
 		bucketObject = newBucketObject;
 	}
 	

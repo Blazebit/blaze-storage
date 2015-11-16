@@ -20,6 +20,7 @@ import com.blazebit.storage.rest.api.BucketSubResource;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketHeadRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketRepresentationView;
+import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
@@ -92,7 +93,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 			Account owner = accountDataAccess.findByKey(ownerKey);
 			
 			if (owner == null) {
-				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
+				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).header(BlazeStorageHeaders.ERROR_CODE, "AccountNotFound").type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
 			}
 			
 			bucket.setOwner(owner);
@@ -109,7 +110,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 			storageOwner = accountDataAccess.findByKey(storageOwnerKey);
 			
 			if (storageOwner == null) {
-				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
+				throw new WebApplicationException(Response.status(Status.BAD_REQUEST).header(BlazeStorageHeaders.ERROR_CODE, "AccountNotFound").type(MediaType.TEXT_PLAIN_TYPE).entity("Account does not exist").build());
 			}
 		} else {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN_TYPE).entity("Only admins may change the storage owner").build());

@@ -18,42 +18,54 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyReader;
 
 import com.blazebit.storage.rest.model.BlazeStorageHeaders;
+import com.blazebit.storage.rest.model.BucketObjectBaseRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
+import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
-public class BucketObjectRepresentationMessageBodyReader implements MessageBodyReader<BucketObjectHeadRepresentation> {
+public class BucketObjectRepresentationMessageBodyReader implements MessageBodyReader<BucketObjectBaseRepresentation> {
 
 	@Override
 	public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return BucketObjectHeadRepresentation.class.isAssignableFrom(type);
+		return BucketObjectBaseRepresentation.class.isAssignableFrom(type);
 	}
 
 	@Override
-	public BucketObjectHeadRepresentation readFrom(Class<BucketObjectHeadRepresentation> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
-		BucketObjectHeadRepresentation result;
+	public BucketObjectBaseRepresentation readFrom(Class<BucketObjectBaseRepresentation> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
+		BucketObjectBaseRepresentation result;
 		
-		if (BucketObjectRepresentation.class.isAssignableFrom(type)) {
-			BucketObjectRepresentation bucketObject = new BucketObjectRepresentation();
-			bucketObject.setContent(entityStream);
-			result = bucketObject;
+		if (BucketObjectUpdateRepresentation.class.isAssignableFrom(type)) {
+			BucketObjectUpdateRepresentation updateResult = new BucketObjectUpdateRepresentation();
+			updateResult.setContentMD5(httpHeaders.getFirst(BlazeStorageHeaders.CONTENT_MD5));
+			updateResult.setExternalContentKey(httpHeaders.getFirst(BlazeStorageHeaders.CONTENT_KEY));
+			updateResult.setContent(entityStream);
+			result = updateResult;
 		} else {
-			result = new BucketObjectHeadRepresentation();
+			BucketObjectHeadRepresentation headResult;
+			if (BucketObjectRepresentation.class.isAssignableFrom(type)) {
+				BucketObjectRepresentation bucketObject = new BucketObjectRepresentation();
+				bucketObject.setContent(entityStream);
+				result = headResult = bucketObject;
+			} else {
+				result = headResult = new BucketObjectHeadRepresentation();
+			}
+			
+			Date lastModified = Response.ok().header(HttpHeaders.LAST_MODIFIED, httpHeaders.getFirst(HttpHeaders.LAST_MODIFIED)).build().getLastModified();
+			if (lastModified != null) {
+				Calendar lastModifiedCalendar = Calendar.getInstance();
+				lastModifiedCalendar.setTime(lastModified);
+				headResult.setLastModified(lastModifiedCalendar);
+			}
 		}
 		
 		if (mediaType != null) {
-			result.setContentType(mediaType.getType());
+			result.setContentType(mediaType.toString());
 		} else {
 			result.setContentType(httpHeaders.getFirst(HttpHeaders.CONTENT_TYPE));
 		}
 		
 		result.setContentDisposition(ContentDisposition.fromString(httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION)));
-		Date lastModified = Response.ok().header(HttpHeaders.LAST_MODIFIED, httpHeaders.getFirst(HttpHeaders.LAST_MODIFIED)).build().getLastModified();
-		if (lastModified != null) {
-			Calendar lastModifiedCalendar = Calendar.getInstance();
-			lastModifiedCalendar.setTime(lastModified);
-			result.setLastModified(lastModifiedCalendar);
-		}
 		if (httpHeaders.getFirst(HttpHeaders.CONTENT_LENGTH) == null) {
 			result.setSize(0L);
 		} else {

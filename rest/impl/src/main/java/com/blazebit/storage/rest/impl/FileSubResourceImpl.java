@@ -29,6 +29,7 @@ import com.blazebit.storage.core.model.security.Role;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketObjectVersionRepresentationView;
+import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
@@ -113,7 +114,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	}
 
 	@Override
-	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate, InputStream content) {
+	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate) {
 		Storage storage = getStorage(accountId, bucketObjectId.getBucket().getId(), bucketObjectUpdate.getStorageName());
 		URI storageUri = storage.getUri();
 		String externalContentKey = bucketObjectUpdate.getExternalContentKey();
@@ -124,7 +125,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			// TODO: Maybe check if the key is valid?
 		} else {
 			// TODO: Check content md5
-			contentKey = bucketObjectService.createContent(storageUri, content);
+			contentKey = bucketObjectService.createContent(storageUri, bucketObjectUpdate.getContent());
 		}
 		
 		BucketObject bucketObject = new BucketObject(bucketObjectId);
@@ -161,7 +162,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		}
 
 		if (storage == null) {
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Storage not found").build());
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).header(BlazeStorageHeaders.ERROR_CODE, "StorageNotFound").type(MediaType.TEXT_PLAIN).entity("Storage not found").build());
 		}
 		if (!storage.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access storage").build());

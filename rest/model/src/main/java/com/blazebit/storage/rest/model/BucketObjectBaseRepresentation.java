@@ -9,17 +9,11 @@ public class BucketObjectBaseRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//	@HeaderParam(HttpHeaders.CONTENT_TYPE)
 	private String contentType = "binary/octet-stream";
-//	@HeaderParam(HttpHeaders.CONTENT_DISPOSITION)
 	private ContentDisposition contentDisposition;
-//	@HeaderParam(HttpHeaders.CONTENT_LENGTH)
 	private long size;
-//	@HeaderParam("x-blz-storage-name")
 	private String storageName;
-//	@HeaderParam("x-blz-storage-owner")
 	private String storageOwner;
-//	@HeaderParam("x-blz-tags") 
 	private Map<String, String> tags; 
 
 	public BucketObjectBaseRepresentation() {

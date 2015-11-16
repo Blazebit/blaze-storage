@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.Response.Status;
 
 import com.blazebit.storage.rest.model.convert.BucketObjectRepresentationMessageBodyWriter;
 import com.blazebit.storage.rest.model.convert.BucketRepresentationMessageBodyWriter;
@@ -25,7 +26,12 @@ public class ResponseObjectResponseFilter implements ContainerResponseFilter {
 		if (writer != null) {
 			Object entity = responseContext.getEntity();
 			Class<?> entityClass = responseContext.getEntityClass();
-			responseContext.setStatus(writer.getStatusCode(entity, entityClass));
+			int status = writer.getStatusCode(entity, entityClass);
+			responseContext.setStatus(status);
+			
+			if (status == Status.NO_CONTENT.getStatusCode()) {
+				writer.writeTo(entity, entityClass, null, null, responseContext.getMediaType(), responseContext.getHeaders(), responseContext.getEntityStream());
+			}
 		}
 	}
 
