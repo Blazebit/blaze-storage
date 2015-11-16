@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+	<changeSet author="Christian Beikov" id="1.0.0.Final">
+		<createSequence sequenceName="STOR_ACCOUNT_SEQ" incrementBy="50" />
+		
+		<createTable tableName="STOR_ACCOUNT">
+			<column name="ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="KEY" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="NAME" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="STOR_ACCOUNT_TAGS">
+			<column name="ACCOUNT_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="VALUE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="TAG" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_BUCKET">
+			<column name="ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATION_DATE" type="TIMESTAMP" />
+			<column name="DELETED" type="BOOLEAN(1)" />
+			<column name="OBJECT_BYTES" type="BIGINT(19)" />
+			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+			<column name="OWNER_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORAGE_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORAGE_OWNER" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_BUCKET_OBJECT">
+			<column name="NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CONTENT_VERSION_UUID" type="VARCHAR(255)" />
+			<column name="STATE" type="INT(10)" />
+			<column name="BUCKET_ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_BUCKET_OBJECT_VERSION">
+			<column name="VERSION_UUID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CONTENT_DISPOSITION" type="VARCHAR(255)" />
+			<column name="CONTENT_KEY" type="VARCHAR(255)" />
+			<column name="CONTENT_LENGTH" type="BIGINT(19)" />
+			<column name="CONTENT_MD5" type="VARCHAR(255)" />
+			<column name="CONTENT_TYPE" type="VARCHAR(255)" />
+			<column name="CREATION_DATE" type="TIMESTAMP" />
+			<column name="ENTITY_TAG" type="VARCHAR(255)" />
+			<column name="LAST_MODIFIED" type="BIGINT(19)" />
+			<column name="STATE" type="INT(10)" />
+			<column name="BUCKET_ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJECT_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORAGE_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="STORAGE_OWNER_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_BUCKET_OBJECT_VERSION_TAGS">
+			<column name="BUCKET_ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJECT_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="VERSION_UUID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="VALUE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="TAG" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_STORAGE">
+			<column name="NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATION_DATE" type="TIMESTAMP" />
+			<column name="OWNER_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="OBJECT_BYTES" type="BIGINT(19)" />
+			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+			<column name="URI" type="VARCHAR(255)" />
+			<column name="QUOTA_PLAN_LIMIT" type="INT(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="QUOTA_PLAN_ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_STORAGE_QUOTA_MODEL">
+			<column name="ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+		</createTable>
+		<createTable tableName="STOR_STORAGE_QUOTA_PLAN">
+			<column name="GIGABYTE_LIMIT" type="INT(10)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ALERT_PERCENT" type="SMALLINT(5)" />
+			<column name="QUOTA_MODEL_ID" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<createTable tableName="STOR_STORAGE_TAGS">
+			<column name="STORAGE_NAME" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="OWNER_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="VALUE" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+			<column name="TAG" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		
+		<addPrimaryKey columnNames="BUCKET_ID, NAME" constraintName="STOR_BUCKET_OBJECT_PKEY" tableName="STOR_BUCKET_OBJECT" />
+		<addPrimaryKey columnNames="GIGABYTE_LIMIT, QUOTA_MODEL_ID" constraintName="STOR_STORAGE_QUOTA_PLAN_PKEY" tableName="STOR_STORAGE_QUOTA_PLAN" />
+		<addPrimaryKey columnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID, TAG" constraintName="STOR_BUCKET_OBJECT_VERSION_TAGS_PKEY" tableName="STOR_BUCKET_OBJECT_VERSION_TAGS" />
+		<addPrimaryKey columnNames="ACCOUNT_ID, TAG" constraintName="STOR_ACCOUNT_TAGS_PKEY" tableName="STOR_ACCOUNT_TAGS" />
+		<addPrimaryKey columnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID" constraintName="STOR_BUCKET_OBJECT_VERSION_PKEY" tableName="STOR_BUCKET_OBJECT_VERSION" />
+		<addPrimaryKey columnNames="NAME, OWNER_ID" constraintName="STOR_STORAGE_PKEY" tableName="STOR_STORAGE" />
+		<addPrimaryKey columnNames="STORAGE_NAME, OWNER_ID, TAG" constraintName="STOR_STORAGE_TAGS_PKEY" tableName="STOR_STORAGE_TAGS" />
+		<addPrimaryKey columnNames="ID" constraintName="STOR_BUCKET_PKEY" tableName="STOR_BUCKET" />
+		<addPrimaryKey columnNames="ID" constraintName="STOR_STORAGE_QUOTA_MODEL_PKEY" tableName="STOR_STORAGE_QUOTA_MODEL" />
+		<addPrimaryKey columnNames="ID" constraintName="STOR_ACCOUNT_PKEY" tableName="STOR_ACCOUNT" />
+		
+		<addUniqueConstraint columnNames="KEY" constraintName="STOR_ACCOUNT_UC_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="STOR_ACCOUNT" />
+		
+		<addForeignKeyConstraint baseColumnNames="BUCKET_ID, OBJECT_NAME" baseTableName="STOR_BUCKET_OBJECT_VERSION" constraintName="STOR_BUCKET_OBJECT_VERSION_FK_BUCKET_OBJECT" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BUCKET_ID, NAME" referencedTableName="STOR_BUCKET_OBJECT" />
+		<addForeignKeyConstraint baseColumnNames="STORAGE_NAME, STORAGE_OWNER" baseTableName="STOR_BUCKET" constraintName="STOR_BUCKET_FK_STORAGE" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME, OWNER_ID" referencedTableName="STOR_STORAGE" />
+		<addForeignKeyConstraint baseColumnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID" baseTableName="STOR_BUCKET_OBJECT_VERSION_TAGS" constraintName="STOR_BUCKET_OBJECT_VERSION_TAGS_FK_BUCKET_OBJECT_VERSION" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID" referencedTableName="STOR_BUCKET_OBJECT_VERSION" />
+		<addForeignKeyConstraint baseColumnNames="QUOTA_PLAN_LIMIT, QUOTA_PLAN_ID" baseTableName="STOR_STORAGE" constraintName="STOR_STORAGE_FK_QUOTA_PLAN" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="GIGABYTE_LIMIT, QUOTA_MODEL_ID" referencedTableName="STOR_STORAGE_QUOTA_PLAN" />
+		<addForeignKeyConstraint baseColumnNames="STORAGE_NAME, STORAGE_OWNER_ID" baseTableName="STOR_BUCKET_OBJECT_VERSION" constraintName="STOR_BUCKET_OBJECT_VERSION_FK_STORAGE" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME, OWNER_ID" referencedTableName="STOR_STORAGE" />
+		<addForeignKeyConstraint baseColumnNames="STORAGE_NAME, OWNER_ID" baseTableName="STOR_STORAGE_TAGS" constraintName="STOR_STORAGE_TAGS_FK_STORAGE" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME, OWNER_ID" referencedTableName="STOR_STORAGE" />
+		<addForeignKeyConstraint baseColumnNames="BUCKET_ID, NAME, CONTENT_VERSION_UUID" baseTableName="STOR_BUCKET_OBJECT" constraintName="STOR_BUCKET_OBJECT_FK_CURRENT_VERSION" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID" referencedTableName="STOR_BUCKET_OBJECT_VERSION" />
+		<addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="STOR_ACCOUNT_TAGS" constraintName="STOR_ACCOUNT_TAGS_FK_ACCOUNT" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_ACCOUNT" />
+		<addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="STOR_BUCKET" constraintName="STOR_BUCKET_FK_OWNER" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_ACCOUNT" />
+		<addForeignKeyConstraint baseColumnNames="BUCKET_ID" baseTableName="STOR_BUCKET_OBJECT" constraintName="STOR_BUCKET_OBJECT_FK_BUCKET" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_BUCKET" />
+		<addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="STOR_STORAGE" constraintName="STOR_STORAGE_FK_OWNER" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_ACCOUNT" />
+		<addForeignKeyConstraint baseColumnNames="QUOTA_MODEL_ID" baseTableName="STOR_STORAGE_QUOTA_PLAN" constraintName="STOR_STORAGE_QUOTA_PLAN_FK_QUOTA_MODEL" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_STORAGE_QUOTA_MODEL" />
+	</changeSet>
+</databaseChangeLog>

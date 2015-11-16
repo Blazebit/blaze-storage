@@ -1,6 +1,7 @@
 package com.blazebit.storage.core.model.jpa;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,7 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class BucketObject extends EmbeddedIdBaseEntity<BucketObjectId> {
+public class BucketObject extends BaseEntity<BucketObjectId> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -29,6 +30,12 @@ public class BucketObject extends EmbeddedIdBaseEntity<BucketObjectId> {
 	
 	public BucketObject(BucketObjectId id) {
 		super(id);
+	}
+	
+	@EmbeddedId
+	@Override
+	public BucketObjectId getId() {
+		return id();
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -55,12 +55,19 @@ public class ResponseObjectInvocation implements Invocation {
 	private <T> T getResponseObject(MessageBodyReader<T> reader, Class<T> responseType, Response response) {
 		int status = response.getStatus();
 		if (status >= 200 && status < 300) {
+			boolean success = false;
 			try {
-				return reader.readFrom(responseType, null, null, null, response.getStringHeaders(), response.readEntity(InputStream.class));
+				T result = reader.readFrom(responseType, null, null, null, response.getStringHeaders(), response.readEntity(InputStream.class));
+				success = true;
+				return result;
 			} catch (IOException e) {
 				throw new WebApplicationException(e);
 			} catch (RuntimeException e) {
 				throw new WebApplicationException(e);
+			} finally {
+				if (!success) {
+					response.close();
+				}
 			}
 		}
 		try {
@@ -70,10 +77,7 @@ public class ResponseObjectInvocation implements Invocation {
 
 			return handleErrorStatus(response);
 		} finally {
-			// close if no content
-			if (response.getMediaType() == null) {
-				response.close();
-			}
+			response.close();
 		}
 	}
 

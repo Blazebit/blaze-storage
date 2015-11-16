@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -25,7 +26,7 @@ import javax.validation.constraints.NotNull;
 import com.blazebit.storage.core.model.jpa.converter.URIConverter;
 
 @Entity
-public class Storage extends EmbeddedIdBaseEntity<StorageId> {
+public class Storage extends BaseEntity<StorageId> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -44,6 +45,12 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 	public Storage(StorageId id) {
 		super(id);
 	}
+	
+	@EmbeddedId
+	@Override
+	public StorageId getId() {
+		return id();
+	}
 
 	@NotNull
 	@Convert(converter = URIConverter.class)
@@ -58,7 +65,7 @@ public class Storage extends EmbeddedIdBaseEntity<StorageId> {
 	// Unfortunately we need this in order to be able to fetch properties from the owner.
 	// Remove this when https://github.com/Blazebit/blaze-persistence/issues/107 is fixed
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "owner_id", insertable = false, updatable = false)
+	@JoinColumn(name = "owner_id", insertable = false, updatable = false, foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_owner"))
 	public Account getOwner() {
 		return owner;
 	}

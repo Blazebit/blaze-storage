@@ -52,8 +52,9 @@
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.10</version.blazeutils>
-		<version.blazepersistence>1.0.6-SNAPSHOT</version.blazepersistence>
+		<version.blazepersistence>1.1.0-Alpha5</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
+		<version.liquibase>3.2.2</version.liquibase>
 		<version.hibernate>4.3.10.Final</version.hibernate>
 		<version.junit>4.11</version.junit>
 
@@ -197,7 +198,7 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>blaze-persistence-integration-hibernate</artifactId>
+				<artifactId>blaze-persistence-integration-hibernate-4</artifactId>
 				<version>${version.blazepersistence}</version>
 			</dependency>
 
@@ -235,7 +236,13 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>blaze-storage-server</artifactId>
+				<artifactId>blaze-storage-server-dependencies</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-server-ui</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
@@ -317,6 +324,19 @@
 				<artifactId>javaee-api</artifactId>
 				<version>${version.javaee-api}</version>
 				<scope>provided</scope>
+			</dependency>
+			
+			<!-- Liquibase dependencies -->
+			<dependency>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+				<version>${version.liquibase}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.yaml</groupId>
+						<artifactId>snakeyaml</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			
 			<!-- Hibernate dependencies -->

@@ -25,5 +25,67 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
+    <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                	<skipTests>${skipLiquibaseTests}</skipTests>
+                </configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${version.liquibase}</version>
+				<configuration>
+					<skip>${liquibase.skip}</skip>
+					<outputFileEncoding>UTF-8</outputFileEncoding>
+					<changeLogFile>${basedir}/src/main/resources/META-INF/changelog/changelog-master.xml</changeLogFile>
+					<driver>${liquibase.db.driver}</driver>
+					<url>${liquibase.db.url}</url>
+					<defaultSchemaName>${liquibase.db.schema}</defaultSchemaName>
+					<username>${liquibase.db.user}</username>
+					<password>${liquibase.db.password}</password>
+					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>${liquibase.exec.goal}</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+	
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<skipLiquibaseTests>false</skipLiquibaseTests>
+				<!-- Need this to skip diffing stuff -->
+				<liquibase.skip>true</liquibase.skip>
+				<liquibase.exec.goal>updateSQL</liquibase.exec.goal>
+			</properties>
+		</profile>
+		
+	</profiles>
 </project>

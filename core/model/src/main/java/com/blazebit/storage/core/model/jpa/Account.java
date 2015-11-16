@@ -32,7 +32,7 @@ public class Account extends SequenceBaseEntity {
 	}
 
 	@NotNull
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	public String getKey() {
 		return key;
 	}

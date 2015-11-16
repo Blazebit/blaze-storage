@@ -1,13 +1,14 @@
 package com.blazebit.storage.core.model.jpa;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class StorageQuotaPlan extends EmbeddedIdBaseEntity<StorageQuotaPlanId> implements Comparable<StorageQuotaPlan> {
+public class StorageQuotaPlan extends BaseEntity<StorageQuotaPlanId> implements Comparable<StorageQuotaPlan> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -19,6 +20,12 @@ public class StorageQuotaPlan extends EmbeddedIdBaseEntity<StorageQuotaPlanId> i
 
 	public StorageQuotaPlan(StorageQuotaPlanId id) {
 		super(id);
+	}
+	
+	@EmbeddedId
+	@Override
+	public StorageQuotaPlanId getId() {
+		return id();
 	}
 
 	@Min(0)

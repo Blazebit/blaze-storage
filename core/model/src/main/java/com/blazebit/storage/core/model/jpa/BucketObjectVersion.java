@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,7 +24,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersionId> {
+public class BucketObjectVersion extends BaseEntity<BucketObjectVersionId> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -48,6 +49,12 @@ public class BucketObjectVersion extends EmbeddedIdBaseEntity<BucketObjectVersio
 
 	public BucketObjectVersion(BucketObjectVersionId id) {
 		super(id);
+	}
+	
+	@EmbeddedId
+	@Override
+	public BucketObjectVersionId getId() {
+		return id();
 	}
 
 	@NotNull

@@ -1,10 +1,9 @@
-Blaze Persistence - Criteria API for JPA backends
+Blaze Storage - Flexible storage server frontend
 =================================================
 :projectname:     Blaze Persistence
 :lang:            en
-:authors:  	  Christian Beikov, Blazebit; Moritz Becker, Curecomp
+:authors:  	      Christian Beikov, Blazebit
 :email:           christian@blazebit.com
-:email_2:         m.becker@curecomp.com
 :revnumber: 	  {version}
 :copyrighttext:   Copyright (C) 2015 Blazebit
 :new:             image:images/smallnew.png[]
