@@ -43,7 +43,7 @@ public abstract class BucketRepresentationView extends BucketRepresentation {
 	private static StatisticsRepresentation toStatistics(ObjectStatistics statistics) {
 		StatisticsRepresentation result = new StatisticsRepresentation();
 		result.setObjectBytes(statistics.getObjectBytes());
-		result.setObjectCount(result.getObjectCount());
+		result.setObjectCount(statistics.getObjectCount());
 		return result;
 	}
 	
