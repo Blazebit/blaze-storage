@@ -40,11 +40,19 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-modules-storage-ftp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>blaze-storage-modules-authentication-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>blaze-storage-client-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-core-config-wildfly</artifactId>
 		</dependency>
 	</dependencies>
 

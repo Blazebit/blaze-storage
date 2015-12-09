@@ -2,7 +2,10 @@ package com.blazebit.storage.server.faces.configuration;
 
 public enum ConfigurationEntryType {
 
-	TEXT("text");
+	TEXT("text"),
+	PASSWORD("password"),
+	INTEGER("integer"),
+	BOOLEAN("boolean");
 	
 	private final String type;
 	

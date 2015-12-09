@@ -10,10 +10,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.blazebit.storage.core.config.api.persistence.MasterOnly;
 
 public abstract class AbstractActor {
 
 	@Inject
+	@MasterOnly
 	protected EntityManager em;
 	@Inject
 	protected CriteriaBuilderFactory cbf;

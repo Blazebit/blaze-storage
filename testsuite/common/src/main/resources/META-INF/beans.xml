@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- 
+	This is needed for tests that depend on this project so that the testsuite common jar will have a beans.xml
+-->
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
+ 	<interceptors>
+​		<class>org.infinispan.jcache.annotation.CacheResultInterceptor</class>
+​		<class>org.infinispan.jcache.annotation.CachePutInterceptor</class>
+​		<class>org.infinispan.jcache.annotation.CacheRemoveEntryInterceptor</class>
+​		<class>org.infinispan.jcache.annotation.CacheRemoveAllInterceptor</class>
+​	</interceptors>
+</beans>

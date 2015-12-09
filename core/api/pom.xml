@@ -15,14 +15,18 @@
     <name>Blazebit Storage Core API</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.openejb</groupId>
-            <artifactId>javaee-api</artifactId>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
             <scope>provided</scope>
-        </dependency>
+		</dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>blaze-storage-core-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>blaze-storage-core-config-api</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>

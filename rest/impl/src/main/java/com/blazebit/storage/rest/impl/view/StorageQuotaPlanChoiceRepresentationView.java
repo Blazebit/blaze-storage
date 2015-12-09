@@ -15,7 +15,7 @@ public abstract class StorageQuotaPlanChoiceRepresentationView extends StorageQu
 
 	public StorageQuotaPlanChoiceRepresentationView(
 			@Mapping("id") StorageQuotaPlanId id) {
-		super(id.getQuotaModel().getId(), id.getGigabyteLimit());
+		super(id.getQuotaModelId(), id.getGigabyteLimit());
 	}
 
 	@JsonIgnore

@@ -1,5 +1,8 @@
 package com.blazebit.storage.core.model.jpa;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -10,6 +13,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -23,6 +27,7 @@ public class BucketObject extends BaseEntity<BucketObjectId> {
 	private BucketObjectState state;
 	private String contentVersionUuid;
 	private BucketObjectVersion contentVersion;
+	private Set<BucketObjectVersion> versions = new HashSet<>(0);
 	
 	public BucketObject() {
 		super(new BucketObjectId());
@@ -38,8 +43,8 @@ public class BucketObject extends BaseEntity<BucketObjectId> {
 		return id();
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "bucket_id", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "bucket_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_object_fk_bucket"), insertable = false, updatable = false)
 	public Bucket getBucket() {
 		return bucket;
 	}
@@ -81,5 +86,19 @@ public class BucketObject extends BaseEntity<BucketObjectId> {
 
 	public void setContentVersion(BucketObjectVersion contentVersion) {
 		this.contentVersion = contentVersion;
+	}
+
+	@OneToMany(mappedBy = "bucketObject")
+	public Set<BucketObjectVersion> getVersions() {
+		return versions;
+	}
+
+	public void setVersions(Set<BucketObjectVersion> versions) {
+		this.versions = versions;
+	}
+
+	@Override
+	public String toString() {
+		return "BucketObject [getId()=" + getId() + "]";
 	}
 }

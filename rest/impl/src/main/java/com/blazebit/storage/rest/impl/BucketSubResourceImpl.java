@@ -116,7 +116,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN_TYPE).entity("Only admins may change the storage owner").build());
 		}
 		
-		bucket.setStorage(new Storage(new StorageId(storageOwner, bucketUpdate.getDefaultStorageName())));
+		bucket.setStorage(new Storage(new StorageId(storageOwner.getId(), bucketUpdate.getDefaultStorageName())));
 		bucketService.put(bucket);
 		return Response.ok().build();
 	}

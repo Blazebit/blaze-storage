@@ -32,7 +32,6 @@ public class Storage extends BaseEntity<StorageId> {
 	
 	private URI uri;
 	private Account owner;
-	private Long ownerId;
 	private Calendar creationDate;
 	private StorageQuotaPlan quotaPlan;
 	private ObjectStatistics statistics = new ObjectStatistics();
@@ -72,15 +71,6 @@ public class Storage extends BaseEntity<StorageId> {
 	
 	public void setOwner(Account owner) {
 		this.owner = owner;
-	}
-	
-	@Column(name = "owner_id", insertable = false, updatable = false)
-	public Long getOwnerId() {
-		return ownerId;
-	}
-	
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
 	}
 
 	@NotNull

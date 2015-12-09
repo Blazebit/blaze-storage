@@ -50,7 +50,7 @@ public class StorageQuotaModel extends BaseEntity<String> {
 		this.description = description;
 	}
 
-	@OneToMany(mappedBy = "id.quotaModel", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "quotaModel", cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<StorageQuotaPlan> getPlans() {
 		return plans;
 	}

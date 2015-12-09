@@ -5,16 +5,19 @@ import java.util.HashSet;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.persistence.LockModeType;
 
+import com.blazebit.storage.core.api.AccountNotFoundException;
+import com.blazebit.storage.core.api.BucketNotEmptyException;
 import com.blazebit.storage.core.api.BucketNotFoundException;
 import com.blazebit.storage.core.api.BucketService;
+import com.blazebit.storage.core.api.StorageNotFoundException;
 import com.blazebit.storage.core.api.event.BucketDeletedEvent;
 import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.ObjectStatistics;
 import com.blazebit.storage.core.model.jpa.Storage;
-import com.blazebit.storage.core.model.jpa.StorageId;
 
 @Stateless
 public class BucketServiceImpl extends AbstractService implements BucketService {
@@ -24,7 +27,11 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 	
 	@Override
 	public void put(Bucket bucket) {
-		Bucket currentBucket = em.find(Bucket.class, bucket.getId());
+		if (em.contains(bucket)) {
+			em.detach(bucket);
+		}
+		
+		Bucket currentBucket = em.find(Bucket.class, bucket.getId(), LockModeType.PESSIMISTIC_WRITE);
 		
 		// Fallback to create
 		if (currentBucket == null) {
@@ -32,7 +39,15 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 			return;
 		}
 
-		currentBucket.setStorage(em.getReference(Storage.class, new StorageId(new Account(bucket.getStorage().getId().getOwner().getId()), bucket.getStorage().getId().getName())));
+		// TODO: check access rights?
+		
+		Storage storage = em.find(Storage.class, bucket.getStorage().getId());
+		
+		if (storage == null) {
+			throw new StorageNotFoundException("Storage not found!");
+		}
+		
+		currentBucket.setStorage(storage);
 		em.merge(currentBucket);
 		em.flush();
 	}
@@ -41,41 +56,54 @@ public class BucketServiceImpl extends AbstractService implements BucketService 
 		bucket.setDeleted(false);
 		bucket.setStatistics(new ObjectStatistics());
 		bucket.setObjects(new HashSet<BucketObject>(0));
-		// TODO: translate JPA/SQL exceptions to not found exceptions 
-		bucket.setOwner(em.getReference(Account.class, bucket.getOwner().getId()));
-		bucket.setStorage(em.getReference(Storage.class, new StorageId(new Account(bucket.getStorage().getId().getOwner().getId()), bucket.getStorage().getId().getName())));
+		
+		Account owner = em.find(Account.class, bucket.getOwner().getId());
+		
+		if (owner == null) {
+			throw new AccountNotFoundException("Account not found!");
+		}
+		
+		bucket.setOwner(owner);
+		
+		Storage storage = em.find(Storage.class, bucket.getStorage().getId());
+		
+		if (storage == null) {
+			throw new StorageNotFoundException("Storage not found!");
+		}
+		
+		bucket.setStorage(storage);
 		
 		em.persist(bucket);
 		em.flush();
 	}
 
 	@Override
-	public void updateStatistics(String bucketId, ObjectStatistics deltaStatistics) {
-		int updated = em.createQuery("UPDATE Bucket b "
-				+ "SET statistics.objectCount = statistics.objectCount + :objectCountDelta, "
-				+ "statistics.objectBytes = statistics.objectBytes + :objectBytesDelta "
-				+ "WHERE b.id = :bucketId")
-			.setParameter("objectCountDelta", deltaStatistics.getObjectCount())
-			.setParameter("objectBytesDelta", deltaStatistics.getObjectBytes())
-			.setParameter("bucketId", bucketId)
-			.executeUpdate();
-		
-		if (updated != 1) {
-			throw new BucketNotFoundException("Bucket statistics update for '" + bucketId + "' failed. Expected to update 1 row but was " + updated);
-		}
-	}
-
-	@Override
 	public void delete(String bucketId) {
-		int updated = em.createQuery("UPDATE Bucket b "
-				+ "SET deleted = true "
-				+ "WHERE b.id = :bucketId")
-			.setParameter("bucketId", bucketId)
-			.executeUpdate();
+		Bucket bucket = em.find(Bucket.class, bucketId, LockModeType.PESSIMISTIC_WRITE);
 		
-		if (updated != 1) {
-			throw new BucketNotFoundException("Bucket deletion for '" + bucketId + "' failed. Expected to update 1 row but was " + updated);
+		// TODO: check access rights?
+		
+		if (bucket == null) {
+			throw new BucketNotFoundException("Bucket '" + bucketId + "' does not exist!");
 		}
+		
+		if (Boolean.TRUE.equals(bucket.getDeleted())) {
+			// If it is already deleted, everything is ok
+			throw new BucketNotFoundException("Bucket '" + bucketId + "' does not exist!");
+		}
+		
+		if (bucket.getStatistics().getObjectCount() != 0L) {
+			throw new BucketNotEmptyException("Can not delete not empty bucket!");
+		}
+		
+		if (bucket.getStatistics().getPendingObjectCount() == 0L) {
+			em.remove(bucket);
+		} else {
+			bucket.setDeleted(true);
+			em.merge(bucket);
+		}
+
+		em.flush();
 		
 		bucketDeleted.fire(new BucketDeletedEvent(bucketId));
 	}

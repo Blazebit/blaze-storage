@@ -71,7 +71,7 @@ public class StorageTypesResourceImpl extends AbstractResource implements Storag
 		element.setDescription(metamodel.getDescription());
 		
 		Set<StorageProviderConfigurationElement> configElements = metamodel.getConfigurationElements();
-		Set<StorageTypeConfigElementRepresentation> storageTypeConfigs = new LinkedHashSet<>(configElements.size());
+		List<StorageTypeConfigElementRepresentation> storageTypeConfigs = new ArrayList<>(configElements.size());
 		
 		for (StorageProviderConfigurationElement config : configElements) {
 			StorageTypeConfigElementRepresentation storageTypeConfig = new StorageTypeConfigElementRepresentation();

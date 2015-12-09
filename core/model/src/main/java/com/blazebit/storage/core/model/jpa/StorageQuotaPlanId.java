@@ -4,10 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -16,26 +12,25 @@ public class StorageQuotaPlanId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private StorageQuotaModel quotaModel;
+	private String quotaModelId;
 	private Integer gigabyteLimit;
 	
 	public StorageQuotaPlanId() {
 	}
 
-	public StorageQuotaPlanId(StorageQuotaModel quotaModel, Integer gigabyteLimit) {
-		this.quotaModel = quotaModel;
+	public StorageQuotaPlanId(String quotaModelId, Integer gigabyteLimit) {
+		this.quotaModelId = quotaModelId;
 		this.gigabyteLimit = gigabyteLimit;
 	}
 
 	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "quota_model_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_quota_plan_fk_quota_model"))
-	public StorageQuotaModel getQuotaModel() {
-		return quotaModel;
+	@Column(name = "quota_model_id")
+	public String getQuotaModelId() {
+		return quotaModelId;
 	}
 
-	public void setQuotaModel(StorageQuotaModel quotaModel) {
-		this.quotaModel = quotaModel;
+	public void setQuotaModelId(String quotaModelId) {
+		this.quotaModelId = quotaModelId;
 	}
 
 	@Min(1)
@@ -54,7 +49,7 @@ public class StorageQuotaPlanId implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((gigabyteLimit == null) ? 0 : gigabyteLimit.hashCode());
-		result = prime * result + ((quotaModel == null) ? 0 : quotaModel.hashCode());
+		result = prime * result + ((quotaModelId == null) ? 0 : quotaModelId.hashCode());
 		return result;
 	}
 
@@ -72,11 +67,16 @@ public class StorageQuotaPlanId implements Serializable {
 				return false;
 		} else if (!gigabyteLimit.equals(other.gigabyteLimit))
 			return false;
-		if (quotaModel == null) {
-			if (other.quotaModel != null)
+		if (quotaModelId == null) {
+			if (other.quotaModelId != null)
 				return false;
-		} else if (!quotaModel.equals(other.quotaModel))
+		} else if (!quotaModelId.equals(other.quotaModelId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "StorageQuotaPlanId [quotaModelId=" + quotaModelId + ", gigabyteLimit=" + gigabyteLimit + "]";
 	}
 }

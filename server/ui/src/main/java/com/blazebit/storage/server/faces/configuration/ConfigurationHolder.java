@@ -1,6 +1,7 @@
 package com.blazebit.storage.server.faces.configuration;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class ConfigurationHolder {
 		return configuration;
 	}
 	
-	public void setConfiguration(Set<? extends StorageTypeConfigEntryRepresentation> configuration) {
+	public void setConfiguration(Collection<? extends StorageTypeConfigEntryRepresentation> configuration) {
 		configurationEntries = new ArrayList<>(configuration.size());
 		for (StorageTypeConfigEntryRepresentation entry : configuration) {
 			if (entry instanceof StorageTypeConfigElementRepresentation) {

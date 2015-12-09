@@ -13,7 +13,7 @@ public class LiquibaseChangeSetTest {
 	  
     @Test
     public void testChangeSets() throws Throwable {
-        String unitName = "StoragePU";
+        String unitName = "StorageTestMasterOnly";
         String changeLogPath = "META-INF/changelog/changelog-master.xml";
 
         List<ChangeSet> changeSets = ChangeSetUtils.computeChangeSets(unitName, changeLogPath);

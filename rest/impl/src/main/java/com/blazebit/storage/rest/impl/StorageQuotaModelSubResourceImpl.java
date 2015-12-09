@@ -74,7 +74,7 @@ public class StorageQuotaModelSubResourceImpl extends AbstractResource implement
 		SortedSet<StorageQuotaPlan> plans = new TreeSet<>();
 		for (Integer limit : limits) {
 			StorageQuotaPlan plan = new StorageQuotaPlan();
-			plan.getId().setQuotaModel(storageQuotaModel);
+			plan.getId().setQuotaModelId(storageQuotaModel.getId());
 			plan.getId().setGigabyteLimit(limit);
 			// TODO: We might need to allow setting that in the future
 			plan.setAlertPercent((short) 100);

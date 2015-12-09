@@ -2,11 +2,8 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -16,26 +13,25 @@ public class StorageId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Account owner;
+	private Long ownerId;
 	private String name;
 	
 	public StorageId() {
 	}
 	
-	public StorageId(Account owner, String name) {
-		this.owner = owner;
+	public StorageId(Long ownerId, String name) {
+		this.ownerId = ownerId;
 		this.name = name;
 	}
 
 	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "owner_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "storage_fk_owner"))
-	public Account getOwner() {
-		return owner;
+	@Column(name = "owner_id")
+	public Long getOwnerId() {
+		return ownerId;
 	}
 	
-	public void setOwner(Account owner) {
-		this.owner = owner;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	@NotNull
@@ -54,7 +50,7 @@ public class StorageId implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
 		return result;
 	}
 
@@ -72,11 +68,16 @@ public class StorageId implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
+		if (ownerId == null) {
+			if (other.ownerId != null)
 				return false;
-		} else if (!owner.equals(other.owner))
+		} else if (!ownerId.equals(other.ownerId))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "StorageId [ownerId=" + ownerId + ", name=" + name + "]";
 	}
 }

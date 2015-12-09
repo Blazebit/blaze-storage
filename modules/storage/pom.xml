@@ -19,5 +19,6 @@
         <module>classpath</module>
         <module>nio2</module>
 		<module>local</module>
+		<module>ftp</module>
     </modules>
 </project>

@@ -10,7 +10,6 @@ import com.blazebit.persistence.QueryBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.BucketDataAccess;
 import com.blazebit.storage.core.model.jpa.Bucket;
-import com.blazebit.storage.core.model.jpa.BucketObject;
 
 @Stateless
 public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDataAccess {
@@ -56,10 +55,15 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 				cb.where("objects.id.name").like().value(prefix.replaceAll("%", "\\%") + "%").escape('\\');
 			}
 			
+			if (marker != null && !marker.isEmpty()) {
+				cb.where("objects.id.name").gt(marker);
+			}
+			
 			// TODO: implement limit and marker in query and also for passing into entity views
 			setting.addOptionalParameter("prefix", prefix);
 			setting.addOptionalParameter("limit", limit);
 			setting.addOptionalParameter("marker", marker);
+			cb.setMaxResults(limit);
 			return evm.applySetting(setting, cb).getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
@@ -77,12 +81,10 @@ public class BucketDataAccessImpl extends AbstractDataAccess implements BucketDa
 	@Override
 	public <T> List<T> findByAccountIdAndStorageName(long accountId, String storageName, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
 		CriteriaBuilder<Bucket> cb = cbf.create(em, Bucket.class)
-				.from(BucketObject.class)
-				.where("id.bucket.owner.id").eq(accountId)
-				.where("storage.id.name").eq(storageName)
+				.from(Bucket.class)
+				.where("owner.id").eq(accountId)
 				.where("deleted").eqExpression("false")
-				.distinct()
-				.select("id.bucket");
+				.where("storage.id.name").eq(storageName);
 		return evm.applySetting(setting, cb).getResultList();
 	}
 

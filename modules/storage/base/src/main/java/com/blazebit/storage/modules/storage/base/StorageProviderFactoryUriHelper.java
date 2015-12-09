@@ -52,7 +52,6 @@ public class StorageProviderFactoryUriHelper {
 		}
 		
 		return URI.create(sb.toString());
-		
 	}
 	
 	public Map<String, String> createConfiguration(URI uri) {

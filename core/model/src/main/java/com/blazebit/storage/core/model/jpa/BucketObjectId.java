@@ -2,11 +2,8 @@ package com.blazebit.storage.core.model.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,26 +12,34 @@ public class BucketObjectId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Bucket bucket;
+	private String bucketId;
 	private String name;
 	
 	public BucketObjectId() {
 	}
 	
 	public BucketObjectId(Bucket bucket, String name) {
-		this.bucket = bucket;
+		if (bucket == null) {
+			this.bucketId = null;
+		} else {
+			this.bucketId = bucket.getId();
+		}
+		this.name = name;
+	}
+
+	public BucketObjectId(String bucketId, String name) {
+		this.bucketId = bucketId;
 		this.name = name;
 	}
 
 	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "bucket_id", foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_object_fk_bucket"))
-	public Bucket getBucket() {
-		return bucket;
+	@Column(name = "bucket_id")
+	public String getBucketId() {
+		return bucketId;
 	}
-	
-	public void setBucket(Bucket bucket) {
-		this.bucket = bucket;
+
+	public void setBucketId(String bucketId) {
+		this.bucketId = bucketId;
 	}
 
 	@NotNull
@@ -47,16 +52,14 @@ public class BucketObjectId implements Serializable {
 		this.name = name;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((bucket == null) ? 0 : bucket.hashCode());
+		result = prime * result + ((bucketId == null) ? 0 : bucketId.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -67,10 +70,10 @@ public class BucketObjectId implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		BucketObjectId other = (BucketObjectId) obj;
-		if (bucket == null) {
-			if (other.bucket != null)
+		if (bucketId == null) {
+			if (other.bucketId != null)
 				return false;
-		} else if (!bucket.equals(other.bucket))
+		} else if (!bucketId.equals(other.bucketId))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -78,5 +81,10 @@ public class BucketObjectId implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BucketObjectId [bucketId=" + bucketId + ", name=" + name + "]";
 	}
 }

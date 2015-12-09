@@ -7,11 +7,13 @@ import javax.persistence.EntityManager;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.view.EntityViewManager;
+import com.blazebit.storage.core.config.api.persistence.ReadOnly;
 
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 public abstract class AbstractDataAccess {
 
 	@Inject
+	@ReadOnly
 	protected EntityManager em;
 	@Inject
 	protected CriteriaBuilderFactory cbf;

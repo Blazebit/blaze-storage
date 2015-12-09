@@ -46,22 +46,24 @@
 
 		<!-- The server part uses Java EE 7 -->
 		<version.javaee-api>7.0</version.javaee-api>
-		<!-- The client available parts are Java EE 6 compatible -->
-		<version.openejb>4.6.0</version.openejb>
-		<version.openejb.javaee-api>6.0-4</version.openejb.javaee-api>
+		<version.cache-api>1.0.0</version.cache-api>
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.10</version.blazeutils>
-		<version.blazepersistence>1.1.0-Alpha5</version.blazepersistence>
+		<version.blazepersistence>1.1.0-Alpha7</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.2.2</version.liquibase>
 		<version.hibernate>4.3.10.Final</version.hibernate>
+		<version.infinispan>7.1.1.Final</version.infinispan>
 		<version.junit>4.11</version.junit>
 
 		<version.resteasy>3.0.10.Final</version.resteasy>
 		<version.keycloak>1.1.0.Final</version.keycloak>
 		<version.keycloak.resteasy-jaxrs>3.0.10.Final</version.keycloak.resteasy-jaxrs>
 		<version.keycloak.jboss-servlet-api_3.0_spec>1.0.2.Final</version.keycloak.jboss-servlet-api_3.0_spec>
+		
+		<version.shrinkwrap.resolvers>2.1.1</version.shrinkwrap.resolvers>
+		<version.arquillian>1.1.5.Final</version.arquillian>
 
 		<!-- ************** -->
 		<!-- Build settings -->
@@ -108,6 +110,7 @@
 		<module>server</module>
 		<module>client</module>
 		<module>modules</module>
+		<module>testsuite</module>
 		<module>examples</module>
 		<module>documentation</module>
 	</modules>
@@ -221,6 +224,16 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-core-config-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-core-config-wildfly</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>blaze-storage-rest-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -269,6 +282,11 @@
 	        </dependency>
 	        <dependency>
 	            <groupId>${project.groupId}</groupId>
+	            <artifactId>blaze-storage-modules-storage-ftp</artifactId>
+				<version>${project.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>${project.groupId}</groupId>
 	            <artifactId>blaze-storage-modules-alert-email</artifactId>
 				<version>${project.version}</version>
 	        </dependency>
@@ -310,6 +328,22 @@
 				<artifactId>blaze-storage-integration-wildfly</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-testsuite-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-testsuite-core-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>blaze-storage-testsuite-storage-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- Platform dependencies -->
 
@@ -324,6 +358,11 @@
 				<artifactId>javaee-api</artifactId>
 				<version>${version.javaee-api}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.cache</groupId>
+				<artifactId>cache-api</artifactId>
+				<version>${version.cache-api}</version>
 			</dependency>
 			
 			<!-- Liquibase dependencies -->
@@ -352,6 +391,57 @@
 						<groupId>org.hibernate.javax.persistence</groupId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+			
+			<!-- Cache dependencies -->
+			<dependency>
+				<groupId>org.infinispan</groupId>
+				<artifactId>infinispan-core</artifactId>
+				<version>${version.infinispan}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.infinispan</groupId>
+				<artifactId>infinispan-jcache</artifactId>
+				<version>${version.infinispan}</version>
+				<scope>runtime</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.enterprise</groupId>
+						<artifactId>cdi-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.cache</groupId>
+						<artifactId>cache-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.infinispan</groupId>
+						<artifactId>infinispan-core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.infinispan</groupId>
+						<artifactId>infinispan-commons</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.infinispan</groupId>
+						<artifactId>infinispan-client-hotrod</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.jboss.logging</groupId>
+						<artifactId>jboss-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>javax.cache</groupId>
+				<artifactId>cache-api</artifactId>
+				<version>${version.cache-api}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jsr107.ri</groupId>
+				<artifactId>cache-annotations-ri-cdi</artifactId>
+				<version>${version.cache-api}</version>
+				<scope>runtime</scope>
 			</dependency>
 		
 			<!-- Resteasy -->
@@ -465,6 +555,26 @@
 				<artifactId>deltaspike-core-impl</artifactId>
 				<version>${version.deltaspike}</version>
 			</dependency>
+
+			<!-- This MUST be before the arquillian BOM as per: https://github.com/shrinkwrap/resolver -->
+			<dependency>
+				<groupId>org.jboss.shrinkwrap.resolver</groupId>
+				<artifactId>shrinkwrap-resolver-bom</artifactId>
+				<version>${version.shrinkwrap.resolvers}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+
+			<!-- Deltaspike Test -->
+
 			<dependency>
 				<groupId>org.apache.deltaspike.cdictrl</groupId>
 				<artifactId>deltaspike-cdictrl-api</artifactId>
@@ -473,14 +583,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.cdictrl</groupId>
-				<artifactId>deltaspike-cdictrl-openejb</artifactId>
+				<artifactId>deltaspike-cdictrl-weld</artifactId>
 				<version>${version.deltaspike}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.openejb</groupId>
-				<artifactId>openejb-core</artifactId>
-				<version>${version.openejb}</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -953,6 +1057,37 @@
 					</plugins>
 				</pluginManagement>
 			</build>
+		</profile>
+		<profile>
+			<id>wildfly-remote</id>
+			<dependencies>
+				<!-- Needed to make Arquillian work with the remote server adapter -->
+		        <dependency>
+		            <groupId>org.jboss.logging</groupId>
+		            <artifactId>jboss-logging</artifactId>
+		            <version>3.2.1.Final</version>
+		            <scope>test</scope>
+		        </dependency>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<version>1.0.2.Final</version>
+					<scope>test</scope>
+					<!-- Exclude this for arquillian to work with the remote adapter -->
+					<exclusions>
+						<exclusion>
+							<artifactId>jboss-logging</artifactId>
+							<groupId>org.jboss.logging</groupId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+					<version>1.6.2</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 </project>

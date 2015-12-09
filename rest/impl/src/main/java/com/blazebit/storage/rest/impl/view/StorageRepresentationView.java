@@ -46,6 +46,8 @@ public abstract class StorageRepresentationView extends StorageRepresentation {
 		StatisticsRepresentation result = new StatisticsRepresentation();
 		result.setObjectBytes(statistics.getObjectBytes());
 		result.setObjectCount(statistics.getObjectCount());
+		result.setObjectVersionBytes(statistics.getObjectVersionBytes());
+		result.setObjectVersionCount(statistics.getObjectVersionCount());
 		return result;
 	}
 	

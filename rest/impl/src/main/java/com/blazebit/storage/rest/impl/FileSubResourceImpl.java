@@ -53,8 +53,6 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	public FileSubResourceImpl(long accountId, String bucketId, String key) {
 		this.accountId = accountId;
 		this.bucketObjectId = new BucketObjectId(new Bucket(bucketId), key);
-		// Needed so we can use this id for loading with em.find + locking
-		this.bucketObjectId.getBucket().setObjects(null);
 	}
 
 	@Override
@@ -115,7 +113,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	@Override
 	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate) {
-		Storage storage = getStorage(accountId, bucketObjectId.getBucket().getId(), bucketObjectUpdate.getStorageName());
+		Storage storage = getStorage(accountId, bucketObjectId.getBucketId(), bucketObjectUpdate.getStorageName());
 		URI storageUri = storage.getUri();
 		String externalContentKey = bucketObjectUpdate.getExternalContentKey();
 		String contentKey;
@@ -156,7 +154,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	private Storage getStorage(long accountId, String bucketId, String storageName) {
 		Storage storage;
 		if (storageName != null && !storageName.isEmpty()) {
-			storage = storageDataAccess.findById(new StorageId(new Account(accountId), storageName));
+			storage = storageDataAccess.findById(new StorageId(accountId, storageName));
 		} else {
 			storage = storageDataAccess.findByBucketId(bucketId);
 		}
@@ -164,7 +162,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		if (storage == null) {
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).header(BlazeStorageHeaders.ERROR_CODE, "StorageNotFound").type(MediaType.TEXT_PLAIN).entity("Storage not found").build());
 		}
-		if (!storage.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
+		if (!storage.getId().getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
 			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access storage").build());
 		}
 		

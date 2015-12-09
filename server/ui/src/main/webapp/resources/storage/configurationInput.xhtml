@@ -19,6 +19,9 @@
 	            <h:column><h:outputText value="#{entry.label}"/></h:column>
 	            <h:column>
 	            	<p:inputText value="#{entry.value}" rendered="#{entry.isType('text')}"/>
+	            	<p:password value="#{entry.value}" rendered="#{entry.isType('password')}"/>
+	            	<p:spinner value="#{entry.value}" rendered="#{entry.isType('integer')}" converter="integerConfigurationEntryConverter"/>
+	            	<p:selectBooleanCheckbox value="#{entry.value}" rendered="#{entry.isType('boolean')}" converter="booleanConfigurationEntryConverter"/>
 	            </h:column>
 	            <h:column><h:outputText value="#{entry.description}"/></h:column>
 	        </h:dataTable>

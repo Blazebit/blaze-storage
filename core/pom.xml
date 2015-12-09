@@ -18,6 +18,6 @@
         <module>model</module>
         <module>api</module>
         <module>impl</module>
-        <module>testsuite</module>
+        <module>config</module>
     </modules>
 </project>

@@ -32,6 +32,7 @@ public class BucketObjectVersion extends BaseEntity<BucketObjectVersionId> {
 
 	private BucketObjectState state;
 	private Calendar creationDate;
+	private BucketObject bucketObject;
 	private Storage storage;
 	
 	private String contentKey;
@@ -76,6 +77,22 @@ public class BucketObjectVersion extends BaseEntity<BucketObjectVersionId> {
 
 	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	@NotNull
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumns(
+			foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_object_version_fk_bucket_object"),
+			value = {
+		@JoinColumn(name = "bucket_id", referencedColumnName = "bucket_id", insertable = false, updatable = false),
+		@JoinColumn(name = "object_name", referencedColumnName = "name", insertable = false, updatable = false)
+	})
+	public BucketObject getBucketObject() {
+		return bucketObject;
+	}
+
+	public void setBucketObject(BucketObject bucketObject) {
+		this.bucketObject = bucketObject;
 	}
 
 	@NotNull
@@ -193,5 +210,10 @@ public class BucketObjectVersion extends BaseEntity<BucketObjectVersionId> {
 	@PreUpdate
 	private void preUpdate() {
 		lastModified = System.currentTimeMillis();
+	}
+
+	@Override
+	public String toString() {
+		return "BucketObjectVersion [getId()=" + getId() + "]";
 	}
 }

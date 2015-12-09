@@ -1,6 +1,8 @@
 package com.blazebit.storage.rest.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.blazebit.storage.rest.model.config.StorageTypeConfigElementRepresentation;
@@ -9,16 +11,16 @@ public class StorageTypeRepresentation extends StorageTypeListElementRepresentat
 
 	private static final long serialVersionUID = 1L;
 
-	private Set<StorageTypeConfigElementRepresentation> configuration = new LinkedHashSet<>(0);
+	private List<StorageTypeConfigElementRepresentation> configuration = new ArrayList<>(0);
 
 	public StorageTypeRepresentation() {
 	}
 
-	public Set<StorageTypeConfigElementRepresentation> getConfiguration() {
+	public List<StorageTypeConfigElementRepresentation> getConfiguration() {
 		return configuration;
 	}
 
-	public void setConfiguration(Set<StorageTypeConfigElementRepresentation> configuration) {
+	public void setConfiguration(List<StorageTypeConfigElementRepresentation> configuration) {
 		this.configuration = configuration;
 	}
 	

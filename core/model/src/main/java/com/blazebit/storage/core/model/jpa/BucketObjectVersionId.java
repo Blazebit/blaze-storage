@@ -4,11 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
@@ -16,31 +11,53 @@ public class BucketObjectVersionId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private BucketObject bucketObject;
+	private String bucketId;
+	private String bucketObjectName;
 	private String versionUuid;
 	
 	public BucketObjectVersionId() {
 	}
 
 	public BucketObjectVersionId(BucketObject bucketObject, String versionUuid) {
-		this.bucketObject = bucketObject;
+		if (bucketObject == null) {
+			this.bucketId = null;
+			this.bucketObjectName = null;
+		} else {
+			this.bucketId = bucketObject.getId().getBucketId();
+			this.bucketObjectName = bucketObject.getId().getName();
+		}
+		
 		this.versionUuid = versionUuid;
 	}
 
-	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumns(
-			foreignKey = @ForeignKey(name = RdbmsConstants.PREFIX + "bucket_object_version_fk_bucket_object"),
-			value = {
-		@JoinColumn(name = "bucket_id", referencedColumnName = "bucket_id"),
-		@JoinColumn(name = "object_name", referencedColumnName = "name")
-	})
-	public BucketObject getBucketObject() {
-		return bucketObject;
+	public BucketObjectVersionId(String bucketId, String bucketObjectName, String versionUuid) {
+		this.bucketId = bucketId;
+		this.bucketObjectName = bucketObjectName;
+		this.versionUuid = versionUuid;
+	}
+	
+	public BucketObjectId toBucketObjectId() {
+		return new BucketObjectId(bucketId, bucketObjectName);
 	}
 
-	public void setBucketObject(BucketObject bucketObject) {
-		this.bucketObject = bucketObject;
+	@NotNull
+	@Column(name = "bucket_id")
+	public String getBucketId() {
+		return bucketId;
+	}
+
+	public void setBucketId(String bucketId) {
+		this.bucketId = bucketId;
+	}
+
+	@NotNull
+	@Column(name = "object_name")
+	public String getBucketObjectName() {
+		return bucketObjectName;
+	}
+
+	public void setBucketObjectName(String bucketObjectName) {
+		this.bucketObjectName = bucketObjectName;
 	}
 
 	@NotNull
@@ -57,7 +74,8 @@ public class BucketObjectVersionId implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((bucketObject == null) ? 0 : bucketObject.hashCode());
+		result = prime * result + ((bucketId == null) ? 0 : bucketId.hashCode());
+		result = prime * result + ((bucketObjectName == null) ? 0 : bucketObjectName.hashCode());
 		result = prime * result + ((versionUuid == null) ? 0 : versionUuid.hashCode());
 		return result;
 	}
@@ -71,10 +89,15 @@ public class BucketObjectVersionId implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		BucketObjectVersionId other = (BucketObjectVersionId) obj;
-		if (bucketObject == null) {
-			if (other.bucketObject != null)
+		if (bucketId == null) {
+			if (other.bucketId != null)
 				return false;
-		} else if (!bucketObject.equals(other.bucketObject))
+		} else if (!bucketId.equals(other.bucketId))
+			return false;
+		if (bucketObjectName == null) {
+			if (other.bucketObjectName != null)
+				return false;
+		} else if (!bucketObjectName.equals(other.bucketObjectName))
 			return false;
 		if (versionUuid == null) {
 			if (other.versionUuid != null)
@@ -82,5 +105,11 @@ public class BucketObjectVersionId implements Serializable {
 		} else if (!versionUuid.equals(other.versionUuid))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BucketObjectVersionId [bucketId=" + bucketId + ", bucketObjectName=" + bucketObjectName
+				+ ", versionUuid=" + versionUuid + "]";
 	}
 }

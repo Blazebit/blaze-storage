@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="StorageTestMasterOnly" transaction-type="JTA">
+    	<jta-data-source>java:jboss/datasources/StorageTestMasterOnly</jta-data-source>
+    	
+		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		    	
+    	<properties>
+    		<!-- In our tests we use hibernate for the database setup -->
+    		<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+			<!-- We use the logging configuration in standalone.xml to enable this, do not change! -->
+    		<property name="hibernate.show_sql" value="false"/>
+    		<property name="hibernate.format_sql" value="false"/>
+    		
+    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+				
+			<!-- We need this to preven negative IDs during tests. This flag is usually set by Wildfly but we use a non-container supplied EntityManager in our tests
+				 to create and drop the database schema. So without this flag, the sequences would be created wrong.
+			 -->
+			<property name="hibernate.id.new_generator_mappings" value="true"/>
+    	</properties>
+    </persistence-unit>
+    <persistence-unit name="StorageTestReadOnly" transaction-type="JTA">
+    	<jta-data-source>java:jboss/datasources/StorageTestReadOnly</jta-data-source>
+    	
+		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		    	
+    	<properties>
+    		<!-- We don't use hbm2ddl at all since we have liquibase -->
+    		<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<!-- We use the logging configuration in standalone.xml to enable this, do not change! -->
+    		<property name="hibernate.show_sql" value="false"/>
+    		<property name="hibernate.format_sql" value="false"/>
+    		
+    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+				
+			<!-- We need this to preven negative IDs during tests. This flag is usually set by Wildfly but we use a non-container supplied EntityManager in our tests
+				 to create and drop the database schema. So without this flag, the sequences would be created wrong.
+			 -->
+			<property name="hibernate.id.new_generator_mappings" value="true"/>
+    	</properties>
+    </persistence-unit>
+</persistence>

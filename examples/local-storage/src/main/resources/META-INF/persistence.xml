@@ -15,20 +15,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="StoragePU" transaction-type="JTA">
-    	<mapping-file>META-INF/core-entities.xml</mapping-file>
-    	
+    <persistence-unit name="StorageMasterOnly" transaction-type="JTA">
+		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		    	
     	<properties>
-    		<!-- We don't use hbm2ddl at all since we have liquibase -->
-<!--     		<property name="hibernate.hbm2ddl.auto" value="none"/> -->
+    		<!-- In the examples we use a temporary database -->
     		<property name="hibernate.hbm2ddl.auto" value="create"/>
 			<!-- We use the logging configuration in standalone.xml to enable this, do not change! -->
-<!--     		<property name="hibernate.show_sql" value="false"/> -->
-<!--     		<property name="hibernate.format_sql" value="false"/> -->
-    		<property name="hibernate.show_sql" value="true"/>
-    		<property name="hibernate.format_sql" value="true"/>
+    		<property name="hibernate.show_sql" value="false"/>
+    		<property name="hibernate.format_sql" value="false"/>
     		
     		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
-   		</properties>
+    	</properties>
+    </persistence-unit>
+    <persistence-unit name="StorageReadOnly" transaction-type="JTA">
+		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		    	
+    	<properties>
+    		<!-- The read only datasource won't ever write anything to the database -->
+    		<property name="hibernate.hbm2ddl.auto" value="none"/>
+			<!-- We use the logging configuration in standalone.xml to enable this, do not change! -->
+    		<property name="hibernate.show_sql" value="false"/>
+    		<property name="hibernate.format_sql" value="false"/>
+    		
+    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+    	</properties>
     </persistence-unit>
 </persistence>

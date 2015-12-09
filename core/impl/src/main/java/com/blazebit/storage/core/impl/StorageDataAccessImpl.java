@@ -31,6 +31,10 @@ public class StorageDataAccessImpl extends AbstractDataAccess implements Storage
 
 	@Override
 	public Storage findById(StorageId storageId) {
+		if (storageId == null) {
+			return null;
+		}
+		
 		try {
 			return cbf.create(em, Storage.class)
 					.where("id").eq(storageId)
@@ -42,6 +46,10 @@ public class StorageDataAccessImpl extends AbstractDataAccess implements Storage
 
 	@Override
 	public Storage findByBucketId(String bucketId) {
+		if (bucketId == null) {
+			return null;
+		}
+		
 		try {
 			return cbf.create(em, Storage.class)
 					.from(Bucket.class)
@@ -55,6 +63,10 @@ public class StorageDataAccessImpl extends AbstractDataAccess implements Storage
 
 	@Override
 	public <T> T findById(StorageId storageId, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
+		if (storageId == null) {
+			return null;
+		}
+		
 		try {
 			CriteriaBuilder<Storage> cb = cbf.create(em, Storage.class)
 					.where("id").eq(storageId);

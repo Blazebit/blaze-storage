@@ -2,7 +2,6 @@ package com.blazebit.storage.core.impl;
 
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -54,21 +53,6 @@ public class BucketObjectDataAccessImpl extends AbstractDataAccess implements Bu
 		} catch (NoResultException ex) {
 			return null;
 		}
-	}
-
-	@Override
-	public List<BucketObject> findByBucketIdAndPrefix(String bucketId, String prefix) {
-		CriteriaBuilder<BucketObject> cb = cbf.create(em, BucketObject.class)
-				.where("id.bucket.id").eq(bucketId)
-				.where("state").eq(BucketObjectState.CREATED)
-				.orderByAsc("id.name");
-		
-		if (prefix != null && !(prefix = prefix.trim()).isEmpty()) {
-			prefix = prefix.replaceAll("%", "\\%") + "%";
-			cb.where("id.name").like().value(prefix).escape('\\');
-		}
-		
-		return cb.getResultList();
 	}
 
 }

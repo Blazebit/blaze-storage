@@ -11,6 +11,7 @@ public class AccountServiceImpl extends AbstractService implements AccountServic
 	@Override
 	public void create(Account account) {
 		em.persist(account);
+		em.flush();
 	}
 
 	@Override

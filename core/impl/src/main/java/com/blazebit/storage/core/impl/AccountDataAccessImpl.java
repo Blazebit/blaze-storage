@@ -33,6 +33,10 @@ public class AccountDataAccessImpl extends AbstractDataAccess implements Account
 
 	@Override
 	public Account findByKey(String key) {
+		if (key == null) {
+			return null;
+		}
+		
 		try {
 			return cbf.create(em, Account.class)
 					.where("key").eq(key)
@@ -44,6 +48,10 @@ public class AccountDataAccessImpl extends AbstractDataAccess implements Account
 
 	@Override
 	public <T> T findByKey(String key, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
+		if (key == null) {
+			return null;
+		}
+		
 		try {
 			CriteriaBuilder<Account> cb =  cbf.create(em, Account.class)
 					.where("key").eq(key);

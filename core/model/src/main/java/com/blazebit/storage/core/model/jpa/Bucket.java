@@ -104,7 +104,7 @@ public class Bucket extends BaseEntity<String> {
 		this.statistics = statistics;
 	}
 	
-	@OneToMany(mappedBy = "id.bucket")
+	@OneToMany(mappedBy = "bucket")
 	public Set<BucketObject> getObjects() {
 		return objects;
 	}
@@ -118,6 +118,11 @@ public class Bucket extends BaseEntity<String> {
 		if (creationDate == null) {
 			creationDate = Calendar.getInstance();
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Bucket [getId()=" + getId() + "]";
 	}
 
 }

@@ -41,7 +41,7 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 	private StorageProviderFactoryDataAccess storageProviderFactoryDataAccess;
 
 	public StorageSubResourceImpl(Account owner, String storageName) {
-		this.id = new StorageId(owner, storageName);
+		this.id = new StorageId(owner.getId(), storageName);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 	public Response put(StorageUpdateRepresentation<StorageTypeConfigEntryRepresentation> storageUpdate) {
 		Storage storage = new Storage(id);
 
-		storage.setQuotaPlan(new StorageQuotaPlan(new StorageQuotaPlanId(new StorageQuotaModel(storageUpdate.getQuotaPlan().getModelId()), storageUpdate.getQuotaPlan().getGigabyteLimit())));
+		storage.setQuotaPlan(new StorageQuotaPlan(new StorageQuotaPlanId(storageUpdate.getQuotaPlan().getModelId(), storageUpdate.getQuotaPlan().getGigabyteLimit())));
 		storage.setTags(storageUpdate.getTags());
 		
 		Map<String, String> configurationMap = new LinkedHashMap<>(storageUpdate.getConfiguration().size());
@@ -73,7 +73,7 @@ public class StorageSubResourceImpl extends AbstractResource implements StorageS
 			.path(AccountsResource.class, "get")
 			.path(AccountSubResource.class, "getStorages")
 			.path(StoragesSubResource.class, "get")
-			.build(storage.getId().getOwner().getId(), storage.getId().getName());
+			.build(storage.getId().getOwnerId(), storage.getId().getName());
 		
 		return Response.created(uri).build();
 	}

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-    <persistence-unit name="StoragePU" transaction-type="JTA">
+    <persistence-unit name="StorageTestMasterOnly" transaction-type="JTA">
     	<mapping-file>META-INF/core-entities.xml</mapping-file>
     	
     	<properties>
