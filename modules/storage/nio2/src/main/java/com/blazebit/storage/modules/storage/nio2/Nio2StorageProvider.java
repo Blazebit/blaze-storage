@@ -68,7 +68,7 @@ public abstract class Nio2StorageProvider implements StorageProvider {
 		
 		try {
 			tempPath = createTempFile();
-			long bytes = Files.copy(content, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(content, tempPath, StandardCopyOption.REPLACE_EXISTING);
 
 			int retries = CREATE_RETRIES;
 			Exception retryException = null;

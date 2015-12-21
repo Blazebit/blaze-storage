@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>blaze-storage-testsuite-storage-ftp</artifactId>
+    <artifactId>blaze-storage-testsuite-storage-local</artifactId>
     <packaging>jar</packaging>
 	
-    <name>Blazebit Storage Testsuite Storage FTP</name>
+    <name>Blazebit Storage Testsuite Storage Local</name>
 
     <dependencies>
 		<dependency>
@@ -33,20 +33,10 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>blaze-storage-testsuite-storage-common</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>blaze-storage-modules-storage-ftp</artifactId>
-		</dependency>
 		
 		<dependency>
-		    <groupId>org.apache.ftpserver</groupId>
-		    <artifactId>ftpserver-core</artifactId>
-		    <version>1.0.6</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-nop</artifactId>
-		    <version>1.5.10</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>blaze-storage-modules-storage-local</artifactId>
 		</dependency>
     </dependencies>
 	
