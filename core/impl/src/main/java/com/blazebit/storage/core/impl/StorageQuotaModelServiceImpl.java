@@ -11,16 +11,18 @@ public class StorageQuotaModelServiceImpl extends AbstractService implements Sto
 	@Override
 	public void create(StorageQuotaModel storageQuotaModel) {
 		em.persist(storageQuotaModel);
+		em.flush();
 	}
 
 	@Override
 	public void update(StorageQuotaModel storageQuotaModel) {
 		em.merge(storageQuotaModel);
+		em.flush();
 	}
 
 	@Override
 	public void delete(String id) {
-		throw new UnsupportedOperationException("Deletion of accounts not yet supported!");
+		throw new UnsupportedOperationException("Deletion of storage quota models not yet supported!");
 	}
 
 }

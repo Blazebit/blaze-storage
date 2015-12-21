@@ -29,7 +29,7 @@ import com.blazebit.storage.testsuite.common.data.AccountTestData;
 import com.blazebit.storage.testsuite.common.data.QuotaPlanTestData;
 import com.blazebit.storage.testsuite.common.data.StorageTestData;
 import com.blazebit.storage.testsuite.common.persistence.PersistenceUnits;
-import com.blazebit.storage.testsuite.common.view.LongIdHolderView;
+import com.blazebit.storage.testsuite.core.common.view.StorageIdHolderView;
 
 @DatabaseAware(unitName = PersistenceUnits.STORAGE_TEST_MASTER_ONLY)
 public class StorageDataAccessTest extends AbstractContainerTest {
@@ -67,10 +67,10 @@ public class StorageDataAccessTest extends AbstractContainerTest {
 	@Test
 	public void testFindAllByAccountId_whenUnknown() throws Exception {
 		// Given
-		EntityViewSetting<LongIdHolderView, CriteriaBuilder<LongIdHolderView>> setting = EntityViewSetting.create(LongIdHolderView.class);
+		EntityViewSetting<StorageIdHolderView, CriteriaBuilder<StorageIdHolderView>> setting = EntityViewSetting.create(StorageIdHolderView.class);
 
 		// When
-		List<LongIdHolderView> list = storageDataAccess.findAllByAccountId(-1L, setting);
+		List<StorageIdHolderView> list = storageDataAccess.findAllByAccountId(-1L, setting);
 		
 		// Then
 		assertEquals(0, list.size());
@@ -79,12 +79,12 @@ public class StorageDataAccessTest extends AbstractContainerTest {
 	@Test
 	public void testFindAllByAccountId_whenHasOne() throws Exception {
 		// Given
-		EntityViewSetting<LongIdHolderView, CriteriaBuilder<LongIdHolderView>> setting = EntityViewSetting.create(LongIdHolderView.class);
+		EntityViewSetting<StorageIdHolderView, CriteriaBuilder<StorageIdHolderView>> setting = EntityViewSetting.create(StorageIdHolderView.class);
 		Storage storage = createStorage();
 		dataService.persist(storage);
 
 		// When
-		List<LongIdHolderView> list = storageDataAccess.findAllByAccountId(defaultOwner.getId(), setting);
+		List<StorageIdHolderView> list = storageDataAccess.findAllByAccountId(defaultOwner.getId(), setting);
 		
 		// Then
 		assertEquals(1, list.size());
@@ -189,11 +189,11 @@ public class StorageDataAccessTest extends AbstractContainerTest {
 	@Test
 	public void testFindByIdWithSetting_whenNull() throws Exception {
 		// Given
-		EntityViewSetting<LongIdHolderView, CriteriaBuilder<LongIdHolderView>> setting = EntityViewSetting.create(LongIdHolderView.class);
+		EntityViewSetting<StorageIdHolderView, CriteriaBuilder<StorageIdHolderView>> setting = EntityViewSetting.create(StorageIdHolderView.class);
 		StorageId id = null;
 
 		// When
-		LongIdHolderView actual = storageDataAccess.findById(id, setting);
+		StorageIdHolderView actual = storageDataAccess.findById(id, setting);
 		
 		// Then
 		assertNull(actual);
@@ -202,11 +202,11 @@ public class StorageDataAccessTest extends AbstractContainerTest {
 	@Test
 	public void testFindByIdWithSetting_whenEmpty() throws Exception {
 		// Given
-		EntityViewSetting<LongIdHolderView, CriteriaBuilder<LongIdHolderView>> setting = EntityViewSetting.create(LongIdHolderView.class);
+		EntityViewSetting<StorageIdHolderView, CriteriaBuilder<StorageIdHolderView>> setting = EntityViewSetting.create(StorageIdHolderView.class);
 		StorageId id = new StorageId(defaultOwner.getId(), "not-existing");
 
 		// When
-		LongIdHolderView actual = storageDataAccess.findById(id, setting);
+		StorageIdHolderView actual = storageDataAccess.findById(id, setting);
 		
 		// Then
 		assertNull(actual);
@@ -215,12 +215,12 @@ public class StorageDataAccessTest extends AbstractContainerTest {
 	@Test
 	public void testFindByIdWithSetting_whenHasOne() throws Exception {
 		// Given
-		EntityViewSetting<LongIdHolderView, CriteriaBuilder<LongIdHolderView>> setting = EntityViewSetting.create(LongIdHolderView.class);
+		EntityViewSetting<StorageIdHolderView, CriteriaBuilder<StorageIdHolderView>> setting = EntityViewSetting.create(StorageIdHolderView.class);
 		Storage storage = createStorage();
 		dataService.persist(storage);
 
 		// When
-		LongIdHolderView actual = storageDataAccess.findById(storage.getId(), setting);
+		StorageIdHolderView actual = storageDataAccess.findById(storage.getId(), setting);
 		
 		// Then
 		assertNotNull(actual);

@@ -21,6 +21,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
+import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.storage.core.config.api.persistence.MasterOnly;
 import com.blazebit.storage.testsuite.common.context.TestUserContext;
 import com.blazebit.storage.testsuite.common.storages.temporary.TestStorageProviderFactory;
@@ -33,6 +34,8 @@ public class AbstractContainerTest {
     protected EntityManager em;
     @Inject
     protected DataService dataService;
+    @Inject
+    protected CriteriaBuilderFactory cbf; 
     
     @Inject
     protected TestUserContext userContext;

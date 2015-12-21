@@ -5,12 +5,11 @@ import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class StorageQuotaModel extends BaseEntity<String> {
+public class StorageQuotaModel extends StringBaseEntity {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -24,12 +23,6 @@ public class StorageQuotaModel extends BaseEntity<String> {
 	
 	public StorageQuotaModel(String id) {
 		super(id);
-	}
-	
-	@Id
-	@Override
-	public String getId() {
-		return id();
 	}
 
 	@NotNull

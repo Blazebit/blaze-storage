@@ -24,6 +24,10 @@ public class StorageQuotaModelDataAccessImpl extends AbstractDataAccess implemen
 	
 	@Override
 	public StorageQuotaModel findById(String id) {
+		if (id == null) {
+			return null;
+		}
+		
 		try {
 			return cbf.create(em, StorageQuotaModel.class)
 					.fetch("plans")
@@ -36,6 +40,10 @@ public class StorageQuotaModelDataAccessImpl extends AbstractDataAccess implemen
 	
 	@Override
 	public StorageQuotaPlan findQuotaPlanById(StorageQuotaPlanId id) {
+		if (id == null) {
+			return null;
+		}
+		
 		try {
 			return cbf.create(em, StorageQuotaPlan.class)
 					.where("id").eq(id)
@@ -47,6 +55,10 @@ public class StorageQuotaModelDataAccessImpl extends AbstractDataAccess implemen
 
 	@Override
 	public <T> T findById(String id, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
+		if (id == null) {
+			return null;
+		}
+		
 		try {
 			CriteriaBuilder<StorageQuotaModel> cb =  cbf.create(em, StorageQuotaModel.class)
 					.where("id").eq(id);

@@ -10,8 +10,12 @@ import com.blazebit.storage.core.model.jpa.StorageQuotaPlan;
 public class StorageTestData {
 
 	public static Storage createStorage(Account owner, StorageQuotaPlan quotaPlan) {
+		return createStorage(owner, quotaPlan, "test");
+	}
+
+	public static Storage createStorage(Account owner, StorageQuotaPlan quotaPlan, String name) {
 		Storage defaultStorage = new Storage();
-		defaultStorage.setId(new StorageId(owner.getId(), "test"));
+		defaultStorage.setId(new StorageId(owner.getId(), name));
 		defaultStorage.setOwner(owner);
 		defaultStorage.setQuotaPlan(quotaPlan);
 		defaultStorage.setUri(URI.create("file:/tmp"));

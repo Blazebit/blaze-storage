@@ -24,7 +24,7 @@ public class StorageDataAccessImpl extends AbstractDataAccess implements Storage
 	@Override
 	public <T> List<T> findAllByAccountId(long accountId, EntityViewSetting<T, ? extends QueryBuilder<T,?>> setting) {
 		CriteriaBuilder<Storage> cb = cbf.create(em, Storage.class)
-				.where("ownerId").eq(accountId);
+				.where("owner.id").eq(accountId);
 		setting.addOptionalParameter("storageProviderFactoryDataAccess", storageProviderFactoryDataAccess);
 		return evm.applySetting(setting, cb).getResultList();
 	}
