@@ -66,7 +66,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket not found").build());
 		}
 		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
-			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access bucket").build());
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("Not allowed to access bucket").build());
 		}
 		
 		return result;

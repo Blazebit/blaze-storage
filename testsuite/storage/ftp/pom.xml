@@ -49,5 +49,18 @@
 		    <version>1.5.10</version>
 		</dependency>
     </dependencies>
-	
+    
+    <profiles>
+		<profile>
+			<!-- We need an older version of slf4j here because the ftp server uses it -->
+			<id>wildfly-remote</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+					<version>1.5.10</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 </project>

@@ -11,8 +11,9 @@ import org.apache.commons.vfs2.FileSystemException;
 
 import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.spi.StorageProvider;
+import com.blazebit.storage.modules.storage.base.AbstractStorageProvider;
 
-public class FtpStorageProvider implements StorageProvider {
+public class FtpStorageProvider extends AbstractStorageProvider implements StorageProvider {
 
 	private static final Logger LOG = Logger.getLogger(FtpStorageProvider.class.getName());
 	private static final int CREATE_RETRIES = 3;
@@ -24,6 +25,11 @@ public class FtpStorageProvider implements StorageProvider {
 	public FtpStorageProvider(FileObject root, boolean supportsWriting) {
 		this.root = root;
 		this.supportsWriting = supportsWriting;
+	}
+
+	@Override
+	public Object getStorageIdentifier() {
+		return root;
 	}
 
 	@Override
@@ -66,6 +72,12 @@ public class FtpStorageProvider implements StorageProvider {
 		}
 	}
 	
+	@Override
+	public String copyObject(StorageProvider sourceStorageProvider, String contentKey) {
+		// NOTE: Since FTP does not support efficient copying within the same server, we do it the old fashioned way 
+		return super.copyObject(sourceStorageProvider, contentKey);
+	}
+
 	private long putObject(FileObject targetFileObject, InputStream content) {
 		OutputStream os = null;
 		
@@ -95,8 +107,6 @@ public class FtpStorageProvider implements StorageProvider {
         }
         return nread;
     }
-
-	/* FTP does not support these operations */
 	
 	private FileObject createTempFile(String tempFolder) {
 		int retries = CREATE_RETRIES;
@@ -120,6 +130,8 @@ public class FtpStorageProvider implements StorageProvider {
 		
 		throw new StorageException("Could not create object. Tried " + CREATE_RETRIES + " times!", retryException);
 	}
+
+	/* FTP does not support these operations */
 
 	@Override
 	public long getTotalSpace() {

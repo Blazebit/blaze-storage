@@ -531,19 +531,16 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${version.junit}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.googlecode.catch-exception</groupId>
 				<artifactId>catch-exception</artifactId>
 				<version>1.2.0</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
 				<version>1.4.183</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.core</groupId>
@@ -579,13 +576,11 @@
 				<groupId>org.apache.deltaspike.cdictrl</groupId>
 				<artifactId>deltaspike-cdictrl-api</artifactId>
 				<version>${version.deltaspike}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.deltaspike.cdictrl</groupId>
 				<artifactId>deltaspike-cdictrl-weld</artifactId>
 				<version>${version.deltaspike}</version>
-				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

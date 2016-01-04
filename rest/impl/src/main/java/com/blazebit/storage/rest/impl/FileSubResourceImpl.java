@@ -65,16 +65,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	}
 	
 	private BucketObjectHeadRepresentation getOrHead(boolean isGet) {
-		EntityViewSetting<BucketObjectRepresentationView, CriteriaBuilder<BucketObjectRepresentationView>> setting;
-		setting = EntityViewSetting.create(BucketObjectRepresentationView.class);
-		BucketObjectRepresentationView result = bucketObjectDataAccess.findById(bucketObjectId, setting);
-
-		if (result == null) {
-			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket object not found").build());
-		}
-		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
-			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("No allowed to access bucket object").build());
-		}
+		BucketObjectRepresentationView result = getBucketObject(bucketObjectId);
 		
 		// TODO: implement range parameter?
 		// TODO: implement If-Modified-Since, If-Unmodified-Since, If-Match, If-None-Match
@@ -104,6 +95,21 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		
 		return response;
 	}
+	
+	private BucketObjectRepresentationView getBucketObject(BucketObjectId objectId) {
+		EntityViewSetting<BucketObjectRepresentationView, CriteriaBuilder<BucketObjectRepresentationView>> setting;
+		setting = EntityViewSetting.create(BucketObjectRepresentationView.class);
+		BucketObjectRepresentationView result = bucketObjectDataAccess.findById(objectId, setting);
+
+		if (result == null) {
+			throw new WebApplicationException(Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket object not found").build());
+		}
+		if (!result.getOwnerId().equals(accountId) && !userContext.getAccountRoles().contains(Role.ADMIN)) {
+			throw new WebApplicationException(Response.status(Status.FORBIDDEN).type(MediaType.TEXT_PLAIN).entity("Not allowed to access bucket object").build());
+		}
+		
+		return result;
+	}
 
 	@Override
 	public Response delete() {
@@ -118,8 +124,37 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		String contentKey;
 		
 		if (externalContentKey != null && !externalContentKey.isEmpty()) {
+			if (bucketObjectUpdate.getCopySource() != null) {
+				return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity("Copy source not allowed with external content key!").build();
+			}
+			
 			contentKey = externalContentKey;
 			// TODO: Maybe check if the key is valid?
+		} else if (bucketObjectUpdate.getCopySource() != null) {
+			String source = bucketObjectUpdate.getCopySource();
+			int idx;
+			// Format is /bucketName/key
+			if (source.charAt(0) != '/' || (idx = source.indexOf('/', 1)) < 2) {
+				return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity("Invalid copy source format. Expected '/bucketName/key'").build();
+			}
+			
+			String sourceBucket = source.substring(1, idx);
+			String sourceKey = source.substring(idx + 1);
+
+			BucketObjectRepresentationView result = getBucketObject(new BucketObjectId(sourceBucket, sourceKey));
+			BucketObjectVersionRepresentationView contentVersion = result.getContentVersion();
+			URI sourceStorageUri = contentVersion.getStorageUri();
+			String sourceContentKey = contentVersion.getContentKey();
+			contentKey = bucketObjectService.copy(sourceStorageUri, sourceContentKey, storageUri);
+			
+			if (bucketObjectUpdate.getContentDisposition() == null) {
+				bucketObjectUpdate.setContentDisposition(ContentDisposition.fromString(contentVersion.getContentDisposition()));
+			}
+			if (bucketObjectUpdate.getTags() == null || bucketObjectUpdate.getTags().isEmpty()) {
+				bucketObjectUpdate.setTags(contentVersion.getTags());
+			}
+			
+			bucketObjectUpdate.setContentType(contentVersion.getContentType());
 		} else {
 			// TODO: Check content md5
 			contentKey = bucketObjectService.createContent(storageUri, bucketObjectUpdate.getContent());

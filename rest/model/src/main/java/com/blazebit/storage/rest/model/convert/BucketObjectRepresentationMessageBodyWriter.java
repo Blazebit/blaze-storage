@@ -71,6 +71,8 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 			    while ((bytesRead = input.read(buffer)) != -1) {
 			    	entityStream.write(buffer, 0, bytesRead);
 			    }
+			} else if (update.getCopySource() != null) {
+				put(httpHeaders, BlazeStorageHeaders.COPY_SOURCE, update.getCopySource());
 			}
 		} else {
 			BucketObjectHeadRepresentation head = (BucketObjectHeadRepresentation) t;

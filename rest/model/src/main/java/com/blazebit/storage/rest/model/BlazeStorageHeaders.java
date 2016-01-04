@@ -18,6 +18,7 @@ public final class BlazeStorageHeaders {
 	public static final String CONTENT_KEY = "x-blz-content-key";
 	public static final String CONTENT_MD5 = "x-blz-content-md5";
 
+	public static final String COPY_SOURCE = "x-blz-copy-source";
 	public static final String MULTIPART_KEY = "x-blz-object-key";
 	
 	private BlazeStorageHeaders() {

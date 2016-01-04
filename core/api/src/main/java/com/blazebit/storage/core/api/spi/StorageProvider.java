@@ -4,6 +4,8 @@ import java.io.InputStream;
 
 
 public interface StorageProvider {
+	
+	public Object getStorageIdentifier();
 
 	public InputStream getObject(String externalKey);
 	
@@ -12,6 +14,8 @@ public interface StorageProvider {
 	public String createObject(InputStream content);
 	
 	public long putObject(String externalKey, InputStream content);
+
+	public String copyObject(StorageProvider sourceStorageProvider, String contentKey);
 	
 	public long getTotalSpace();
 	

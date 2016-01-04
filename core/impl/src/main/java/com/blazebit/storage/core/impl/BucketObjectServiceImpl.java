@@ -57,6 +57,16 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	}
 
 	@Override
+	public String copy(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri) {
+		StorageProviderFactory factory = storageProviderFactoryDataAccess.findByScheme(targetStorageUri.getScheme());
+		StorageProvider storageProvider = factory.createStorageProvider(factory.createConfiguration(targetStorageUri));
+		StorageProviderFactory sourceFactory = storageProviderFactoryDataAccess.findByScheme(sourceStorageUri.getScheme());
+		StorageProvider sourceStorageProvider = sourceFactory.createStorageProvider(sourceFactory.createConfiguration(sourceStorageUri));
+		
+		return storageProvider.copyObject(sourceStorageProvider, sourceContentKey);
+	}
+
+	@Override
 	public void put(BucketObject bucketObject) {
 		List<BucketObject> results = cbf.create(em, BucketObject.class)
 			.fetch("contentVersion.storage")

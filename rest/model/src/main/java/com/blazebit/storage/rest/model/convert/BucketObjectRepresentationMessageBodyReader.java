@@ -39,7 +39,15 @@ public class BucketObjectRepresentationMessageBodyReader implements MessageBodyR
 			BucketObjectUpdateRepresentation updateResult = new BucketObjectUpdateRepresentation();
 			updateResult.setContentMD5(httpHeaders.getFirst(BlazeStorageHeaders.CONTENT_MD5));
 			updateResult.setExternalContentKey(httpHeaders.getFirst(BlazeStorageHeaders.CONTENT_KEY));
-			updateResult.setContent(entityStream);
+
+			String copySource = httpHeaders.getFirst(BlazeStorageHeaders.COPY_SOURCE);
+			
+			if (copySource != null) {
+				updateResult.setCopySource(copySource);
+			} else {
+				updateResult.setContent(entityStream);
+			}
+			
 			result = updateResult;
 		} else {
 			BucketObjectHeadRepresentation headResult;

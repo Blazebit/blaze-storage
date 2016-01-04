@@ -13,19 +13,22 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 	private String externalContentKey;
 	
 	private InputStream content;
+	private String copySource;
 	
 	public BucketObjectUpdateRepresentation() {
 	}
 
-	public BucketObjectUpdateRepresentation(String contentType, ContentDisposition contentDisposition, long size, String storageName, String storageOwner, Map<String, String> tags, String contentMD5, String externalContentKey, InputStream content) {
+	public BucketObjectUpdateRepresentation(String contentType, ContentDisposition contentDisposition, long size, String storageName, String storageOwner, Map<String, String> tags, String contentMD5, String externalContentKey, InputStream content, String copySource) {
 		super(contentType, contentDisposition, size, storageName, storageOwner, tags);
 		this.contentMD5 = contentMD5;
 		this.externalContentKey = externalContentKey;
 		this.content = content;
+		this.copySource = copySource;
 	}
 
 	public BucketObjectUpdateRepresentation(BucketObjectBaseRepresentation bucketObject) {
-		this(bucketObject.getContentType(), bucketObject.getContentDisposition(), bucketObject.getSize(), bucketObject.getStorageName(), bucketObject.getStorageOwner(), bucketObject.getTags(), null, null, bucketObject instanceof BucketObjectRepresentation ? ((BucketObjectRepresentation) bucketObject).getContent() : null);
+		this(bucketObject.getContentType(), bucketObject.getContentDisposition(), bucketObject.getSize(), bucketObject.getStorageName(), bucketObject.getStorageOwner(), bucketObject.getTags(), null, null, 
+				bucketObject instanceof BucketObjectRepresentation ? ((BucketObjectRepresentation) bucketObject).getContent() : null, null);
 	}
 
 	public String getContentMD5() {
@@ -50,5 +53,13 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 
 	public void setContent(InputStream content) {
 		this.content = content;
+	}
+
+	public String getCopySource() {
+		return copySource;
+	}
+
+	public void setCopySource(String copySource) {
+		this.copySource = copySource;
 	}
 }

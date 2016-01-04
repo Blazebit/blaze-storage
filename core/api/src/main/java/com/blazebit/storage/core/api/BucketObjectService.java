@@ -25,6 +25,8 @@ public interface BucketObjectService {
 	 */
 	public String createContent(URI storageUri, InputStream inputStream);
 
+	public String copy(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri);
+
 	public void put(BucketObject bucketObject);
 	
 	public void delete(BucketObjectId bucketObjectId);

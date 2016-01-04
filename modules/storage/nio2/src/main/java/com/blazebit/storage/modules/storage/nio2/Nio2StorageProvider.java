@@ -13,8 +13,9 @@ import java.util.logging.Logger;
 
 import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.spi.StorageProvider;
+import com.blazebit.storage.modules.storage.base.AbstractStorageProvider;
 
-public abstract class Nio2StorageProvider implements StorageProvider {
+public abstract class Nio2StorageProvider extends AbstractStorageProvider implements StorageProvider {
 	
 	private static final Logger LOG = Logger.getLogger(Nio2StorageProvider.class.getName());
 	private static final int CREATE_RETRIES = 3;
@@ -30,6 +31,11 @@ public abstract class Nio2StorageProvider implements StorageProvider {
 		return getBasePath().resolve(externalKey);
 	}
 	
+	@Override
+	public Object getStorageIdentifier() {
+		return getBasePath();
+	}
+
 	/**
 	 * Create a temporary file that resides on the same device as the actual files so we can do atomic moves.
 	 * 
@@ -118,6 +124,34 @@ public abstract class Nio2StorageProvider implements StorageProvider {
 					LOG.log(Level.SEVERE, "Could not delete temporary file!", e);
 				}
 			}
+		}
+	}
+	
+	@Override
+	public String copyObject(StorageProvider sourceStorageProvider, String contentKey) {
+		if (getBasePath().equals(sourceStorageProvider.getStorageIdentifier())) {
+			Path sourceObjectPath = getObjectPath(contentKey);
+
+			try {
+				int retries = CREATE_RETRIES;
+				Exception retryException = null;
+				while (retries-- != 0) {
+					try {
+						String externalKey = UUID.randomUUID().toString();
+						Path objectPath = getObjectPath(externalKey);
+						Files.copy(sourceObjectPath, objectPath);
+						return externalKey;
+					} catch (FileAlreadyExistsException ex) {
+						retryException = ex;
+					}
+				}
+				
+				throw new StorageException("Could not copy object. Tried " + CREATE_RETRIES + " times!", retryException);
+			} catch (IOException e) {
+				throw new StorageException(e);
+			}
+		} else {
+			return super.copyObject(sourceStorageProvider, contentKey);
 		}
 	}
 

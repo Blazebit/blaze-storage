@@ -5,8 +5,9 @@ import java.net.URL;
 
 import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.spi.StorageProvider;
+import com.blazebit.storage.modules.storage.base.AbstractStorageProvider;
 
-public class ClassPathStorageProvider implements StorageProvider {
+public class ClassPathStorageProvider extends AbstractStorageProvider implements StorageProvider {
 	
 	private final ClassLoader classLoader;
 
@@ -16,6 +17,11 @@ public class ClassPathStorageProvider implements StorageProvider {
 	
 	protected URL getResource(String externalKey) {
 		return classLoader.getResource(externalKey);
+	}
+
+	@Override
+	public Object getStorageIdentifier() {
+		return classLoader;
 	}
 
 	@Override
@@ -41,6 +47,11 @@ public class ClassPathStorageProvider implements StorageProvider {
 
 	@Override
 	public long putObject(String externalKey, InputStream content) {
+		throw new UnsupportedOperationException("Put is not supported on the classpath!");
+	}
+
+	@Override
+	public String copyObject(StorageProvider sourceStorageProvider, String contentKey) {
 		throw new UnsupportedOperationException("Put is not supported on the classpath!");
 	}
 
