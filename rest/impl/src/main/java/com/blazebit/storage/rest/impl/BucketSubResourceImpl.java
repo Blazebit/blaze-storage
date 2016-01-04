@@ -1,10 +1,18 @@
 package com.blazebit.storage.rest.impl;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.Status.Family;
 
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
@@ -22,11 +30,17 @@ import com.blazebit.storage.rest.impl.view.BucketHeadRepresentationView;
 import com.blazebit.storage.rest.impl.view.BucketRepresentationView;
 import com.blazebit.storage.rest.model.BlazeStorageHeaders;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
+import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
+import com.blazebit.storage.rest.model.MultipartUploadErrorRepresentation;
+import com.blazebit.storage.rest.model.MultipartUploadRepresentation;
+import com.blazebit.storage.rest.model.MultipartUploadResultRepresentation;
 
 public class BucketSubResourceImpl extends AbstractResource implements BucketSubResource {
 
+	private static final Logger LOG = Logger.getLogger(BucketSubResourceImpl.class.getName());
+	
 	private final long accountId;
 	private final String bucketId;
 	
@@ -78,11 +92,6 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 		throw new WebApplicationException(Response.status(Status.NOT_IMPLEMENTED).type(MediaType.TEXT_PLAIN).entity("Not yet implemented").build());
 	}
 
-//	@Override
-//	public Response put(BucketUpdateRepresentation bucketUpdate) {
-//		return put(bucketUpdate, userContext.getAccountKey());
-//	}
-
 	@Override
 	public Response put(BucketUpdateRepresentation bucketUpdate, String ownerKey) {
 		Bucket bucket = new Bucket(bucketId);
@@ -119,6 +128,59 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 		bucket.setStorage(new Storage(new StorageId(storageOwner.getId(), bucketUpdate.getDefaultStorageName())));
 		bucketService.put(bucket);
 		return Response.ok().build();
+	}
+
+	@Override
+	public MultipartUploadResultRepresentation uploadMultiple(MultipartUploadRepresentation upload) {
+		List<String> uploaded = new ArrayList<String>(upload.getUploads().size());
+		List<MultipartUploadErrorRepresentation> errors = new ArrayList<>();
+		MultipartUploadResultRepresentation result = new MultipartUploadResultRepresentation(uploaded, errors);
+		
+		List<Throwable> exceptions = null;
+		
+		try (MultipartUploadRepresentation u = upload) {
+			for (Map.Entry<String, BucketObjectUpdateRepresentation> entry : upload.getUploads().entrySet()) {
+				// TODO: maybe do some sanity checks on the file key?
+				String fileKey = entry.getKey();
+				
+				Response r;
+				
+				try (InputStream is = entry.getValue().getContent()) {
+					r = getFile(fileKey).put(entry.getValue());
+				} catch (WebApplicationException ex) {
+					r = ex.getResponse();
+				} catch (Throwable t) {
+					r = null;
+					
+					if (exceptions == null) {
+						exceptions = new ArrayList<>();
+					}
+					
+					exceptions.add(t);
+				}
+				
+				if (r != null) {
+					if (r.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+						uploaded.add(fileKey);
+					} else {
+						String code = r.getHeaderString(BlazeStorageHeaders.ERROR_CODE);
+						String message = r.readEntity(String.class);
+						errors.add(new MultipartUploadErrorRepresentation(fileKey, code, message));
+					}
+				}
+			}
+			
+			if (exceptions != null) {
+				int size = exceptions.size();
+				LOG.log(Level.SEVERE, size + " error(s) happened during multipart processing!");
+				
+				for (int i = 0; i < size; i++) {
+					LOG.log(Level.SEVERE, " - Error " + i, exceptions.get(i));
+				}
+			}
+		}
+		
+		return result;
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class StorageServiceImpl extends AbstractService implements StorageServic
 			throw new StorageQuotaPlanNotFoundException("Storage quota plan not found!");
 		}
 		
-		Account owner = em.find(Account.class, storage.getOwner().getId());
+		Account owner = em.find(Account.class, storage.getId().getOwnerId());
 		
 		if (owner == null) {
 			throw new AccountNotFoundException("Account not found!");

@@ -26,6 +26,8 @@ import com.blazebit.storage.rest.model.convert.BucketObjectRepresentationMessage
 import com.blazebit.storage.rest.model.convert.BucketObjectUpdateRepresentationMessageBodyReader;
 import com.blazebit.storage.rest.model.convert.BucketObjectUpdateRepresentationMessageBodyWriter;
 import com.blazebit.storage.rest.model.convert.BucketRepresentationMessageBodyReader;
+import com.blazebit.storage.rest.model.convert.MultipartUploadRepresentationMessageBodyReader;
+import com.blazebit.storage.rest.model.convert.MultipartUploadRepresentationMessageBodyWriter;
 
 public class BlazeStorageClient implements BlazeStorage, Serializable {
 
@@ -51,6 +53,8 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 		// Register the non-response object providers
 		clientTarget.register(BucketObjectUpdateRepresentationMessageBodyReader.class);
 		clientTarget.register(BucketObjectUpdateRepresentationMessageBodyWriter.class);
+		clientTarget.register(MultipartUploadRepresentationMessageBodyReader.class);
+		clientTarget.register(MultipartUploadRepresentationMessageBodyWriter.class);
         
         for (ClientRequestFilter filter : requestFilters) {
         	clientTarget = clientTarget.register(filter);

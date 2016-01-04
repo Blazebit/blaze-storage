@@ -3,6 +3,17 @@
 	<deployment>
 		<dependencies>
 			<module name="org.jboss.resteasy.resteasy-jackson-provider" />
+			
+            <system export="true">
+                <paths>
+                	<!-- Actually we need this to avoid class not found exceptions when using java.util.ServiceProvider -->
+                    <path name="com/sun/nio/zipfs"/>
+                </paths>
+            </system>
+            
+			<module name="org.infinispan" />
+			<module name="org.infinispan.commons" />
+			<module name="org.infinispan.client.hotrod" />
 		</dependencies>
 	</deployment>
 </jboss-deployment-structure>

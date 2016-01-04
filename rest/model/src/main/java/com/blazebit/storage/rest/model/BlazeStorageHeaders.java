@@ -17,6 +17,8 @@ public final class BlazeStorageHeaders {
 	public static final String ERROR_CODE = "x-blz-error-code";
 	public static final String CONTENT_KEY = "x-blz-content-key";
 	public static final String CONTENT_MD5 = "x-blz-content-md5";
+
+	public static final String MULTIPART_KEY = "x-blz-object-key";
 	
 	private BlazeStorageHeaders() {
 	}

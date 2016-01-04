@@ -76,6 +76,7 @@ public class StorageQuotaModelSubResourceImpl extends AbstractResource implement
 			StorageQuotaPlan plan = new StorageQuotaPlan();
 			plan.getId().setQuotaModelId(storageQuotaModel.getId());
 			plan.getId().setGigabyteLimit(limit);
+			plan.setQuotaModel(storageQuotaModel);
 			// TODO: We might need to allow setting that in the future
 			plan.setAlertPercent((short) 100);
 			plans.add(plan);

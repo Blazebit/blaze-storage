@@ -38,5 +38,11 @@
 			<version>2.5.0</version>
 			<scope>provided</scope>
 		</dependency>
+		
+        <dependency>
+            <groupId>org.apache.james</groupId>
+            <artifactId>apache-mime4j</artifactId>
+            <version>0.6</version>
+        </dependency>
     </dependencies>
 </project>

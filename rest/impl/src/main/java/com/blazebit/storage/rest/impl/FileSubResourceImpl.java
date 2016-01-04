@@ -18,7 +18,6 @@ import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.BucketObjectDataAccess;
 import com.blazebit.storage.core.api.BucketObjectService;
 import com.blazebit.storage.core.api.StorageDataAccess;
-import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.BucketObjectId;
@@ -148,7 +147,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		
 		bucketObjectService.put(bucketObject);
 		
-		return null;
+		return Response.ok().build();
 	}
 
 	private Storage getStorage(long accountId, String bucketId, String storageName) {

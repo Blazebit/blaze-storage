@@ -85,7 +85,7 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	private void createObject(BucketObject bucketObject) {
 		List<Bucket> results = cbf.create(em, Bucket.class)
 				.fetch("storage")
-				.where("id").eq(bucketObject.getBucket().getId())
+				.where("id").eq(bucketObject.getId().getBucketId())
 				.getQuery()
 				.setLockMode(LockModeType.PESSIMISTIC_WRITE)
 				.getResultList();

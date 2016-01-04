@@ -5,9 +5,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,6 +18,8 @@ import com.blazebit.storage.rest.api.aop.ResponseObject;
 import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
+import com.blazebit.storage.rest.model.MultipartUploadRepresentation;
+import com.blazebit.storage.rest.model.MultipartUploadResultRepresentation;
 
 public interface BucketSubResource {
 
@@ -62,6 +66,12 @@ public interface BucketSubResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response put(BucketUpdateRepresentation bucketUpdate, @HeaderParam("x-blz-owner-key") String ownerKey);
+	
+	@POST
+	@Path("upload")
+    @Consumes({ "multipart/mixed" })
+	@Produces(MediaType.APPLICATION_JSON)
+	public MultipartUploadResultRepresentation uploadMultiple(MultipartUploadRepresentation upload);
 	
 	@Path("{key: .+}")
 	public FileSubResource getFile(@PathParam("key") String key);

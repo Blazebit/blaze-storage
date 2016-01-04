@@ -78,7 +78,7 @@ public class BucketObjectRepresentationMessageBodyReader implements MessageBodyR
 		Map<String, String> tags = new HashMap<>();
 		for (Map.Entry<String, List<String>> entry : httpHeaders.entrySet()) {
 			if (entry.getKey().startsWith(BlazeStorageHeaders.TAG_PREFIX)) {
-				String tag = entry.getKey().substring(BlazeStorageHeaders.TAG_PREFIX.length() + 1);
+				String tag = entry.getKey().substring(BlazeStorageHeaders.TAG_PREFIX.length());
 				if (entry.getValue().isEmpty()) {
 					tags.put(tag, "");
 				} else {
