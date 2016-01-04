@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response.Status;
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.BucketObjectDataAccess;
+import com.blazebit.storage.core.api.BucketObjectNotFoundException;
 import com.blazebit.storage.core.api.BucketObjectService;
 import com.blazebit.storage.core.api.StorageDataAccess;
 import com.blazebit.storage.core.model.jpa.Bucket;
@@ -113,7 +114,12 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	@Override
 	public Response delete() {
-		throw new WebApplicationException(Response.status(Status.NOT_IMPLEMENTED).type(MediaType.TEXT_PLAIN).entity("Not yet implemented").build());
+		try {
+			bucketObjectService.delete(bucketObjectId);
+			return Response.noContent().build();
+		} catch (BucketObjectNotFoundException ex) {
+			return Response.status(Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity("Bucket object not found").build();
+		}
 	}
 
 	@Override
@@ -129,7 +135,6 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			}
 			
 			contentKey = externalContentKey;
-			// TODO: Maybe check if the key is valid?
 		} else if (bucketObjectUpdate.getCopySource() != null) {
 			String source = bucketObjectUpdate.getCopySource();
 			int idx;

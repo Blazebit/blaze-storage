@@ -10,15 +10,25 @@ public class MultipartUploadRepresentation implements Serializable, Closeable {
 
 	private static final long serialVersionUID = 1L;
 
+	private boolean quiet;
 	private Map<String, BucketObjectUpdateRepresentation> uploads = new HashMap<String, BucketObjectUpdateRepresentation>(0);
 	private Closeable inputResource;
 
 	public MultipartUploadRepresentation() {
 	}
 
-	public MultipartUploadRepresentation(Map<String, BucketObjectUpdateRepresentation> uploads, Closeable inputResource) {
+	public MultipartUploadRepresentation(boolean quiet, Map<String, BucketObjectUpdateRepresentation> uploads, Closeable inputResource) {
+		this.quiet = quiet;
 		this.uploads = uploads;
 		this.inputResource = inputResource;
+	}
+
+	public boolean isQuiet() {
+		return quiet;
+	}
+
+	public void setQuiet(boolean quiet) {
+		this.quiet = quiet;
 	}
 
 	public Map<String, BucketObjectUpdateRepresentation> getUploads() {

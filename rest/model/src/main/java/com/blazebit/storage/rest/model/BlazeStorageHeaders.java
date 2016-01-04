@@ -20,6 +20,7 @@ public final class BlazeStorageHeaders {
 
 	public static final String COPY_SOURCE = "x-blz-copy-source";
 	public static final String MULTIPART_KEY = "x-blz-object-key";
+	public static final String QUIET = "x-blz-quiet";
 	
 	private BlazeStorageHeaders() {
 	}

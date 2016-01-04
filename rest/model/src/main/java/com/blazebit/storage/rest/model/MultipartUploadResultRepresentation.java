@@ -9,12 +9,12 @@ public class MultipartUploadResultRepresentation implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<String> uploaded = new ArrayList<String>(0);
-	private List<MultipartUploadErrorRepresentation> errors = new ArrayList<MultipartUploadErrorRepresentation>(0);
+	private List<ErrorRepresentation> errors = new ArrayList<ErrorRepresentation>(0);
 
 	public MultipartUploadResultRepresentation() {
 	}
 
-	public MultipartUploadResultRepresentation(List<String> uploaded, List<MultipartUploadErrorRepresentation> errors) {
+	public MultipartUploadResultRepresentation(List<String> uploaded, List<ErrorRepresentation> errors) {
 		this.uploaded = uploaded;
 		this.errors = errors;
 	}
@@ -27,11 +27,11 @@ public class MultipartUploadResultRepresentation implements Serializable {
 		this.uploaded = uploaded;
 	}
 
-	public List<MultipartUploadErrorRepresentation> getErrors() {
+	public List<ErrorRepresentation> getErrors() {
 		return errors;
 	}
 
-	public void setErrors(List<MultipartUploadErrorRepresentation> errors) {
+	public void setErrors(List<ErrorRepresentation> errors) {
 		this.errors = errors;
 	}
 }

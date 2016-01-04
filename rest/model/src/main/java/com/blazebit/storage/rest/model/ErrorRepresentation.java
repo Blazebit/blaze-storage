@@ -2,7 +2,7 @@ package com.blazebit.storage.rest.model;
 
 import java.io.Serializable;
 
-public class MultipartUploadErrorRepresentation implements Serializable {
+public class ErrorRepresentation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -10,10 +10,10 @@ public class MultipartUploadErrorRepresentation implements Serializable {
 	private String code;
 	private String message;
 
-	public MultipartUploadErrorRepresentation() {
+	public ErrorRepresentation() {
 	}
 
-	public MultipartUploadErrorRepresentation(String key, String code, String message) {
+	public ErrorRepresentation(String key, String code, String message) {
 		this.key = key;
 		this.code = code;
 		this.message = message;

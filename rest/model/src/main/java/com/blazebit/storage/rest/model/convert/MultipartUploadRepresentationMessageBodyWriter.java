@@ -52,6 +52,7 @@ public class MultipartUploadRepresentationMessageBodyWriter implements MessageBo
 		MessageBodyWriter<BucketObjectUpdateRepresentation> writer = providers.getMessageBodyWriter(writerType, writerGenericType, writerAnnotations, MediaType.WILDCARD_TYPE);
 		
 		String boundary = UUID.randomUUID().toString();
+		httpHeaders.putSingle(BlazeStorageHeaders.QUIET, Boolean.toString(o.isQuiet()));
 		httpHeaders.putSingle(HttpHeaders.CONTENT_TYPE, mediaType.toString() + "; boundary=" + boundary);
 		byte[] boundaryBytes = ("--" + boundary).getBytes();
 

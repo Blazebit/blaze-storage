@@ -18,12 +18,16 @@ import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.AccountDataAccess;
 import com.blazebit.storage.core.api.BucketDataAccess;
+import com.blazebit.storage.core.api.BucketObjectService;
 import com.blazebit.storage.core.api.BucketService;
 import com.blazebit.storage.core.model.jpa.Account;
 import com.blazebit.storage.core.model.jpa.Bucket;
+import com.blazebit.storage.core.model.jpa.BucketObjectId;
 import com.blazebit.storage.core.model.jpa.Storage;
 import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.core.model.security.Role;
+import com.blazebit.storage.core.model.service.BucketObjectDeleteReport;
+import com.blazebit.storage.core.model.service.BucketObjectDeleteReportItem;
 import com.blazebit.storage.rest.api.BucketSubResource;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketHeadRepresentationView;
@@ -33,9 +37,13 @@ import com.blazebit.storage.rest.model.BucketHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
-import com.blazebit.storage.rest.model.MultipartUploadErrorRepresentation;
+import com.blazebit.storage.rest.model.ErrorRepresentation;
 import com.blazebit.storage.rest.model.MultipartUploadRepresentation;
 import com.blazebit.storage.rest.model.MultipartUploadResultRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteObjectRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteObjectResultRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteResultRepresentation;
 
 public class BucketSubResourceImpl extends AbstractResource implements BucketSubResource {
 
@@ -50,6 +58,8 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 	private BucketDataAccess bucketDataAccess;
 	@Inject
 	private BucketService bucketService;
+	@Inject
+	private BucketObjectService bucketObjectService;
 
 	public BucketSubResourceImpl(long accountId, String bucketId) {
 		this.accountId = accountId;
@@ -132,15 +142,15 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 
 	@Override
 	public MultipartUploadResultRepresentation uploadMultiple(MultipartUploadRepresentation upload) {
+		final boolean verbose = !upload.isQuiet();
 		List<String> uploaded = new ArrayList<String>(upload.getUploads().size());
-		List<MultipartUploadErrorRepresentation> errors = new ArrayList<>();
+		List<ErrorRepresentation> errors = new ArrayList<>();
 		MultipartUploadResultRepresentation result = new MultipartUploadResultRepresentation(uploaded, errors);
 		
 		List<Throwable> exceptions = null;
 		
 		try (MultipartUploadRepresentation u = upload) {
 			for (Map.Entry<String, BucketObjectUpdateRepresentation> entry : upload.getUploads().entrySet()) {
-				// TODO: maybe do some sanity checks on the file key?
 				String fileKey = entry.getKey();
 				
 				Response r;
@@ -161,11 +171,13 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 				
 				if (r != null) {
 					if (r.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-						uploaded.add(fileKey);
+						if (verbose) {
+							uploaded.add(fileKey);
+						}
 					} else {
 						String code = r.getHeaderString(BlazeStorageHeaders.ERROR_CODE);
 						String message = r.readEntity(String.class);
-						errors.add(new MultipartUploadErrorRepresentation(fileKey, code, message));
+						errors.add(new ErrorRepresentation(fileKey, code, message));
 					}
 				}
 			}
@@ -177,6 +189,35 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 				for (int i = 0; i < size; i++) {
 					LOG.log(Level.SEVERE, " - Error " + i, exceptions.get(i));
 				}
+			}
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public MultipleDeleteResultRepresentation deleteMultiple(MultipleDeleteRepresentation delete) {
+		final boolean verbose = !delete.isQuiet();
+		List<MultipleDeleteObjectResultRepresentation> deleted = new ArrayList<MultipleDeleteObjectResultRepresentation>(delete.getObjects().size());
+		List<ErrorRepresentation> errors = new ArrayList<>();
+		MultipleDeleteResultRepresentation result = new MultipleDeleteResultRepresentation(deleted, errors);
+
+		List<BucketObjectId> bucketObjectIds = new ArrayList<>(delete.getObjects().size());
+		for (MultipleDeleteObjectRepresentation o : delete.getObjects()) {
+			bucketObjectIds.add(new BucketObjectId(bucketId, o.getKey()));
+		}
+		
+		BucketObjectDeleteReport report = bucketObjectService.delete(bucketObjectIds);
+		
+		for (BucketObjectDeleteReportItem item : report.getItems()) {
+			if (item.getMessage() == null) {
+				if (verbose) {
+					deleted.add(new MultipleDeleteObjectResultRepresentation(item.getBucketObjectId().getName()));
+				}
+			} else {
+				String code = item.getCode();
+				String message = item.getMessage();
+				errors.add(new ErrorRepresentation(item.getBucketObjectId().getName(), code, message));
 			}
 		}
 		

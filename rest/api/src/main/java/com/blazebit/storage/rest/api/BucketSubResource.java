@@ -20,6 +20,8 @@ import com.blazebit.storage.rest.model.BucketRepresentation;
 import com.blazebit.storage.rest.model.BucketUpdateRepresentation;
 import com.blazebit.storage.rest.model.MultipartUploadRepresentation;
 import com.blazebit.storage.rest.model.MultipartUploadResultRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteRepresentation;
+import com.blazebit.storage.rest.model.MultipleDeleteResultRepresentation;
 
 public interface BucketSubResource {
 
@@ -59,10 +61,6 @@ public interface BucketSubResource {
 	 * @param bucketUpdate
 	 * @return
 	 */
-//	@PUT
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response put(BucketUpdateRepresentation bucketUpdate);
-	
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response put(BucketUpdateRepresentation bucketUpdate, @HeaderParam("x-blz-owner-key") String ownerKey);
@@ -72,6 +70,12 @@ public interface BucketSubResource {
     @Consumes({ "multipart/mixed" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultipartUploadResultRepresentation uploadMultiple(MultipartUploadRepresentation upload);
+	
+	@POST
+	@Path("delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public MultipleDeleteResultRepresentation deleteMultiple(MultipleDeleteRepresentation delete);
 	
 	@Path("{key: .+}")
 	public FileSubResource getFile(@PathParam("key") String key);

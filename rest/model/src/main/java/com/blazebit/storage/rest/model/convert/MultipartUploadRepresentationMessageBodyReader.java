@@ -53,7 +53,7 @@ public class MultipartUploadRepresentationMessageBodyReader implements MessageBo
 		
 		Map<String, BucketObjectUpdateRepresentation> uploads = new HashMap<String, BucketObjectUpdateRepresentation>(parts.size());
 		@SuppressWarnings("resource")
-		MultipartUploadRepresentation result = new MultipartUploadRepresentation(uploads, input);
+		MultipartUploadRepresentation result = new MultipartUploadRepresentation("true".equalsIgnoreCase(httpHeaders.getFirst(BlazeStorageHeaders.QUIET)), uploads, input);
 		
 		Class<BucketObjectUpdateRepresentation> readerType = BucketObjectUpdateRepresentation.class;
 		Type readerGenericType = readerType;
