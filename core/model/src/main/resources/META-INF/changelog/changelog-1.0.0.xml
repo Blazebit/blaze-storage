@@ -31,8 +31,14 @@
 			</column>
 			<column name="CREATION_DATE" type="TIMESTAMP" />
 			<column name="DELETED" type="BOOLEAN(1)" />
-			<column name="OBJECT_BYTES" type="BIGINT(19)" />
-			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
 			<column name="OWNER_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
@@ -104,8 +110,14 @@
 			<column name="OWNER_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
-			<column name="OBJECT_BYTES" type="BIGINT(19)" />
-			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
 			<column name="URI" type="VARCHAR(255)" />
 			<column name="QUOTA_PLAN_LIMIT" type="INT(10)">
 				<constraints nullable="false" />
