@@ -150,7 +150,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			BucketObjectVersionRepresentationView contentVersion = result.getContentVersion();
 			URI sourceStorageUri = contentVersion.getStorageUri();
 			String sourceContentKey = contentVersion.getContentKey();
-			contentKey = bucketObjectService.copy(sourceStorageUri, sourceContentKey, storageUri);
+			contentKey = bucketObjectService.copyContent(sourceStorageUri, sourceContentKey, storageUri);
 			
 			if (bucketObjectUpdate.getContentDisposition() == null) {
 				bucketObjectUpdate.setContentDisposition(ContentDisposition.fromString(contentVersion.getContentDisposition()));
@@ -185,7 +185,16 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		version.setStorage(storage);
 		version.setTags(bucketObjectUpdate.getTags());
 		
-		bucketObjectService.put(bucketObject);
+		boolean success = false;
+		try {
+			bucketObjectService.put(bucketObject);
+			success = true;
+		} finally {
+			if (!success && !contentKey.equals(externalContentKey)) {
+				// Delete the file
+				bucketObjectService.deleteContent(storageUri, contentKey);
+			}
+		}
 		
 		return Response.ok().build();
 	}

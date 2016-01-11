@@ -359,11 +359,6 @@
 				<version>${version.javaee-api}</version>
 				<scope>provided</scope>
 			</dependency>
-			<dependency>
-				<groupId>javax.cache</groupId>
-				<artifactId>cache-api</artifactId>
-				<version>${version.cache-api}</version>
-			</dependency>
 			
 			<!-- Liquibase dependencies -->
 			<dependency>

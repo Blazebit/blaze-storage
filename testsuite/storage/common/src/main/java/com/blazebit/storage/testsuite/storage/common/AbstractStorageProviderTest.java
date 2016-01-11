@@ -28,6 +28,15 @@ public abstract class AbstractStorageProviderTest {
 	
 	protected abstract StorageProvider getStorageProvider();
 
+	/**************************
+	 * getStorageIdentifier()
+	 **************************/
+
+	@Test
+	public void testGetStorageIdentifier_whenSame() throws Exception {
+		// When & Then
+		assertEquals(getStorageProvider().getStorageIdentifier(), getStorageProvider().getStorageIdentifier());
+	}
 	
 	/**************************
 	 * getObject(String)
@@ -134,6 +143,30 @@ public abstract class AbstractStorageProviderTest {
 		// When
 		getStorageProvider().putObject(fileName, new ByteArrayInputStream("abc".getBytes()));
 		Path newFile = getDirectory().resolve(fileName);
+
+		// Then
+		assertTrue(Files.exists(newFile));
+		assertEquals("abc", readFull(Files.newInputStream(newFile)));
+	}
+	
+	/**************************
+	 * copyObject(String, InputStream)
+	 **************************/
+
+	@Test
+	public void testCopyObject_whenSourceNotExisting() throws Exception {
+		// When & Then
+		Assert.verifyException(getStorageProvider(), StorageException.class).copyObject(getStorageProvider(), "not-existing");
+	}
+
+	@Test
+	public void testCopyObject_whenTargetNotExisting() throws Exception {
+		// Given
+		String fileName = createFile(getDirectory(), "abc");
+		
+		// When
+		String externalKey = getStorageProvider().copyObject(getStorageProvider(), fileName);
+		Path newFile = getDirectory().resolve(externalKey);
 
 		// Then
 		assertTrue(Files.exists(newFile));

@@ -138,6 +138,8 @@ public class BucketObjectServiceTest extends AbstractContainerTest {
 		assertEquals("1", readFull(Files.newInputStream(basePath.resolve(actual))));
 	}
 	
+	// TODO: test copyContent and deleteContent
+	
 	/**************************
 	 * put(BucketObject)
 	 **************************/
