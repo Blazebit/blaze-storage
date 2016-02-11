@@ -35,6 +35,7 @@ public class AbstractContainerTest {
     @Inject
     protected DataService dataService;
     @Inject
+    @MasterOnly
     protected CriteriaBuilderFactory cbf; 
     
     @Inject

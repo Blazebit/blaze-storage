@@ -18,7 +18,6 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.LockModeType;
 
-import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.storage.core.api.BucketNotFoundException;
 import com.blazebit.storage.core.api.BucketObjectNotFoundException;
 import com.blazebit.storage.core.api.BucketObjectService;
@@ -46,8 +45,6 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	private StorageProviderFactoryDataAccess storageProviderFactoryDataAccess;
 	@Inject
 	private Event<BucketObjectDeletedEvent> bucketObjectDeleted;
-	@Inject
-	private CriteriaBuilderFactory cbf;
 
 	@Override
 	public String createContent(URI storageUri, InputStream inputStream) {

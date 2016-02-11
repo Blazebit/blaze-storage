@@ -12,7 +12,8 @@
     		<property name="hibernate.show_sql" value="false"/>
     		<property name="hibernate.format_sql" value="false"/>
     		
-    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+			<property name="hibernate.implicit_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomImplicitNamingStrategy" />
+			<property name="hibernate.physical_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomPhysicalNamingStrategy" />
 				
 			<!-- We need this to preven negative IDs during tests. This flag is usually set by Wildfly but we use a non-container supplied EntityManager in our tests
 				 to create and drop the database schema. So without this flag, the sequences would be created wrong.
@@ -32,7 +33,8 @@
     		<property name="hibernate.show_sql" value="false"/>
     		<property name="hibernate.format_sql" value="false"/>
     		
-    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+			<property name="hibernate.implicit_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomImplicitNamingStrategy" />
+			<property name="hibernate.physical_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomPhysicalNamingStrategy" />
 				
 			<!-- We need this to preven negative IDs during tests. This flag is usually set by Wildfly but we use a non-container supplied EntityManager in our tests
 				 to create and drop the database schema. So without this flag, the sequences would be created wrong.

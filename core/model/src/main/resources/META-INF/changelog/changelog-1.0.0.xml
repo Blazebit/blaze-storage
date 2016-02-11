@@ -31,8 +31,14 @@
 			</column>
 			<column name="CREATION_DATE" type="TIMESTAMP" />
 			<column name="DELETED" type="BOOLEAN(1)" />
-			<column name="OBJECT_BYTES" type="BIGINT(19)" />
-			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
 			<column name="OWNER_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
@@ -104,8 +110,14 @@
 			<column name="OWNER_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
-			<column name="OBJECT_BYTES" type="BIGINT(19)" />
-			<column name="OBJECT_COUNT" type="BIGINT(19)" />
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
 			<column name="URI" type="VARCHAR(255)" />
 			<column name="QUOTA_PLAN_LIMIT" type="INT(10)">
 				<constraints nullable="false" />
@@ -144,7 +156,42 @@
 				<constraints nullable="false" />
 			</column>
 		</createTable>
-		
+        <createTable tableName="STOR_BUCKET_TAG_OBJECT_STATISTICS">
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="BUCKET_ID" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAGS" type="VARCHAR(32704)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="STOR_STORAGE_TAG_OBJECT_STATISTICS">
+            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="STORAGE_OWNER_ID" type="BIGINT(19)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STORAGE_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAGS" type="VARCHAR(32704)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
 		<addPrimaryKey columnNames="BUCKET_ID, NAME" constraintName="STOR_BUCKET_OBJECT_PKEY" tableName="STOR_BUCKET_OBJECT" />
 		<addPrimaryKey columnNames="GIGABYTE_LIMIT, QUOTA_MODEL_ID" constraintName="STOR_STORAGE_QUOTA_PLAN_PKEY" tableName="STOR_STORAGE_QUOTA_PLAN" />
 		<addPrimaryKey columnNames="BUCKET_ID, OBJECT_NAME, VERSION_UUID, TAG" constraintName="STOR_BUCKET_OBJECT_VERSION_TAGS_PKEY" tableName="STOR_BUCKET_OBJECT_VERSION_TAGS" />
@@ -155,7 +202,9 @@
 		<addPrimaryKey columnNames="ID" constraintName="STOR_BUCKET_PKEY" tableName="STOR_BUCKET" />
 		<addPrimaryKey columnNames="ID" constraintName="STOR_STORAGE_QUOTA_MODEL_PKEY" tableName="STOR_STORAGE_QUOTA_MODEL" />
 		<addPrimaryKey columnNames="ID" constraintName="STOR_ACCOUNT_PKEY" tableName="STOR_ACCOUNT" />
-		
+        <addPrimaryKey columnNames="BUCKET_ID, TAGS" constraintName="STOR_BUCKET_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_BUCKET_TAG_OBJECT_STATISTICS"/>
+        <addPrimaryKey columnNames="STORAGE_NAME, STORAGE_OWNER_ID, TAGS" constraintName="STOR_STORAGE_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_STORAGE_TAG_OBJECT_STATISTICS"/>
+        
 		<addUniqueConstraint columnNames="KEY" constraintName="STOR_ACCOUNT_UC_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="STOR_ACCOUNT" />
 		
 		<addForeignKeyConstraint baseColumnNames="BUCKET_ID, OBJECT_NAME" baseTableName="STOR_BUCKET_OBJECT_VERSION" constraintName="STOR_BUCKET_OBJECT_VERSION_FK_BUCKET_OBJECT" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="BUCKET_ID, NAME" referencedTableName="STOR_BUCKET_OBJECT" />
@@ -170,5 +219,7 @@
 		<addForeignKeyConstraint baseColumnNames="BUCKET_ID" baseTableName="STOR_BUCKET_OBJECT" constraintName="STOR_BUCKET_OBJECT_FK_BUCKET" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_BUCKET" />
 		<addForeignKeyConstraint baseColumnNames="OWNER_ID" baseTableName="STOR_STORAGE" constraintName="STOR_STORAGE_FK_OWNER" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_ACCOUNT" />
 		<addForeignKeyConstraint baseColumnNames="QUOTA_MODEL_ID" baseTableName="STOR_STORAGE_QUOTA_PLAN" constraintName="STOR_STORAGE_QUOTA_PLAN_FK_QUOTA_MODEL" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_STORAGE_QUOTA_MODEL" />
+        <addForeignKeyConstraint baseColumnNames="STORAGE_NAME, STORAGE_OWNER_ID" baseTableName="STOR_STORAGE_TAG_OBJECT_STATISTICS" constraintName="STOR_STORAGE_TAG_OBJECT_STATISTICS_FK_STORAGE" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME, OWNER_ID" referencedTableName="STOR_STORAGE"/>
+        <addForeignKeyConstraint baseColumnNames="BUCKET_ID" baseTableName="STOR_BUCKET_TAG_OBJECT_STATISTICS" constraintName="STOR_BUCKET_TAG_OBJECT_STATISTICS_FK_BUCKET" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="STOR_BUCKET"/>
 	</changeSet>
 </databaseChangeLog>

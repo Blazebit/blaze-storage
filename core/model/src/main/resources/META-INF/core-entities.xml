@@ -11,4 +11,7 @@
 	<entity class="com.blazebit.storage.core.model.jpa.StorageQuotaPlan"/>
 	<entity class="com.blazebit.storage.core.model.jpa.Account"/>
 	
+	<entity class="com.blazebit.storage.core.model.jpa.BucketTagObjectStatistics"/>
+	<entity class="com.blazebit.storage.core.model.jpa.StorageTagObjectStatistics"/>
+	
 </entity-mappings>

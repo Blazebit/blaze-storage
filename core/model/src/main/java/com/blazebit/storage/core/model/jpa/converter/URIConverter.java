@@ -3,7 +3,9 @@ package com.blazebit.storage.core.model.jpa.converter;
 import java.net.URI;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter
 public class URIConverter implements AttributeConverter<URI, String> {
 
 	@Override

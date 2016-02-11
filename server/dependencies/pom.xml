@@ -52,15 +52,11 @@
         </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>blaze-persistence-integration-core-cdi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>blaze-persistence-integration-entity-view-cdi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>blaze-persistence-integration-hibernate-4</artifactId>
+			<artifactId>blaze-persistence-integration-hibernate-5</artifactId>
 		</dependency>
         
 		<dependency>

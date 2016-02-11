@@ -16,7 +16,9 @@ public abstract class AbstractDataAccess {
 	@ReadOnly
 	protected EntityManager em;
 	@Inject
+	@ReadOnly
 	protected CriteriaBuilderFactory cbf;
 	@Inject
+	@ReadOnly
 	protected EntityViewManager evm;
 }

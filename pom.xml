@@ -50,11 +50,11 @@
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.10</version.blazeutils>
-		<version.blazepersistence>1.1.0-Alpha7</version.blazepersistence>
+		<version.blazepersistence>1.1.0-SNAPSHOT</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.2.2</version.liquibase>
-		<version.hibernate>4.3.10.Final</version.hibernate>
-		<version.infinispan>7.1.1.Final</version.infinispan>
+		<version.hibernate>5.0.7.Final</version.hibernate>
+		<version.infinispan>8.1.0.Final</version.infinispan>
 		<version.junit>4.11</version.junit>
 
 		<version.resteasy>3.0.10.Final</version.resteasy>
@@ -191,17 +191,12 @@
 	        </dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>blaze-persistence-integration-core-cdi</artifactId>
-				<version>${version.blazepersistence}</version>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
 				<artifactId>blaze-persistence-integration-entity-view-cdi</artifactId>
 				<version>${version.blazepersistence}</version>
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>blaze-persistence-integration-hibernate-4</artifactId>
+				<artifactId>blaze-persistence-integration-hibernate-5</artifactId>
 				<version>${version.blazepersistence}</version>
 			</dependency>
 

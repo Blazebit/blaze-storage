@@ -41,6 +41,6 @@ public class ClusteredCacheManagerProducer {
     @ApplicationScoped
     public CacheManager produceJcacheCacheManager() {
     	// Note that we don't close the cache manager because the underlying resource is container managed
-    	return new org.infinispan.jcache.JCacheManager(URI.create("storage"), cacheManager, Caching.getCachingProvider());
+    	return new org.infinispan.jcache.embedded.JCacheManager(URI.create("storage"), cacheManager, Caching.getCachingProvider());
     }
 }

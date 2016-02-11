@@ -27,7 +27,8 @@ limitations under the License.
     		<property name="hibernate.show_sql" value="false"/>
     		<property name="hibernate.format_sql" value="false"/>
     		
-    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+			<property name="hibernate.implicit_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomImplicitNamingStrategy" />
+			<property name="hibernate.physical_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomPhysicalNamingStrategy" />
 
 			<property name="hibernate.query.plan_cache_max_size" value="${com.blazebit.storage.hibernate.plan_cache_max_size:768}"/>
 			<property name="hibernate.generate_statistics" value="${com.blazebit.storage.hibernate.statistics:false}" />
@@ -45,7 +46,8 @@ limitations under the License.
     		<property name="hibernate.show_sql" value="false"/>
     		<property name="hibernate.format_sql" value="false"/>
     		
-    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+			<property name="hibernate.implicit_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomImplicitNamingStrategy" />
+			<property name="hibernate.physical_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomPhysicalNamingStrategy" />
 
 			<property name="hibernate.query.plan_cache_max_size" value="${com.blazebit.storage.hibernate.plan_cache_max_size:768}"/>
 			<property name="hibernate.generate_statistics" value="${com.blazebit.storage.hibernate.statistics:false}" />

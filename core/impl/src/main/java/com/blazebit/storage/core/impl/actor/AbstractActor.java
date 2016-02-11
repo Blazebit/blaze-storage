@@ -18,6 +18,7 @@ public abstract class AbstractActor {
 	@MasterOnly
 	protected EntityManager em;
 	@Inject
+	@MasterOnly
 	protected CriteriaBuilderFactory cbf;
 
 	public void init(@Observes @Initialized(ApplicationScoped.class) Object o) {

@@ -1,4 +1,4 @@
-package com.blazebit.storage.core.config.wildfly.persistence;
+package com.blazebit.storage.testsuite.common.persistence;
 
 import javax.enterprise.event.Observes;
 

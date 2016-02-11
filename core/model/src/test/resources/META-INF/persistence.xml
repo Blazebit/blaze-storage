@@ -28,7 +28,8 @@ limitations under the License.
     		<property name="hibernate.show_sql" value="true"/>
     		<property name="hibernate.format_sql" value="true"/>
     		
-    		<property name="hibernate.ejb.naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomNamingStrategy"/>
+			<property name="hibernate.implicit_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomImplicitNamingStrategy" />
+			<property name="hibernate.physical_naming_strategy" value="com.blazebit.storage.core.model.jpa.hibernate.CustomPhysicalNamingStrategy" />
    		</properties>
     </persistence-unit>
 </persistence>

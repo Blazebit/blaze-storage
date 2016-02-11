@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -12,19 +13,20 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Embeddable
+@MappedSuperclass
 public class ObjectStatistics implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long objectCount;
-	private long objectBytes;
-	private long objectVersionCount;
-	private long objectVersionBytes;
+	protected long objectCount;
+	protected long objectBytes;
+	protected long objectVersionCount;
+	protected long objectVersionBytes;
 	
-	private long pendingObjectCount;
-	private long pendingObjectBytes;
-	private long pendingObjectVersionCount;
-	private long pendingObjectVersionBytes;
+	protected long pendingObjectCount;
+	protected long pendingObjectBytes;
+	protected long pendingObjectVersionCount;
+	protected long pendingObjectVersionBytes;
 
 	public ObjectStatistics() {
 	}
