@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import com.blazebit.storage.core.api.AccountDataAccess;
@@ -32,6 +33,7 @@ public class UserContextProducer {
 	private AccountService accountService;
 
 	@Produces
+	@Named("userContext")
 	@RequestScoped
 	public UserContext produceUserContext(HttpServletRequest request) {
 		Account account = null;

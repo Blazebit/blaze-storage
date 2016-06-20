@@ -54,9 +54,11 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 		put(httpHeaders, HttpHeaders.CONTENT_DISPOSITION, t.getContentDisposition());
 		put(httpHeaders, BlazeStorageHeaders.STORAGE_NAME, t.getStorageName());
 		put(httpHeaders, BlazeStorageHeaders.STORAGE_OWNER, t.getStorageOwner());
-		
-		for (Map.Entry<String, String> tagEntry : t.getTags().entrySet()) {
-			put(httpHeaders, BlazeStorageHeaders.TAG_PREFIX + tagEntry.getKey(), tagEntry.getValue());
+
+		if (t.getTags() != null) {
+			for (Map.Entry<String, String> tagEntry : t.getTags().entrySet()) {
+				put(httpHeaders, BlazeStorageHeaders.TAG_PREFIX + tagEntry.getKey(), tagEntry.getValue());
+			}
 		}
 		
 		if (t instanceof BucketObjectUpdateRepresentation) {
