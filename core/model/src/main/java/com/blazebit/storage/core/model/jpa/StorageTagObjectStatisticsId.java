@@ -20,24 +20,27 @@ public class StorageTagObjectStatisticsId implements Serializable {
 
 	private Long storageOwnerId;
 	private String storageName;
-	private Map<String, String> tags = new TreeMap<>();
+	private String tagKey;
+	private String tagValue;
 	
 	public StorageTagObjectStatisticsId() {
 	}
 
-	public StorageTagObjectStatisticsId(Storage storage, Map<String, String> tags) {
+	public StorageTagObjectStatisticsId(Storage storage, String tagKey, String tagValue) {
 		if (storage != null) {
 			this.storageOwnerId = storage.getId().getOwnerId();
 			this.storageName = storage.getId().getName();
 		}
 		
-		this.tags = tags;
+		this.tagKey = tagKey;
+		this.tagValue = tagValue;
 	}
 
-	public StorageTagObjectStatisticsId(Long storageOwnerId, String storageName, Map<String, String> tags) {
+	public StorageTagObjectStatisticsId(Long storageOwnerId, String storageName, String tagKey, String tagValue) {
 		this.storageOwnerId = storageOwnerId;
 		this.storageName = storageName;
-		this.tags = tags;
+		this.tagKey = tagKey;
+		this.tagValue = tagValue;
 	}
 
 	@NotNull
@@ -62,14 +65,23 @@ public class StorageTagObjectStatisticsId implements Serializable {
 	}
 
 	@NotNull
-	@Column(name = "tags", nullable = false, length = RdbmsConstants.TAGS_MAX_LENGTH)
-	@Convert(converter = TagMapConverter.class)
-	public Map<String, String> getTags() {
-		return tags;
+	@Column(name = "tag_key", nullable = false, length = RdbmsConstants.TAG_KEY_MAX_LENGTH)
+	public String getTagKey() {
+		return tagKey;
 	}
 
-	public void setTags(Map<String, String> tags) {
-		this.tags = tags;
+	public void setTagKey(String tagKey) {
+		this.tagKey = tagKey;
+	}
+
+	@NotNull
+	@Column(name = "tag_value", nullable = false, length = RdbmsConstants.TAG_VALUE_MAX_LENGTH)
+	public String getTagValue() {
+		return tagValue;
+	}
+
+	public void setTagValue(String tagValue) {
+		this.tagValue = tagValue;
 	}
 
 	@Override
@@ -78,7 +90,8 @@ public class StorageTagObjectStatisticsId implements Serializable {
 		int result = 1;
 		result = prime * result + ((storageName == null) ? 0 : storageName.hashCode());
 		result = prime * result + ((storageOwnerId == null) ? 0 : storageOwnerId.hashCode());
-		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		result = prime * result + ((tagKey == null) ? 0 : tagKey.hashCode());
+		result = prime * result + ((tagValue == null) ? 0 : tagValue.hashCode());
 		return result;
 	}
 
@@ -101,10 +114,15 @@ public class StorageTagObjectStatisticsId implements Serializable {
 				return false;
 		} else if (!storageOwnerId.equals(other.storageOwnerId))
 			return false;
-		if (tags == null) {
-			if (other.tags != null)
+		if (tagKey == null) {
+			if (other.tagKey != null)
 				return false;
-		} else if (!tags.equals(other.tags))
+		} else if (!tagKey.equals(other.tagKey))
+			return false;
+		if (tagValue == null) {
+			if (other.tagValue != null)
+				return false;
+		} else if (!tagValue.equals(other.tagValue))
 			return false;
 		return true;
 	}
@@ -112,6 +130,6 @@ public class StorageTagObjectStatisticsId implements Serializable {
 	@Override
 	public String toString() {
 		return "StorageTagObjectStatisticsId [storageOwnerId=" + storageOwnerId + ", storageName=" + storageName
-				+ ", tags=" + tags + "]";
+				+ ", tagKey=" + tagKey + ", tagValue=" + tagValue + "]";
 	}
 }

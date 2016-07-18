@@ -18,7 +18,7 @@ limitations under the License.
     <persistence-unit name="StorageMasterOnly" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/StorageMasterOnly</jta-data-source>
     	
-		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		<mapping-file>META-INF/blaze-storage-core-entities.xml</mapping-file>
 		    	
     	<properties>
     		<!-- We don't use hbm2ddl at all since we have liquibase -->
@@ -37,7 +37,7 @@ limitations under the License.
     <persistence-unit name="StorageReadOnly" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/StorageReadOnly</jta-data-source>
     	
-		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		<mapping-file>META-INF/blaze-storage-core-entities.xml</mapping-file>
 		    	
     	<properties>
     		<!-- We don't use hbm2ddl at all since we have liquibase -->

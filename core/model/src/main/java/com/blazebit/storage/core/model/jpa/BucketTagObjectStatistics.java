@@ -23,16 +23,16 @@ public class BucketTagObjectStatistics extends ObjectStatistics implements IdHol
 		super();
 	}
 
-	public BucketTagObjectStatistics(Bucket bucket, Map<String, String> tags) {
-		this.id = new BucketTagObjectStatisticsId(bucket, tags);
+	public BucketTagObjectStatistics(Bucket bucket, String tagKey, String tagValue) {
+		this.id = new BucketTagObjectStatisticsId(bucket, tagKey, tagValue);
 		this.bucket = bucket;
 	}
 
 	public BucketTagObjectStatistics(long objectCount, long objectBytes, long objectVersionCount,
 			long objectVersionBytes, long pendingObjectCount, long pendingObjectBytes, long pendingObjectVersionCount,
-			long pendingObjectVersionBytes, Bucket bucket, Map<String, String> tags) {
+			long pendingObjectVersionBytes, Bucket bucket, String tagKey, String tagValue) {
 		super(objectCount, objectBytes, objectVersionCount, objectVersionBytes, pendingObjectCount, pendingObjectBytes, pendingObjectVersionCount, pendingObjectVersionBytes);
-		this.id = new BucketTagObjectStatisticsId(bucket.getId(), tags);
+		this.id = new BucketTagObjectStatisticsId(bucket.getId(), tagKey, tagValue);
 		this.bucket = bucket;
 	}
 

@@ -3,7 +3,7 @@
     <persistence-unit name="StorageTestMasterOnly" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/StorageTestMasterOnly</jta-data-source>
     	
-		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		<mapping-file>META-INF/blaze-storage-core-entities.xml</mapping-file>
 		    	
     	<properties>
     		<!-- In our tests we use hibernate for the database setup -->
@@ -24,7 +24,7 @@
     <persistence-unit name="StorageTestReadOnly" transaction-type="JTA">
     	<jta-data-source>java:jboss/datasources/StorageTestReadOnly</jta-data-source>
     	
-		<mapping-file>META-INF/core-entities.xml</mapping-file>
+		<mapping-file>META-INF/blaze-storage-core-entities.xml</mapping-file>
 		    	
     	<properties>
     		<!-- We don't use hbm2ddl at all since we have liquibase -->

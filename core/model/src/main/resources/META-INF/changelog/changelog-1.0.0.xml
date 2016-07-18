@@ -168,7 +168,10 @@
             <column name="BUCKET_ID" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="TAGS" type="VARCHAR(32704)">
+            <column name="TAG_KEY" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAG_VALUE" type="VARCHAR(1024)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -187,7 +190,10 @@
             <column name="STORAGE_NAME" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="TAGS" type="VARCHAR(32704)">
+            <column name="TAG_KEY" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TAG_VALUE" type="VARCHAR(1024)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -202,8 +208,8 @@
 		<addPrimaryKey columnNames="ID" constraintName="STOR_BUCKET_PKEY" tableName="STOR_BUCKET" />
 		<addPrimaryKey columnNames="ID" constraintName="STOR_STORAGE_QUOTA_MODEL_PKEY" tableName="STOR_STORAGE_QUOTA_MODEL" />
 		<addPrimaryKey columnNames="ID" constraintName="STOR_ACCOUNT_PKEY" tableName="STOR_ACCOUNT" />
-        <addPrimaryKey columnNames="BUCKET_ID, TAGS" constraintName="STOR_BUCKET_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_BUCKET_TAG_OBJECT_STATISTICS"/>
-        <addPrimaryKey columnNames="STORAGE_NAME, STORAGE_OWNER_ID, TAGS" constraintName="STOR_STORAGE_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_STORAGE_TAG_OBJECT_STATISTICS"/>
+        <addPrimaryKey columnNames="BUCKET_ID, TAG_KEY, TAG_VALUE" constraintName="STOR_BUCKET_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_BUCKET_TAG_OBJECT_STATISTICS"/>
+        <addPrimaryKey columnNames="STORAGE_NAME, STORAGE_OWNER_ID, TAG_KEY, TAG_VALUE" constraintName="STOR_STORAGE_TAG_OBJECT_STATISTICS_PKEY" tableName="STOR_STORAGE_TAG_OBJECT_STATISTICS"/>
         
 		<addUniqueConstraint columnNames="KEY" constraintName="STOR_ACCOUNT_UC_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="STOR_ACCOUNT" />
 		

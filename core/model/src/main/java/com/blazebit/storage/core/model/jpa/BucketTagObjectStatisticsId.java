@@ -17,22 +17,25 @@ public class BucketTagObjectStatisticsId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String bucketId;
-	private Map<String, String> tags = new TreeMap<>();
+	private String tagKey;
+	private String tagValue;
 	
 	public BucketTagObjectStatisticsId() {
 	}
 
-	public BucketTagObjectStatisticsId(Bucket bucket, Map<String, String> tags) {
+	public BucketTagObjectStatisticsId(Bucket bucket, String tagKey, String tagValue) {
 		if (bucket != null) {
 			this.bucketId = bucket.getId();
 		}
-		
-		this.tags = tags;
+
+		this.tagKey = tagKey;
+		this.tagValue = tagValue;
 	}
 
-	public BucketTagObjectStatisticsId(String bucketId, Map<String, String> tags) {
+	public BucketTagObjectStatisticsId(String bucketId, String tagKey, String tagValue) {
 		this.bucketId = bucketId;
-		this.tags = tags;
+		this.tagKey = tagKey;
+		this.tagValue = tagValue;
 	}
 
 	@NotNull
@@ -46,14 +49,23 @@ public class BucketTagObjectStatisticsId implements Serializable {
 	}
 
 	@NotNull
-	@Column(name = "tags", nullable = false, length = RdbmsConstants.TAGS_MAX_LENGTH)
-	@Convert(converter = TagMapConverter.class)
-	public Map<String, String> getTags() {
-		return tags;
+	@Column(name = "tag_key", nullable = false, length = RdbmsConstants.TAG_KEY_MAX_LENGTH)
+	public String getTagKey() {
+		return tagKey;
 	}
 
-	public void setTags(Map<String, String> tags) {
-		this.tags = tags;
+	public void setTagKey(String tagKey) {
+		this.tagKey = tagKey;
+	}
+
+	@NotNull
+	@Column(name = "tag_value", nullable = false, length = RdbmsConstants.TAG_VALUE_MAX_LENGTH)
+	public String getTagValue() {
+		return tagValue;
+	}
+
+	public void setTagValue(String tagValue) {
+		this.tagValue = tagValue;
 	}
 
 	@Override
@@ -61,7 +73,8 @@ public class BucketTagObjectStatisticsId implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((bucketId == null) ? 0 : bucketId.hashCode());
-		result = prime * result + ((tags == null) ? 0 : tags.hashCode());
+		result = prime * result + ((tagKey == null) ? 0 : tagKey.hashCode());
+		result = prime * result + ((tagValue == null) ? 0 : tagValue.hashCode());
 		return result;
 	}
 
@@ -79,16 +92,22 @@ public class BucketTagObjectStatisticsId implements Serializable {
 				return false;
 		} else if (!bucketId.equals(other.bucketId))
 			return false;
-		if (tags == null) {
-			if (other.tags != null)
+		if (tagKey == null) {
+			if (other.tagKey != null)
 				return false;
-		} else if (!tags.equals(other.tags))
+		} else if (!tagKey.equals(other.tagKey))
+			return false;
+		if (tagValue == null) {
+			if (other.tagValue != null)
+				return false;
+		} else if (!tagValue.equals(other.tagValue))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "BucketTagObjectStatisticsId [bucketId=" + bucketId + ", tags=" + tags + "]";
+		return "BucketTagObjectStatisticsId [bucketId=" + bucketId + ", tagKey=" + tagKey + ", tagValue=" + tagValue
+				+ "]";
 	}
 }

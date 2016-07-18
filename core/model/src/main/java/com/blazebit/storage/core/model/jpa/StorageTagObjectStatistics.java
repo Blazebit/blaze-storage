@@ -31,16 +31,16 @@ public class StorageTagObjectStatistics extends ObjectStatistics implements IdHo
 		super();
 	}
 
-	public StorageTagObjectStatistics(Storage storage, Map<String, String> tags) {
-		this.id = new StorageTagObjectStatisticsId(storage, tags); 
+	public StorageTagObjectStatistics(Storage storage, String tagKey, String tagValue) {
+		this.id = new StorageTagObjectStatisticsId(storage, tagKey, tagValue); 
 		this.storage = storage;
 	}
 
 	public StorageTagObjectStatistics(long objectCount, long objectBytes, long objectVersionCount,
 			long objectVersionBytes, long pendingObjectCount, long pendingObjectBytes, long pendingObjectVersionCount,
-			long pendingObjectVersionBytes, Storage storage, Map<String, String> tags) {
+			long pendingObjectVersionBytes, Storage storage, String tagKey, String tagValue) {
 		super(objectCount, objectBytes, objectVersionCount, objectVersionBytes, pendingObjectCount, pendingObjectBytes, pendingObjectVersionCount, pendingObjectVersionBytes);
-		this.id = new StorageTagObjectStatisticsId(storage, tags); 
+		this.id = new StorageTagObjectStatisticsId(storage, tagKey, tagValue); 
 		this.storage = storage;
 	}
 
