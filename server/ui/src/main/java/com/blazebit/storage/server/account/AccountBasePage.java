@@ -38,7 +38,7 @@ public class AccountBasePage implements Serializable {
 					return null;
 				} else {
 					tagsHolder.setTags(account.getTags());
-					return "";
+					return null;
 				}
 			}
 

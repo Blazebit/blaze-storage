@@ -38,7 +38,7 @@ public class QuotaBasePage implements Serializable {
 					return null;
 				} else {
 					limitsHolder.setLimits(quota.getLimits());
-					return "";
+					return null;
 				}
 			}
 

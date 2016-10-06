@@ -47,7 +47,7 @@ public class StorageBasePage implements Serializable {
 					tagsHolder.setTags(storage.getTags());
 					configurationHolder.setConfiguration(storage.getConfiguration());
 					init();
-					return "";
+					return null;
 				}
 			}
 

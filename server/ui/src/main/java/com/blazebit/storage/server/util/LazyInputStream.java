@@ -42,6 +42,7 @@ public abstract class LazyInputStream extends InputStream implements Serializabl
 
 	public void close() throws IOException {
 		getDelegate().close();
+		delegate = null;
 	}
 
 	public abstract int hashCode();

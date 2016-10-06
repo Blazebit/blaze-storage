@@ -22,7 +22,17 @@ import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 public class BucketObjectRepresentationMessageBodyWriter implements ResponseObjectAwareMessageBodyWriter<BucketObjectBaseRepresentation> {
 
 	private static final int BUFFER_SIZE = 4096;
-	
+
+	private final boolean writeSize;
+
+	public BucketObjectRepresentationMessageBodyWriter() {
+		this(true);
+	}
+
+	public BucketObjectRepresentationMessageBodyWriter(boolean writeSize) {
+		this.writeSize = writeSize;
+	}
+
 	@Override
 	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
 		return BucketObjectBaseRepresentation.class.isAssignableFrom(type);
@@ -47,7 +57,7 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 		put(httpHeaders, HttpHeaders.CONTENT_TYPE, t.getContentType());
 		
 		// This is required for Undertow, otherwise it won't allow actually writing to the output stream 
-		if (t.getSize() > 0) {
+		if (t.getSize() > 0 && writeSize) {
 			put(httpHeaders, HttpHeaders.CONTENT_LENGTH, t.getSize());
 		}
 		
@@ -68,11 +78,13 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 
 			InputStream input = update.getContent();
 			if (input != null) {
-				byte[] buffer = new byte[BUFFER_SIZE];
-			    int bytesRead;
-			    while ((bytesRead = input.read(buffer)) != -1) {
-			    	entityStream.write(buffer, 0, bytesRead);
-			    }
+				try (InputStream is = input) {
+					byte[] buffer = new byte[BUFFER_SIZE];
+					int bytesRead;
+					while ((bytesRead = input.read(buffer)) != -1) {
+						entityStream.write(buffer, 0, bytesRead);
+					}
+				}
 			} else if (update.getCopySource() != null) {
 				put(httpHeaders, BlazeStorageHeaders.COPY_SOURCE, update.getCopySource());
 			}
@@ -81,12 +93,13 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 			put(httpHeaders, HttpHeaders.LAST_MODIFIED, head.getLastModified() == null ? null : head.getLastModified().getTime());
 			
 			if (t instanceof BucketObjectRepresentation) {
-				InputStream input = ((BucketObjectRepresentation) t).getContent();
-				byte[] buffer = new byte[BUFFER_SIZE];
-			    int bytesRead;
-			    while ((bytesRead = input.read(buffer)) != -1) {
-			    	entityStream.write(buffer, 0, bytesRead);
-			    }
+				try (InputStream input = ((BucketObjectRepresentation) t).getContent()) {
+					byte[] buffer = new byte[BUFFER_SIZE];
+					int bytesRead;
+					while ((bytesRead = input.read(buffer)) != -1) {
+						entityStream.write(buffer, 0, bytesRead);
+					}
+				}
 			}
 		}
 	}

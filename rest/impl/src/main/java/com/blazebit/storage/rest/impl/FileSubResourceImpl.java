@@ -15,16 +15,8 @@ import javax.ws.rs.core.Response.Status;
 
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
-import com.blazebit.storage.core.api.BucketObjectDataAccess;
-import com.blazebit.storage.core.api.BucketObjectNotFoundException;
-import com.blazebit.storage.core.api.BucketObjectService;
-import com.blazebit.storage.core.api.StorageDataAccess;
-import com.blazebit.storage.core.model.jpa.Bucket;
-import com.blazebit.storage.core.model.jpa.BucketObject;
-import com.blazebit.storage.core.model.jpa.BucketObjectId;
-import com.blazebit.storage.core.model.jpa.BucketObjectVersion;
-import com.blazebit.storage.core.model.jpa.Storage;
-import com.blazebit.storage.core.model.jpa.StorageId;
+import com.blazebit.storage.core.api.*;
+import com.blazebit.storage.core.model.jpa.*;
 import com.blazebit.storage.core.model.security.Role;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
@@ -49,6 +41,8 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 	private BucketObjectService bucketObjectService;
 	@Inject
 	private StorageDataAccess storageDataAccess;
+	@Inject
+	private AccountDataAccess accountDataAccess;
 	
 	public FileSubResourceImpl(long accountId, String bucketId, String key) {
 		this.accountId = accountId;
@@ -124,7 +118,7 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	@Override
 	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate) {
-		Storage storage = getStorage(accountId, bucketObjectId.getBucketId(), bucketObjectUpdate.getStorageName());
+		Storage storage = getStorage(accountId, bucketObjectId.getBucketId(), bucketObjectUpdate.getStorageOwner(), bucketObjectUpdate.getStorageName());
 		URI storageUri = storage.getUri();
 		String externalContentKey = bucketObjectUpdate.getExternalContentKey();
 		String contentKey;
@@ -199,8 +193,12 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 		return Response.ok().build();
 	}
 
-	private Storage getStorage(long accountId, String bucketId, String storageName) {
+	private Storage getStorage(long accountId, String bucketId, String storageOwner, String storageName) {
 		Storage storage;
+		if (userContext.getAccountRoles().contains(Role.ADMIN) && !userContext.getAccountKey().equals(storageOwner)) {
+			Account storageOwnerAccount = accountDataAccess.findByKey(storageOwner);
+			accountId = storageOwnerAccount.getId();
+		}
 		if (storageName != null && !storageName.isEmpty()) {
 			storage = storageDataAccess.findById(new StorageId(accountId, storageName));
 		} else {

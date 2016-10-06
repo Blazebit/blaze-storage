@@ -14,6 +14,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.ext.MessageBodyReader;
 
+import com.blazebit.storage.rest.model.convert.*;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
 import com.blazebit.storage.rest.api.AccountsResource;
@@ -22,12 +23,6 @@ import com.blazebit.storage.rest.api.BucketsResource;
 import com.blazebit.storage.rest.api.BucketsSubResource;
 import com.blazebit.storage.rest.api.StorageQuotaModelsResource;
 import com.blazebit.storage.rest.api.StorageTypesResource;
-import com.blazebit.storage.rest.model.convert.BucketObjectRepresentationMessageBodyReader;
-import com.blazebit.storage.rest.model.convert.BucketObjectUpdateRepresentationMessageBodyReader;
-import com.blazebit.storage.rest.model.convert.BucketObjectUpdateRepresentationMessageBodyWriter;
-import com.blazebit.storage.rest.model.convert.BucketRepresentationMessageBodyReader;
-import com.blazebit.storage.rest.model.convert.MultipartUploadRepresentationMessageBodyReader;
-import com.blazebit.storage.rest.model.convert.MultipartUploadRepresentationMessageBodyWriter;
 
 public class BlazeStorageClient implements BlazeStorage, Serializable {
 
@@ -52,7 +47,7 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 		
 		// Register the non-response object providers
 		clientTarget.register(BucketObjectUpdateRepresentationMessageBodyReader.class);
-		clientTarget.register(BucketObjectUpdateRepresentationMessageBodyWriter.class);
+		clientTarget.register(BucketObjectUpdateRepresentationClientMessageBodyWriter.class);
 		clientTarget.register(MultipartUploadRepresentationMessageBodyReader.class);
 		clientTarget.register(MultipartUploadRepresentationMessageBodyWriter.class);
         

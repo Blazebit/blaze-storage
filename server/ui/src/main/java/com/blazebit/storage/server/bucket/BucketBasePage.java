@@ -35,7 +35,7 @@ public class BucketBasePage implements Serializable {
 					return null;
 				} else {
 					init();
-					return "";
+					return null;
 				}
 			}
 

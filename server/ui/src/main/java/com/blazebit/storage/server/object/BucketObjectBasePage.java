@@ -44,7 +44,7 @@ public class BucketObjectBasePage implements Serializable {
 				} else {
 					tagsHolder.setTags(bucketObject.getTags());
 					init();
-					return "";
+					return null;
 				}
 			}
 
