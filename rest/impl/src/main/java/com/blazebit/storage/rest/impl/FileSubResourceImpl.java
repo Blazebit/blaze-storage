@@ -195,8 +195,11 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	private Storage getStorage(long accountId, String bucketId, String storageOwner, String storageName) {
 		Storage storage;
-		if (userContext.getAccountRoles().contains(Role.ADMIN) && !userContext.getAccountKey().equals(storageOwner)) {
+		if (storageOwner != null && !storageOwner.isEmpty() && userContext.getAccountRoles().contains(Role.ADMIN) && !userContext.getAccountKey().equals(storageOwner)) {
 			Account storageOwnerAccount = accountDataAccess.findByKey(storageOwner);
+			if (storageOwnerAccount == null) {
+				throw new WebApplicationException(Response.status(Status.NOT_FOUND).header(BlazeStorageHeaders.ERROR_CODE, "StorageOwnerNotFound").type(MediaType.TEXT_PLAIN).entity("Storage owner '" + storageOwner + "' not found").build());
+			}
 			accountId = storageOwnerAccount.getId();
 		}
 		if (storageName != null && !storageName.isEmpty()) {
