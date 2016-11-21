@@ -57,7 +57,9 @@ public class ResponseObjectInvocation implements Invocation {
 		if (status >= 200 && status < 300) {
 			boolean success = false;
 			try {
-				T result = reader.readFrom(responseType, null, null, null, response.getStringHeaders(), response.readEntity(InputStream.class));
+				// this wrapping serves as a workaround to prevent the GC from closing the response and with it the underlying inputstream
+				InputStream responseBody = new ResponseInputStreamWrapper(response.readEntity(InputStream.class), response);
+				T result = reader.readFrom(responseType, null, null, null, response.getStringHeaders(), responseBody);
 				success = true;
 				return result;
 			} catch (IOException e) {
