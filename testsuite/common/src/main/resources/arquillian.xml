@@ -9,8 +9,10 @@
 		<property name="prefix">ARQT_</property>
 	</extension>
 
-	<container qualifier="wildfly-remote">
+	<container qualifier="chameleon" default="true">
+		<configuration>
+			<property name="chameleonTarget">wildfly:10.0.0.Final:managed</property>
+		</configuration>
 	</container>
-	<container qualifier="wildfly-managed">
-	</container>
+
 </arquillian>
