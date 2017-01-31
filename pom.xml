@@ -50,7 +50,7 @@
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.14</version.blazeutils>
-		<version.blazepersistence>1.2.0-Alpha1</version.blazepersistence>
+		<version.blazepersistence>1.2.0-SNAPSHOT</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.4.2</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>
@@ -532,6 +532,38 @@
 				<type>pom</type>
 			</dependency>
 
+			<dependency>
+				<groupId>org.jboss.logging</groupId>
+				<artifactId>jboss-logging</artifactId>
+				<version>3.2.1.Final</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.arquillian</groupId>
+				<artifactId>wildfly-arquillian-container-remote</artifactId>
+				<version>1.0.2.Final</version>
+				<scope>test</scope>
+				<!-- Exclude this for arquillian to work with the remote adapter -->
+				<exclusions>
+					<exclusion>
+						<artifactId>jboss-logging</artifactId>
+						<groupId>org.jboss.logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.arquillian</groupId>
+				<artifactId>wildfly-arquillian-container-managed</artifactId>
+				<version>1.0.2.Final</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.2</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- Deltaspike Test -->
 
 			<dependency>
@@ -669,7 +701,7 @@
                     <localCheckout>true</localCheckout>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
 
-                    <preparationGoals>clean install</preparationGoals>
+                    <preparationGoals>clean install -DskipTests</preparationGoals>
                 </configuration>
             </plugin>
 		</plugins>
@@ -700,30 +732,38 @@
 			<id>wildfly-remote</id>
 			<dependencies>
 				<!-- Needed to make Arquillian work with the remote server adapter -->
-		        <dependency>
-		            <groupId>org.jboss.logging</groupId>
-		            <artifactId>jboss-logging</artifactId>
-		            <version>3.2.1.Final</version>
-		            <scope>test</scope>
-		        </dependency>
+				<dependency>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</dependency>
 				<dependency>
 					<groupId>org.wildfly.arquillian</groupId>
 					<artifactId>wildfly-arquillian-container-remote</artifactId>
-					<version>1.0.2.Final</version>
-					<scope>test</scope>
-					<!-- Exclude this for arquillian to work with the remote adapter -->
-					<exclusions>
-						<exclusion>
-							<artifactId>jboss-logging</artifactId>
-							<groupId>org.jboss.logging</groupId>
-						</exclusion>
-					</exclusions>
 				</dependency>
 				<dependency>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
-					<version>1.6.2</version>
-					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>wildfly-managed</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<!-- Needed to make Arquillian work with the remote server adapter -->
+				<dependency>
+					<groupId>org.jboss.logging</groupId>
+					<artifactId>jboss-logging</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
 				</dependency>
 			</dependencies>
 		</profile>

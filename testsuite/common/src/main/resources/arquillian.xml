@@ -11,4 +11,6 @@
 
 	<container qualifier="wildfly-remote">
 	</container>
+	<container qualifier="wildfly-managed">
+	</container>
 </arquillian>
