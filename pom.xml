@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.blazebit</groupId>
 		<artifactId>blazebit-parent</artifactId>
-		<version>8</version>
+		<version>10</version>
 	</parent>
 
 	<artifactId>blaze-storage</artifactId>
@@ -64,40 +64,6 @@
 		
 		<version.shrinkwrap.resolvers>2.1.1</version.shrinkwrap.resolvers>
 		<version.arquillian>1.1.5.Final</version.arquillian>
-
-		<!-- ************** -->
-		<!-- Build settings -->
-		<!-- ************** -->
-
-		<!-- Cross plugins settings -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven.compiler.source>1.7</maven.compiler.source>
-
-		<!-- Options to override the compiler arguments directly on the compiler 
-			arument line to separate between what the IDE understands as the source level 
-			and what the Maven compiler actually use. -->
-		<maven.compiler.argument.target>${maven.compiler.target}</maven.compiler.argument.target>
-		<maven.compiler.argument.source>${maven.compiler.source}</maven.compiler.argument.source>
-
-		<!-- maven-enforcer-plugin -->
-		<!-- Version 3.0-beta-1 includes strong POM validation and correct "import" 
-			scope dependency resolution. -->
-		<maven.min.version>3.0</maven.min.version>
-		<jdk.min.version>${maven.compiler.source}</jdk.min.version>
-
-		<!-- maven-idea-plugin & maven-eclipse-plugin -->
-		<downloadSources>true</downloadSources>
-
-		<!-- maven-pmd-plugin -->
-		<targetJdk>${maven.compiler.target}</targetJdk>
-
-		<!-- maven-release-plugin -->
-		<useReleaseProfile>false</useReleaseProfile>
-		<arguments>-Psweazer-release</arguments>
 	</properties>
 
 	<prerequisites>
