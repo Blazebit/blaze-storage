@@ -6,12 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -83,28 +80,6 @@ public abstract class AbstractStorageProviderTest {
 		getStorageProvider().deleteObject("not-existing");
 	}
 
-	@Test
-	public void testDeleteObject_whenOpened() throws Exception {
-		// Given
-		String fileName = createFile(getDirectory(), "xyz");
-		Path newFile = getDirectory().resolve(fileName);
-		
-		try (FileOutputStream fos = new FileOutputStream(newFile.toFile())) {
-			FileChannel channel = fos.getChannel();
-			// When & Then
-			FileLock lock = null;
-			
-			try {
-				channel.lock();
-				Assert.verifyException(getStorageProvider(), StorageException.class).deleteObject(fileName);
-			} finally {
-				if (lock != null) {
-					lock.release();
-				}
-			}
-		}
-	}
-	
 	/**************************
 	 * createObject(String)
 	 **************************/
