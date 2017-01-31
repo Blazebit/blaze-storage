@@ -42,7 +42,7 @@ public class FtpStorageProviderFactoryTest {
 		FtpServerFactory serverFactory = new FtpServerFactory();
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setServerAddress("127.0.0.1");
-		listenerFactory.setPort(21);
+		listenerFactory.setPort(21000);
 		serverFactory.addListener("default", listenerFactory.createListener());
 		serverFactory.setUserManager(new AdminUserManagerFactory(directory.getAbsolutePath()));
 		
@@ -92,7 +92,7 @@ public class FtpStorageProviderFactoryTest {
 
 		// When
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost/test-1");
+		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost:21000/test-1");
 		properties.put(FtpStorage.CREATE_DIRECTORY_PROPERTY, "false");
 		StorageProvider provider = factory.createStorageProvider(properties);
 
@@ -104,7 +104,7 @@ public class FtpStorageProviderFactoryTest {
 	public void testCreateStorageProvider_whenDirectoryDoesNotExist() throws Exception {
 		// When & Then
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost/test-1");
+		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost:21000/test-1");
 		properties.put(FtpStorage.CREATE_DIRECTORY_PROPERTY, "false");
 		Assert.verifyException(factory, StorageException.class).createStorageProvider(properties);
 	}
@@ -113,7 +113,7 @@ public class FtpStorageProviderFactoryTest {
 	public void testCreateStorageProvider_whenSuccessfulCreatingDirectory() throws Exception {
 		// When
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost/test-1");
+		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost:21000/test-1");
 		properties.put(FtpStorage.CREATE_DIRECTORY_PROPERTY, "true");
 		StorageProvider provider = factory.createStorageProvider(properties);
 
@@ -129,7 +129,7 @@ public class FtpStorageProviderFactoryTest {
 
 		// When & Then
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost/test-1");
+		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost:21000/test-1");
 		properties.put(FtpStorage.CREATE_DIRECTORY_PROPERTY, "false");
 		Assert.verifyException(factory, StorageException.class).createStorageProvider(properties);
 	}

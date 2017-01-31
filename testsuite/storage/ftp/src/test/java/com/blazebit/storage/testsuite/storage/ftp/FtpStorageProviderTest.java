@@ -40,7 +40,7 @@ public class FtpStorageProviderTest extends AbstractStorageProviderTest {
 		FtpServerFactory serverFactory = new FtpServerFactory();
 		ListenerFactory listenerFactory = new ListenerFactory();
 		listenerFactory.setServerAddress("127.0.0.1");
-		listenerFactory.setPort(21);
+		listenerFactory.setPort(21000);
 		serverFactory.addListener("default", listenerFactory.createListener());
 		serverFactory.setUserManager(new AdminUserManagerFactory(directory.getParentFile().getAbsolutePath()));
 		
@@ -53,7 +53,7 @@ public class FtpStorageProviderTest extends AbstractStorageProviderTest {
 		
 		FtpStorageProviderFactory factory = new FtpStorageProviderFactory();
 		Map<String, Object> properties = new HashMap<String, Object>();
-		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost/" + directory.getName());
+		properties.put(FtpStorage.URL_PROPERTY, "ftp://admin:admin@localhost:21000/" + directory.getName());
 		properties.put(FtpStorage.CREATE_DIRECTORY_PROPERTY, "false");
 		storageProvider = factory.createStorageProvider(properties);
 	}
