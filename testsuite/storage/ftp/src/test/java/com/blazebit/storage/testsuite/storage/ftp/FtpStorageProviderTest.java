@@ -39,6 +39,7 @@ public class FtpStorageProviderTest extends AbstractStorageProviderTest {
 		
 		FtpServerFactory serverFactory = new FtpServerFactory();
 		ListenerFactory listenerFactory = new ListenerFactory();
+		listenerFactory.setServerAddress("127.0.0.1");
 		listenerFactory.setPort(21);
 		serverFactory.addListener("default", listenerFactory.createListener());
 		serverFactory.setUserManager(new AdminUserManagerFactory(directory.getParentFile().getAbsolutePath()));
