@@ -50,7 +50,7 @@
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
 		<version.blazeutils>0.1.14</version.blazeutils>
-		<version.blazepersistence>1.2.0-SNAPSHOT</version.blazepersistence>
+		<version.blazepersistence>1.2.0-Alpha2</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.4.2</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>
