@@ -6,7 +6,7 @@
 		<createSequence sequenceName="STOR_ACCOUNT_SEQ" incrementBy="50" />
 		
 		<createTable tableName="STOR_ACCOUNT">
-			<column name="ID" type="BIGINT(19)">
+			<column name="ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 			<column name="KEY" type="VARCHAR(255)">
@@ -15,7 +15,7 @@
 			<column name="NAME" type="VARCHAR(255)" />
 		</createTable>
 		<createTable tableName="STOR_ACCOUNT_TAGS">
-			<column name="ACCOUNT_ID" type="BIGINT(19)">
+			<column name="ACCOUNT_ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 			<column name="VALUE" type="VARCHAR(255)">
@@ -29,23 +29,23 @@
 			<column name="ID" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="CREATION_DATE" type="TIMESTAMP" />
-			<column name="DELETED" type="BOOLEAN(1)" />
-            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-			<column name="OWNER_ID" type="BIGINT(19)">
+			<column name="CREATION_DATE" type="TIMESTAMP(6)" />
+			<column name="DELETED" type="BOOLEAN" />
+            <column name="OBJECT_BYTES" type="BIGINT"/>
+            <column name="OBJECT_COUNT" type="BIGINT"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT"/>
+			<column name="OWNER_ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 			<column name="STORAGE_NAME" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="STORAGE_OWNER" type="BIGINT(19)">
+			<column name="STORAGE_OWNER" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -54,7 +54,7 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="CONTENT_VERSION_UUID" type="VARCHAR(255)" />
-			<column name="STATE" type="INT(10)" />
+			<column name="STATE" type="INTEGER" />
 			<column name="BUCKET_ID" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
@@ -65,13 +65,13 @@
 			</column>
 			<column name="CONTENT_DISPOSITION" type="VARCHAR(255)" />
 			<column name="CONTENT_KEY" type="VARCHAR(255)" />
-			<column name="CONTENT_LENGTH" type="BIGINT(19)" />
+			<column name="CONTENT_LENGTH" type="BIGINT" />
 			<column name="CONTENT_MD5" type="VARCHAR(255)" />
 			<column name="CONTENT_TYPE" type="VARCHAR(255)" />
-			<column name="CREATION_DATE" type="TIMESTAMP" />
+			<column name="CREATION_DATE" type="TIMESTAMP(6)" />
 			<column name="ENTITY_TAG" type="VARCHAR(255)" />
-			<column name="LAST_MODIFIED" type="BIGINT(19)" />
-			<column name="STATE" type="INT(10)" />
+			<column name="LAST_MODIFIED" type="BIGINT" />
+			<column name="STATE" type="INTEGER" />
 			<column name="BUCKET_ID" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
@@ -81,7 +81,7 @@
 			<column name="STORAGE_NAME" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="STORAGE_OWNER_ID" type="BIGINT(19)">
+			<column name="STORAGE_OWNER_ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 		</createTable>
@@ -106,20 +106,20 @@
 			<column name="NAME" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="CREATION_DATE" type="TIMESTAMP" />
-			<column name="OWNER_ID" type="BIGINT(19)">
+			<column name="CREATION_DATE" type="TIMESTAMP(6)" />
+			<column name="OWNER_ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
-            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_BYTES" type="BIGINT"/>
+            <column name="OBJECT_COUNT" type="BIGINT"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT"/>
 			<column name="URI" type="VARCHAR(255)" />
-			<column name="QUOTA_PLAN_LIMIT" type="INT(10)">
+			<column name="QUOTA_PLAN_LIMIT" type="INTEGER">
 				<constraints nullable="false" />
 			</column>
 			<column name="QUOTA_PLAN_ID" type="VARCHAR(255)">
@@ -134,10 +134,10 @@
 			<column name="NAME" type="VARCHAR(255)" />
 		</createTable>
 		<createTable tableName="STOR_STORAGE_QUOTA_PLAN">
-			<column name="GIGABYTE_LIMIT" type="INT(10)">
+			<column name="GIGABYTE_LIMIT" type="INTEGER">
 				<constraints nullable="false" />
 			</column>
-			<column name="ALERT_PERCENT" type="SMALLINT(5)" />
+			<column name="ALERT_PERCENT" type="SMALLINT" />
 			<column name="QUOTA_MODEL_ID" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
@@ -146,7 +146,7 @@
 			<column name="STORAGE_NAME" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>
-			<column name="OWNER_ID" type="BIGINT(19)">
+			<column name="OWNER_ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
 			<column name="VALUE" type="VARCHAR(255)">
@@ -157,14 +157,14 @@
 			</column>
 		</createTable>
         <createTable tableName="STOR_BUCKET_TAG_OBJECT_STATISTICS">
-            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
+            <column name="OBJECT_BYTES" type="BIGINT"/>
+            <column name="OBJECT_COUNT" type="BIGINT"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT"/>
             <column name="BUCKET_ID" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -176,15 +176,15 @@
             </column>
         </createTable>
         <createTable tableName="STOR_STORAGE_TAG_OBJECT_STATISTICS">
-            <column name="OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_COUNT" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT(19)"/>
-            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT(19)"/>
-            <column name="STORAGE_OWNER_ID" type="BIGINT(19)">
+            <column name="OBJECT_BYTES" type="BIGINT"/>
+            <column name="OBJECT_COUNT" type="BIGINT"/>
+            <column name="OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="OBJECT_VERSION_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_COUNT" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_BYTES" type="BIGINT"/>
+            <column name="PENDING_OBJECT_VERSION_COUNT" type="BIGINT"/>
+            <column name="STORAGE_OWNER_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="STORAGE_NAME" type="VARCHAR(255)">
