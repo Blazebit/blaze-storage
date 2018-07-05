@@ -11,6 +11,7 @@ import javax.persistence.EntityManagerFactory;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.view.EntityViewManager;
+import com.blazebit.persistence.view.EntityViews;
 import com.blazebit.persistence.view.spi.EntityViewConfiguration;
 import com.blazebit.storage.core.config.api.persistence.ReadOnly;
 
@@ -29,17 +30,17 @@ public class EntityViewManagerReadOnlyProducer {
 	@ReadOnly
 	private CriteriaBuilderFactory criteriaBuilderFactory;
 
-	// inject your entity manager factory
-	@Inject
-	@ReadOnly
-	private EntityManagerFactory entityManagerFactory;
-	
 	private EntityViewManager evm;
 	
 	@PostConstruct
 	public void init() {
-    	configEvent.fire(config);
-    	evm = config.createEntityViewManager(criteriaBuilderFactory, entityManagerFactory);
+		EntityViewConfiguration readOnlyConfig = EntityViews.createDefaultConfiguration();
+		for (Class<?> viewClass : config.getEntityViews()) {
+			readOnlyConfig.addEntityView(viewClass);
+		}
+
+		configEvent.fire(readOnlyConfig);
+		evm = readOnlyConfig.createEntityViewManager(criteriaBuilderFactory);
 	}
 
     @Produces

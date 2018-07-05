@@ -7,7 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.persistence.EntityManagerFactory;
 
 import com.blazebit.persistence.CriteriaBuilderFactory;
 import com.blazebit.persistence.view.EntityViewManager;
@@ -29,17 +28,12 @@ public class EntityViewManagerMasterOnlyProducer {
 	@MasterOnly
 	private CriteriaBuilderFactory criteriaBuilderFactory;
 
-	// inject your entity manager factory
-	@Inject
-	@MasterOnly
-	private EntityManagerFactory entityManagerFactory;
-	
 	private EntityViewManager evm;
 	
 	@PostConstruct
 	public void init() {
     	configEvent.fire(config);
-    	evm = config.createEntityViewManager(criteriaBuilderFactory, entityManagerFactory);
+    	evm = config.createEntityViewManager(criteriaBuilderFactory);
 	}
 
     @Produces
