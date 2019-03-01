@@ -73,8 +73,8 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	@Override
 	public void put(BucketObject bucketObject) {
 		List<BucketObject> results = cbf.create(em, BucketObject.class)
-			.fetch("contentVersion.storage")
-			.fetch("bucket.storage")
+			.innerJoinFetchDefault("contentVersion.storage", "versionStorage")
+			.innerJoinFetchDefault("bucket.storage", "bucketStorage")
 			.where("id.bucketId").eq(bucketObject.getId().getBucketId())
 			.where("id.name").eq(bucketObject.getId().getName())
 			.getQuery()
