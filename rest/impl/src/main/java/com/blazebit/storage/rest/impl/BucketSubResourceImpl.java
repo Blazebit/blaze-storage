@@ -1,19 +1,5 @@
 package com.blazebit.storage.rest.impl;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.Status.Family;
-
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
 import com.blazebit.storage.core.api.AccountDataAccess;
@@ -44,6 +30,18 @@ import com.blazebit.storage.rest.model.MultipleDeleteObjectRepresentation;
 import com.blazebit.storage.rest.model.MultipleDeleteObjectResultRepresentation;
 import com.blazebit.storage.rest.model.MultipleDeleteRepresentation;
 import com.blazebit.storage.rest.model.MultipleDeleteResultRepresentation;
+
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.Status.Family;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BucketSubResourceImpl extends AbstractResource implements BucketSubResource {
 
@@ -155,7 +153,7 @@ public class BucketSubResourceImpl extends AbstractResource implements BucketSub
 				
 				Response r;
 				
-				try (InputStream is = entry.getValue().getContent()) {
+				try {
 					r = getFile(fileKey).put(entry.getValue());
 				} catch (WebApplicationException ex) {
 					r = ex.getResponse();

@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
+import com.blazebit.storage.core.api.spi.StorageResult;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.BucketObjectId;
 import com.blazebit.storage.core.model.jpa.BucketObjectVersionId;
@@ -23,9 +24,9 @@ public interface BucketObjectService {
 	 * @return the external key for the storage
 	 * @throws StorageException when the file could not be created or some error occurred during reading
 	 */
-	public String createContent(URI storageUri, InputStream inputStream);
+	public StorageResult createContent(URI storageUri, InputStream inputStream);
 
-	public String copyContent(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri);
+	public StorageResult copyContent(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri);
 	
 	public void deleteContent(URI storageUri, String contentKey);
 

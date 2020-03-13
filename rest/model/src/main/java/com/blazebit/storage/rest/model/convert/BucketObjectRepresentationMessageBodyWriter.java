@@ -76,15 +76,8 @@ public class BucketObjectRepresentationMessageBodyWriter implements ResponseObje
 			put(httpHeaders, BlazeStorageHeaders.CONTENT_MD5, update.getContentMD5());
 			put(httpHeaders, BlazeStorageHeaders.CONTENT_KEY, update.getExternalContentKey());
 
-			InputStream input = update.getContent();
-			if (input != null) {
-				try (InputStream is = input) {
-					byte[] buffer = new byte[BUFFER_SIZE];
-					int bytesRead;
-					while ((bytesRead = input.read(buffer)) != -1) {
-						entityStream.write(buffer, 0, bytesRead);
-					}
-				}
+			if (update.getContent() != null) {
+				update.getContent().transferTo(entityStream);
 			} else if (update.getCopySource() != null) {
 				put(httpHeaders, BlazeStorageHeaders.COPY_SOURCE, update.getCopySource());
 			}

@@ -1,18 +1,17 @@
 package com.blazebit.storage.rest.model;
 
+import com.blazebit.storage.rest.model.rs.ContentDisposition;
+
 import java.io.InputStream;
 import java.util.Map;
-
-import com.blazebit.storage.rest.model.rs.ContentDisposition;
 
 public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresentation {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private String contentMD5; 
 	private String externalContentKey;
-	
-	private InputStream content;
+	private TransferableContent content;
 	private String copySource;
 	
 	public BucketObjectUpdateRepresentation() {
@@ -22,7 +21,7 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 		super(contentType, contentDisposition, size, storageName, storageOwner, tags);
 		this.contentMD5 = contentMD5;
 		this.externalContentKey = externalContentKey;
-		this.content = content;
+		this.content = TransferableContent.forInputStream(content);
 		this.copySource = copySource;
 	}
 
@@ -47,12 +46,16 @@ public class BucketObjectUpdateRepresentation extends BucketObjectBaseRepresenta
 		this.externalContentKey = externalContentKey;
 	}
 
-	public InputStream getContent() {
+	public TransferableContent getContent() {
 		return content;
 	}
 
-	public void setContent(InputStream content) {
+	public void setContent(TransferableContent content) {
 		this.content = content;
+	}
+
+	public void setContent(InputStream content) {
+		this.content = TransferableContent.forInputStream(content);
 	}
 
 	public String getCopySource() {

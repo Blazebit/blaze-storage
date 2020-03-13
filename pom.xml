@@ -17,6 +17,10 @@
 	<description>Extendible storage abstraction for files</description>
 
 	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+
 		<!-- **************** -->
 		<!-- Plugins versions -->
 		<!-- **************** -->
@@ -48,8 +52,8 @@
 		<version.cache-api>1.0.0</version.cache-api>
 		
 		<version.blazecbav>0.2.0</version.blazecbav>
-		<version.blazeutils>0.1.16</version.blazeutils>
-		<version.blazepersistence>1.2.1</version.blazepersistence>
+		<version.blazeutils>0.1.21</version.blazeutils>
+		<version.blazepersistence>1.4.1</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.4.2</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>

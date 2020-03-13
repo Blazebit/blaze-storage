@@ -1,22 +1,21 @@
 package com.blazebit.storage.rest.impl;
 
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import com.blazebit.persistence.CriteriaBuilder;
 import com.blazebit.persistence.view.EntityViewSetting;
-import com.blazebit.storage.core.api.*;
-import com.blazebit.storage.core.model.jpa.*;
+import com.blazebit.storage.core.api.AccountDataAccess;
+import com.blazebit.storage.core.api.BucketObjectDataAccess;
+import com.blazebit.storage.core.api.BucketObjectNotFoundException;
+import com.blazebit.storage.core.api.BucketObjectService;
+import com.blazebit.storage.core.api.StorageDataAccess;
+import com.blazebit.storage.core.api.StorageException;
+import com.blazebit.storage.core.api.spi.StorageResult;
+import com.blazebit.storage.core.model.jpa.Account;
+import com.blazebit.storage.core.model.jpa.Bucket;
+import com.blazebit.storage.core.model.jpa.BucketObject;
+import com.blazebit.storage.core.model.jpa.BucketObjectId;
+import com.blazebit.storage.core.model.jpa.BucketObjectVersion;
+import com.blazebit.storage.core.model.jpa.Storage;
+import com.blazebit.storage.core.model.jpa.StorageId;
 import com.blazebit.storage.core.model.security.Role;
 import com.blazebit.storage.rest.api.FileSubResource;
 import com.blazebit.storage.rest.impl.view.BucketObjectRepresentationView;
@@ -26,6 +25,20 @@ import com.blazebit.storage.rest.model.BucketObjectHeadRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectRepresentation;
 import com.blazebit.storage.rest.model.BucketObjectUpdateRepresentation;
 import com.blazebit.storage.rest.model.rs.ContentDisposition;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class FileSubResourceImpl extends AbstractResource implements FileSubResource {
 
@@ -118,10 +131,18 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 
 	@Override
 	public Response put(BucketObjectUpdateRepresentation bucketObjectUpdate) {
+		byte[] md5Bytes;
+		if (bucketObjectUpdate.getContentMD5() == null) {
+			md5Bytes = null;
+		} else {
+			md5Bytes = HexUtils.hexStringToByteArray(bucketObjectUpdate.getContentMD5());
+		}
 		Storage storage = getStorage(accountId, bucketObjectId.getBucketId(), bucketObjectUpdate.getStorageOwner(), bucketObjectUpdate.getStorageName());
 		URI storageUri = storage.getUri();
 		String externalContentKey = bucketObjectUpdate.getExternalContentKey();
 		String contentKey;
+		String contentMd5;
+		long contentLength;
 		
 		if (externalContentKey != null && !externalContentKey.isEmpty()) {
 			if (bucketObjectUpdate.getCopySource() != null) {
@@ -129,6 +150,8 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			}
 			
 			contentKey = externalContentKey;
+			contentMd5 = bucketObjectUpdate.getContentMD5();
+			contentLength = bucketObjectUpdate.getSize();
 		} else if (bucketObjectUpdate.getCopySource() != null) {
 			String source = bucketObjectUpdate.getCopySource();
 			int idx;
@@ -144,8 +167,17 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			BucketObjectVersionRepresentationView contentVersion = result.getContentVersion();
 			URI sourceStorageUri = contentVersion.getStorageUri();
 			String sourceContentKey = contentVersion.getContentKey();
-			contentKey = bucketObjectService.copyContent(sourceStorageUri, sourceContentKey, storageUri);
-			
+			StorageResult storageResult = bucketObjectService.copyContent(sourceStorageUri, sourceContentKey, storageUri);
+			contentKey = storageResult.getExternalKey();
+			contentMd5 = HexUtils.bytesToHex(storageResult.getMd5Checksum());
+			if (md5Bytes != null && storageResult.getMd5Checksum() != null) {
+				if (!Arrays.equals(md5Bytes, storageResult.getMd5Checksum())) {
+					bucketObjectService.deleteContent(storageUri, storageResult.getExternalKey());
+					return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity("The expected MD5 checksum " + bucketObjectUpdate.getContentMD5() + " did not match the actual MD5 checksum " + contentMd5).build();
+				}
+			}
+			contentLength = contentVersion.getContentLength();
+
 			if (bucketObjectUpdate.getContentDisposition() == null) {
 				bucketObjectUpdate.setContentDisposition(ContentDisposition.fromString(contentVersion.getContentDisposition()));
 			}
@@ -155,8 +187,27 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			
 			bucketObjectUpdate.setContentType(contentVersion.getContentType());
 		} else {
-			// TODO: Check content md5
-			contentKey = bucketObjectService.createContent(storageUri, bucketObjectUpdate.getContent());
+			InputStream inputStream;
+			try {
+				inputStream = bucketObjectUpdate.getContent().getInputStream();
+			} catch (IOException e) {
+				throw new StorageException(e);
+			}
+			StorageResult storageResult = bucketObjectService.createContent(storageUri, inputStream);
+			contentKey = storageResult.getExternalKey();
+			contentMd5 = HexUtils.bytesToHex(storageResult.getMd5Checksum());
+			if (md5Bytes != null && storageResult.getMd5Checksum() != null) {
+				if (!Arrays.equals(md5Bytes, storageResult.getMd5Checksum())) {
+					bucketObjectService.deleteContent(storageUri, storageResult.getExternalKey());
+					return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity("The expected MD5 checksum " + bucketObjectUpdate.getContentMD5() + " did not match the actual MD5 checksum " + contentMd5).build();
+				}
+			}
+			long expectedContentLength = bucketObjectUpdate.getSize();
+			if (expectedContentLength >= 0 && expectedContentLength != storageResult.getSize()) {
+				bucketObjectService.deleteContent(storageUri, storageResult.getExternalKey());
+				return Response.status(Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity("The expected content length " + expectedContentLength + " did not match the actual content length " + storageResult.getSize()).build();
+			}
+			contentLength = storageResult.getSize();
 		}
 		
 		BucketObject bucketObject = new BucketObject(bucketObjectId);
@@ -167,9 +218,8 @@ public class FileSubResourceImpl extends AbstractResource implements FileSubReso
 			version.setContentDisposition(bucketObjectUpdate.getContentDisposition().toString());
 		}
 		
-		version.setContentLength(bucketObjectUpdate.getSize());
-		// TODO: for what?
-		version.setContentMD5(bucketObjectUpdate.getContentMD5());
+		version.setContentLength(contentLength);
+		version.setContentMD5(contentMd5);
 		version.setContentType(bucketObjectUpdate.getContentType());
 		version.setContentKey(contentKey);
 		

@@ -1,6 +1,5 @@
 package com.blazebit.storage.rest.client;
 
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;

@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import com.blazebit.storage.core.api.spi.StorageResult;
 import org.junit.Test;
 
 import com.blazebit.storage.core.api.StorageException;
@@ -87,8 +88,8 @@ public abstract class AbstractStorageProviderTest {
 	@Test
 	public void testCreateObject_whenSuccessful() throws Exception {
 		// When
-		String fileName = getStorageProvider().createObject(new ByteArrayInputStream("abc".getBytes()));
-		Path newFile = getDirectory().resolve(fileName);
+		StorageResult storageResult = getStorageProvider().createObject(new ByteArrayInputStream("abc".getBytes()));
+		Path newFile = getDirectory().resolve(storageResult.getExternalKey());
 
 		// Then
 		assertTrue(Files.exists(newFile));
@@ -140,8 +141,8 @@ public abstract class AbstractStorageProviderTest {
 		String fileName = createFile(getDirectory(), "abc");
 		
 		// When
-		String externalKey = getStorageProvider().copyObject(getStorageProvider(), fileName);
-		Path newFile = getDirectory().resolve(externalKey);
+		StorageResult storageResult = getStorageProvider().copyObject(getStorageProvider(), fileName);
+		Path newFile = getDirectory().resolve(storageResult.getExternalKey());
 
 		// Then
 		assertTrue(Files.exists(newFile));

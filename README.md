@@ -14,6 +14,11 @@ How to use it?
 ==============
 Currently you have to build it yourself, but soon we will publish the version 1.0 to
 the Maven Central.
+
+Running Arquillian tests in IntelliJ
+====================================
+To be able to run the tests in IntelliJ you must configure a "Manual container configuration" Run Configuration
+with the "Working directory" `$MODULE_WORKING_DIR$`. 
  
 Licensing
 =========

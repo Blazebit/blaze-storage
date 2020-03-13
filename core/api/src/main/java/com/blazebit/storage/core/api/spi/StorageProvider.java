@@ -11,11 +11,11 @@ public interface StorageProvider {
 	
 	public void deleteObject(String externalKey);
 	
-	public String createObject(InputStream content);
+	public StorageResult createObject(InputStream content);
 	
-	public long putObject(String externalKey, InputStream content);
+	public StorageResult putObject(String externalKey, InputStream content);
 
-	public String copyObject(StorageProvider sourceStorageProvider, String contentKey);
+	public StorageResult copyObject(StorageProvider sourceStorageProvider, String contentKey);
 	
 	public long getTotalSpace();
 	

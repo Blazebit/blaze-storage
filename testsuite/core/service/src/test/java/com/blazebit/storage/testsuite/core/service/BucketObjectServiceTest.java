@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.blazebit.storage.core.api.spi.StorageResult;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -101,7 +102,7 @@ public class BucketObjectServiceTest extends AbstractContainerTest {
 
 		// When
 		InputStream is = null;
-		String actual = null;
+		StorageResult actual = null;
 		
 		try {
 			is = createTempFile("1");
@@ -123,22 +124,63 @@ public class BucketObjectServiceTest extends AbstractContainerTest {
 		testStorage.setBasePath(basePath);
 
 		// When
-		InputStream is = null;
-		String actual = null;
-		
-		try {
-			is = createTempFile("1");
+		StorageResult actual;
+
+		try (InputStream is = createTempFile("1")) {
 			actual = bucketObjectService.createContent(testStorage.createUri(configuration), is);
-		} finally {
-			is.close();
 		}
 		
 		// Then
-		assertTrue(Files.exists(basePath.resolve(actual)));
-		assertEquals("1", readFull(Files.newInputStream(basePath.resolve(actual))));
+		assertTrue(Files.exists(basePath.resolve(actual.getExternalKey())));
+		assertEquals("1", readFull(Files.newInputStream(basePath.resolve(actual.getExternalKey()))));
 	}
-	
-	// TODO: test copyContent and deleteContent
+
+	/*********************************
+	 * copyContent(URI, InputStream, URI)
+	 ********************************/
+
+	@Test
+	public void testCopyContent_whenSuccessful() throws Exception {
+		// Given
+		Path basePath = createBasePath();
+		Map<String, String> configuration = createConfiguration();
+		testStorage.setBasePath(basePath);
+		StorageResult storageResult;
+
+		try (InputStream is = createTempFile("1")) {
+			storageResult = bucketObjectService.createContent(testStorage.createUri(configuration), is);
+		}
+
+		// When
+		StorageResult actual = bucketObjectService.copyContent(testStorage.createUri(configuration), storageResult.getExternalKey(), testStorage.createUri(configuration));
+
+		// Then
+		assertTrue(Files.exists(basePath.resolve(actual.getExternalKey())));
+		assertEquals("1", readFull(Files.newInputStream(basePath.resolve(actual.getExternalKey()))));
+	}
+
+	/*********************************
+	 * deleteContent(URI, String)
+	 ********************************/
+
+	@Test
+	public void testDeleteContent_whenSuccessful() throws Exception {
+		// Given
+		Path basePath = createBasePath();
+		Map<String, String> configuration = createConfiguration();
+		testStorage.setBasePath(basePath);
+		StorageResult storageResult;
+
+		try (InputStream is = createTempFile("1")) {
+			storageResult = bucketObjectService.createContent(testStorage.createUri(configuration), is);
+		}
+
+		// When
+		bucketObjectService.deleteContent(testStorage.createUri(configuration), storageResult.getExternalKey());
+
+		// Then
+		assertEquals(0, Files.list(basePath).count());
+	}
 	
 	/**************************
 	 * put(BucketObject)

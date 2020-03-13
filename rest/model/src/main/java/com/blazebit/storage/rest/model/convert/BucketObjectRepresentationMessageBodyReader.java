@@ -75,9 +75,9 @@ public class BucketObjectRepresentationMessageBodyReader implements MessageBodyR
 		
 		result.setContentDisposition(ContentDisposition.fromString(httpHeaders.getFirst(HttpHeaders.CONTENT_DISPOSITION)));
 		if (httpHeaders.getFirst(HttpHeaders.CONTENT_LENGTH) == null) {
-			result.setSize(0L);
+			result.setSize(-1L);
 		} else {
-			result.setSize(Long.valueOf(httpHeaders.getFirst(HttpHeaders.CONTENT_LENGTH)));
+			result.setSize(Long.parseLong(httpHeaders.getFirst(HttpHeaders.CONTENT_LENGTH)));
 		}
 		
 		result.setStorageName(httpHeaders.getFirst(BlazeStorageHeaders.STORAGE_NAME));

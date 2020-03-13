@@ -27,6 +27,7 @@ import com.blazebit.storage.core.api.StorageProviderFactoryDataAccess;
 import com.blazebit.storage.core.api.event.BucketObjectDeletedEvent;
 import com.blazebit.storage.core.api.spi.StorageProvider;
 import com.blazebit.storage.core.api.spi.StorageProviderFactory;
+import com.blazebit.storage.core.api.spi.StorageResult;
 import com.blazebit.storage.core.model.jpa.Bucket;
 import com.blazebit.storage.core.model.jpa.BucketObject;
 import com.blazebit.storage.core.model.jpa.BucketObjectId;
@@ -47,14 +48,14 @@ public class BucketObjectServiceImpl extends AbstractService implements BucketOb
 	private Event<BucketObjectDeletedEvent> bucketObjectDeleted;
 
 	@Override
-	public String createContent(URI storageUri, InputStream inputStream) {
+	public StorageResult createContent(URI storageUri, InputStream inputStream) {
 		StorageProviderFactory factory = storageProviderFactoryDataAccess.findByScheme(storageUri.getScheme());
 		StorageProvider storageProvider = factory.createStorageProvider(factory.createConfiguration(storageUri));
 		return storageProvider.createObject(inputStream);
 	}
 
 	@Override
-	public String copyContent(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri) {
+	public StorageResult copyContent(URI sourceStorageUri, String sourceContentKey, URI targetStorageUri) {
 		StorageProviderFactory factory = storageProviderFactoryDataAccess.findByScheme(targetStorageUri.getScheme());
 		StorageProvider storageProvider = factory.createStorageProvider(factory.createConfiguration(targetStorageUri));
 		StorageProviderFactory sourceFactory = storageProviderFactoryDataAccess.findByScheme(sourceStorageUri.getScheme());

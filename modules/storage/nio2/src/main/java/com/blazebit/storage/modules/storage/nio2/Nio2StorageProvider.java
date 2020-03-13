@@ -2,17 +2,22 @@ package com.blazebit.storage.modules.storage.nio2;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.spi.StorageProvider;
+import com.blazebit.storage.core.api.spi.StorageResult;
 import com.blazebit.storage.modules.storage.base.AbstractStorageProvider;
 
 public abstract class Nio2StorageProvider extends AbstractStorageProvider implements StorageProvider {
@@ -69,23 +74,38 @@ public abstract class Nio2StorageProvider extends AbstractStorageProvider implem
 	}
 
 	@Override
-	public String createObject(InputStream content) {
+	public StorageResult createObject(InputStream content) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 		Path tempPath = null;
 		
 		try {
 			tempPath = createTempFile();
-			Files.copy(content, tempPath, StandardCopyOption.REPLACE_EXISTING);
+			StorageResult storageResult;
+			try (OutputStream os = Files.newOutputStream(tempPath, StandardOpenOption.WRITE)) {
+				storageResult = copyWithChecksum(md, content, os);
+			}
 
 			int retries = CREATE_RETRIES;
 			Exception retryException = null;
+			Path objectPath = null;
 			while (retries-- != 0) {
 				try {
 					String externalKey = UUID.randomUUID().toString();
-					Path objectPath = getObjectPath(externalKey);
+					objectPath = getObjectPath(externalKey);
 					Files.move(tempPath, objectPath, StandardCopyOption.ATOMIC_MOVE);
-					return externalKey;
+					return storageResult.withExternalKey(externalKey);
 				} catch (FileAlreadyExistsException ex) {
 					retryException = ex;
+				} catch (IOException e) {
+					if (objectPath != null) {
+						Files.deleteIfExists(objectPath);
+					}
+					throw e;
 				}
 			}
 			
@@ -104,17 +124,34 @@ public abstract class Nio2StorageProvider extends AbstractStorageProvider implem
 	}
 
 	@Override
-	public long putObject(String externalKey, InputStream content) {
+	public StorageResult putObject(String externalKey, InputStream content) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 		Path objectPath = getObjectPath(externalKey);
 		Path tempPath = null;
 		
 		try {
 			tempPath = createTempFile();
-			long bytes = Files.copy(content, tempPath, StandardCopyOption.REPLACE_EXISTING);
-			
+			StorageResult storageResult;
+			try (OutputStream os = Files.newOutputStream(tempPath, StandardOpenOption.WRITE)) {
+				storageResult = copyWithChecksum(md, content, os);
+			}
+
 			Files.move(tempPath, objectPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-			return bytes;
+			return storageResult.withExternalKey(externalKey);
 		} catch (IOException e) {
+			if (objectPath != null) {
+				try {
+					Files.deleteIfExists(objectPath);
+				} catch (IOException ex) {
+					ex.addSuppressed(e);
+					LOG.log(Level.SEVERE, "Could not delete file after IO error!", ex);
+				}
+			}
 			throw new StorageException(e);
 		} finally {
 			if (tempPath != null) {
@@ -128,21 +165,27 @@ public abstract class Nio2StorageProvider extends AbstractStorageProvider implem
 	}
 	
 	@Override
-	public String copyObject(StorageProvider sourceStorageProvider, String contentKey) {
-		if (getBasePath().equals(sourceStorageProvider.getStorageIdentifier())) {
+	public StorageResult copyObject(StorageProvider sourceStorageProvider, String contentKey) {
+		if (getStorageIdentifier().equals(sourceStorageProvider.getStorageIdentifier())) {
 			Path sourceObjectPath = getObjectPath(contentKey);
 
 			try {
 				int retries = CREATE_RETRIES;
 				Exception retryException = null;
 				while (retries-- != 0) {
+					Path objectPath = null;
 					try {
 						String externalKey = UUID.randomUUID().toString();
-						Path objectPath = getObjectPath(externalKey);
+						objectPath = getObjectPath(externalKey);
 						Files.copy(sourceObjectPath, objectPath);
-						return externalKey;
+						return new StorageResult(externalKey, null, -1);
 					} catch (FileAlreadyExistsException ex) {
 						retryException = ex;
+					} catch (IOException ex) {
+						if (objectPath != null) {
+							Files.deleteIfExists(objectPath);
+						}
+						throw ex;
 					}
 				}
 				

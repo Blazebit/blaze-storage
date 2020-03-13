@@ -3,9 +3,12 @@ package com.blazebit.storage.modules.storage.ftp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import com.blazebit.storage.core.api.spi.StorageResult;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 
@@ -17,8 +20,7 @@ public class FtpStorageProvider extends AbstractStorageProvider implements Stora
 
 	private static final Logger LOG = Logger.getLogger(FtpStorageProvider.class.getName());
 	private static final int CREATE_RETRIES = 3;
-    private static final int BUFFER_SIZE = 8192;
-	
+
 	private final FileObject root;
 	private final boolean supportsWriting;
 
@@ -51,39 +53,50 @@ public class FtpStorageProvider extends AbstractStorageProvider implements Stora
 	}
 
 	@Override
-	public String createObject(InputStream content) {
+	public StorageResult createObject(InputStream content) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 		FileObject fileObject = createTempFile(null);
-		long bytes = putObject(fileObject, content);
-		return fileObject.getName().getBaseName();
+		StorageResult storageResult = putObject(md, fileObject, content);
+		return storageResult.withExternalKey(fileObject.getName().getBaseName());
 	}
 
 	@Override
-	public long putObject(String externalKey, InputStream content) {
+	public StorageResult putObject(String externalKey, InputStream content) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
 		try {
 			FileObject targetFileObject = root.resolveFile(externalKey);
 			FileObject fileObject = createTempFile("temp");
-			
-			long bytes = putObject(fileObject, content);
+
+			StorageResult storageResult = putObject(md, fileObject, content);
 			fileObject.moveTo(targetFileObject);
-			
-			return bytes;
+			return storageResult.withExternalKey(externalKey);
 		} catch (FileSystemException ex) {
 			throw new StorageException(ex);
 		}
 	}
 	
 	@Override
-	public String copyObject(StorageProvider sourceStorageProvider, String contentKey) {
+	public StorageResult copyObject(StorageProvider sourceStorageProvider, String contentKey) {
 		// NOTE: Since FTP does not support efficient copying within the same server, we do it the old fashioned way 
 		return super.copyObject(sourceStorageProvider, contentKey);
 	}
 
-	private long putObject(FileObject targetFileObject, InputStream content) {
+	private StorageResult putObject(MessageDigest md, FileObject targetFileObject, InputStream content) {
 		OutputStream os = null;
 		
 		try {
 			os = targetFileObject.getContent().getOutputStream();
-			return copy(content, os);
+			return copyWithChecksum(md, content, os);
 		} catch (IOException ex) {
 			throw new StorageException(ex);
 		} finally {
@@ -96,17 +109,6 @@ public class FtpStorageProvider extends AbstractStorageProvider implements Stora
 			}
 		}
 	}
-	
-	private static long copy(InputStream source, OutputStream sink) throws IOException {
-        long nread = 0L;
-        byte[] buf = new byte[BUFFER_SIZE];
-        int n;
-        while ((n = source.read(buf)) > 0) {
-            sink.write(buf, 0, n);
-            nread += n;
-        }
-        return nread;
-    }
 	
 	private FileObject createTempFile(String tempFolder) {
 		int retries = CREATE_RETRIES;
