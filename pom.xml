@@ -57,7 +57,7 @@
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.liquibase>3.4.2</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>
-		<version.infinispan>8.1.0.Final</version.infinispan>
+		<version.infinispan>10.1.4.Final</version.infinispan>
 		<version.junit>4.11</version.junit>
 
 		<version.resteasy>3.0.10.Final</version.resteasy>
