@@ -1,5 +1,6 @@
 package com.blazebit.storage.server.faces.configuration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -12,7 +13,7 @@ import javax.faces.context.FacesContext;
 import com.blazebit.storage.rest.model.config.StorageTypeConfigElementRepresentation;
 import com.blazebit.storage.rest.model.config.StorageTypeConfigEntryRepresentation;
 
-public class ConfigurationHolder {
+public class ConfigurationHolder implements Serializable {
 
 	protected List<ConfigurationEntry> configurationEntries = new ArrayList<>();
 	

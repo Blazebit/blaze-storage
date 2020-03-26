@@ -6,6 +6,7 @@ import com.blazebit.storage.core.api.AccountDataAccess;
 import com.blazebit.storage.core.api.BucketObjectDataAccess;
 import com.blazebit.storage.core.api.BucketObjectNotFoundException;
 import com.blazebit.storage.core.api.BucketObjectService;
+import com.blazebit.storage.core.api.HexUtils;
 import com.blazebit.storage.core.api.StorageDataAccess;
 import com.blazebit.storage.core.api.StorageException;
 import com.blazebit.storage.core.api.spi.StorageResult;

@@ -1,5 +1,6 @@
 package com.blazebit.storage.server.faces.limit;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -8,7 +9,7 @@ import java.util.TreeSet;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-public class LimitsHolder {
+public class LimitsHolder implements Serializable {
 
 	protected List<LimitEntry> limitEntries = new ArrayList<>();
 

@@ -22,7 +22,7 @@ public class BucketObject extends BaseEntity<BucketObjectId> {
 	private static final long serialVersionUID = 1L;
 	
 	public static final String DEFAULT_CONTENT_TYPE = "binary/octet-stream";
-	
+
 	private Bucket bucket;
 	private BucketObjectState state;
 	private String contentVersionUuid;

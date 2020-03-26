@@ -63,7 +63,9 @@ public class BucketObjectBasePage implements Serializable {
 	public void put() {
 		BucketObjectUpdateRepresentation oldBucketObject = (BucketObjectUpdateRepresentation) bucketObject;
 		BucketObjectUpdateRepresentation newBucketObject = new BucketObjectUpdateRepresentation();
-		newBucketObject.setContent(getContent());
+		if (oldBucketObject.getExternalContentKey() == null) {
+			newBucketObject.setContent(getContent());
+		}
 		newBucketObject.setContentDisposition(oldBucketObject.getContentDisposition());
 		newBucketObject.setContentMD5(oldBucketObject.getContentMD5());
 		newBucketObject.setContentType(oldBucketObject.getContentType());

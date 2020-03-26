@@ -55,6 +55,7 @@
 		<version.blazeutils>0.1.21</version.blazeutils>
 		<version.blazepersistence>1.4.1</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
+		<version.nfs4j>0.20.1</version.nfs4j>
 		<version.liquibase>3.4.2</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>
 		<version.infinispan>8.1.0.Final</version.infinispan>
@@ -79,6 +80,7 @@
 		<module>server</module>
 		<module>client</module>
 		<module>modules</module>
+		<module>nfs</module>
 		<module>testsuite</module>
 		<module>examples</module>
 		<module>documentation</module>
@@ -122,6 +124,15 @@
 			</roles>
 		</developer>
 	</developers>
+
+	<repositories>
+		<repository>
+			<id>dcache-releases</id>
+			<name>dCache.ORG maven repository</name>
+			<url>https://download.dcache.org/nexus/content/repositories/releases</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -322,6 +333,11 @@
 				<artifactId>javaee-api</artifactId>
 				<version>${version.javaee-api}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.dcache</groupId>
+				<artifactId>nfs4j-core</artifactId>
+				<version>${version.nfs4j}</version>
 			</dependency>
 			
 			<!-- Liquibase dependencies -->

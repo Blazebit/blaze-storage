@@ -1,4 +1,4 @@
-package com.blazebit.storage.rest.impl;
+package com.blazebit.storage.core.api;
 
 public final class HexUtils {
 

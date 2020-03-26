@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ironjacamar>
+    <bootstrap-context>default</bootstrap-context>
+    <resource-adapters>
+        <resource-adapter>
+            <archive>blaze-storage.nfs-rar.rar</archive>
+        </resource-adapter>
+    </resource-adapters>
+</ironjacamar>

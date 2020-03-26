@@ -1,15 +1,14 @@
 package com.blazebit.storage.rest.impl.view;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.blazebit.persistence.view.EntityView;
 import com.blazebit.persistence.view.IdMapping;
 import com.blazebit.persistence.view.Mapping;
 import com.blazebit.storage.core.model.jpa.StorageQuotaModel;
 import com.blazebit.storage.rest.model.StorageQuotaModelListElementRepresentation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @EntityView(StorageQuotaModel.class)
 public abstract class StorageQuotaModelListElementRepresentationView extends StorageQuotaModelListElementRepresentation {
@@ -24,7 +23,6 @@ public abstract class StorageQuotaModelListElementRepresentationView extends Sto
 		super(name, description, toSet(plans), id);
 	}
 	
-	@JsonIgnore
 	@IdMapping("id")
 	public abstract String getId();
 	
