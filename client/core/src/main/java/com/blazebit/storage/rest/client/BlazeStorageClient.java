@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,11 +36,10 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 	private final ClientRequestFilter[] requestFilters;
     private final transient Client client;
     
-	private BlazeStorageClient(String serverUrl, ClientRequestFilter[] requestFilters) {
+	private BlazeStorageClient(String serverUrl, Client client, ClientRequestFilter[] requestFilters) {
 		this.serverUrl = serverUrl;
 		this.requestFilters = requestFilters;
-		
-		this.client = ClientBuilder.newClient();
+		this.client = client;
 	}
 	
 	private WebTarget initTarget() {
@@ -59,11 +59,30 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 	}
 
 	public static BlazeStorage getInstance(String serverUrl) {
-		return new BlazeStorageClient(serverUrl, new ClientRequestFilter[0]);
+		return new BlazeStorageClient(serverUrl, newClient(), new ClientRequestFilter[0]);
 	}
 
 	public static BlazeStorage getInstance(String serverUrl, ClientRequestFilter... requestFilters) {
-		return new BlazeStorageClient(serverUrl, requestFilters);
+		return new BlazeStorageClient(serverUrl, newClient(), requestFilters);
+	}
+
+	public static BlazeStorage getInstance(String serverUrl, Client client, ClientRequestFilter... requestFilters) {
+		return new BlazeStorageClient(serverUrl, client, requestFilters);
+	}
+
+	private static Client newClient() {
+		ClientBuilder clientBuilder = ClientBuilder.newBuilder();
+
+		// Older RestEasy implementations didn't use connection pooling which is important for storage connections
+		try {
+			Method connectionPoolSize = clientBuilder.getClass().getMethod("connectionPoolSize", int.class);
+			connectionPoolSize.invoke(clientBuilder, 50);
+		} catch (NoSuchMethodException e) {
+			// Ignore
+		} catch (Exception e) {
+			throw new RuntimeException("Could not create RestEasy client with connection pool size!", e);
+		}
+		return clientBuilder.build();
 	}
 
 	@Override
@@ -104,7 +123,7 @@ public class BlazeStorageClient implements BlazeStorage, Serializable {
 
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        set("client", ClientBuilder.newClient());
+        set("client", newClient());
     }
     
     private void set(String fieldName, Object value) {
