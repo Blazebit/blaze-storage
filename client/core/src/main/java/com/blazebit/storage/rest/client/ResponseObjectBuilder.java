@@ -19,8 +19,8 @@ import javax.ws.rs.ext.MessageBodyReader;
 public class ResponseObjectBuilder implements Builder {
 
 	private final List<MessageBodyReader<?>> responseObjectMessageReader;
-	private Builder delegate;
-	
+	private final Builder delegate;
+
 	public ResponseObjectBuilder(Builder delegate, List<MessageBodyReader<?>> responseObjectMessageReader) {
 		this.delegate = delegate;
 		this.responseObjectMessageReader = responseObjectMessageReader;

@@ -26,7 +26,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 public class ResponseObjectInvocation implements Invocation {
 
 	private final List<MessageBodyReader<?>> responseObjectMessageReader;
-	private Invocation delegate;
+	private final Invocation delegate;
 
 	public ResponseObjectInvocation(Invocation delegate, List<MessageBodyReader<?>> responseObjectMessageReader) {
 		this.delegate = delegate;
@@ -58,7 +58,11 @@ public class ResponseObjectInvocation implements Invocation {
 			boolean success = false;
 			try {
 				// this wrapping serves as a workaround to prevent the GC from closing the response and with it the underlying inputstream
-				InputStream responseBody = new ResponseInputStreamWrapper(response.readEntity(InputStream.class), response);
+				InputStream is = null;
+				if (response.hasEntity()) {
+					is = response.readEntity(InputStream.class);
+				}
+				InputStream responseBody = new ResponseInputStreamWrapper(is, response);
 				T result = reader.readFrom(responseType, null, null, null, response.getStringHeaders(), responseBody);
 				success = true;
 				return result;

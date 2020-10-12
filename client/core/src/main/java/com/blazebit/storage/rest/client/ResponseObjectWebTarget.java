@@ -14,7 +14,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 public class ResponseObjectWebTarget implements WebTarget {
 
 	private final List<MessageBodyReader<?>> responseObjectMessageReader;
-	private WebTarget delegate;
+	private final WebTarget delegate;
 	
 	public ResponseObjectWebTarget(WebTarget delegate, List<MessageBodyReader<?>> responseObjectMessageReader) {
 		this.delegate = delegate;
