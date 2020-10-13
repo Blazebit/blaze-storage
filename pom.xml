@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>blaze-storage</artifactId>
-	<version>0.3.3-SNAPSHOT</version>
+	<version>0.3.3</version>
 	<packaging>pom</packaging>
 
 	<name>Blazebit Storage</name>
@@ -107,7 +107,7 @@
 		<connection>scm:git:git@github.com:Blazebit/blaze-storage.git</connection>
 		<developerConnection>scm:git:git@github.com:Blazebit/blaze-storage.git</developerConnection>
 		<url>git@github.com:Blazebit/blaze-storage.git</url>
-		<tag>HEAD</tag>
+		<tag>0.3.3</tag>
 	</scm>
 
 	<developers>
