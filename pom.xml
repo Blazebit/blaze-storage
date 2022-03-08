@@ -56,7 +56,7 @@
 		<version.blazepersistence>1.4.1</version.blazepersistence>
 		<version.deltaspike>1.4.1</version.deltaspike>
 		<version.nfs4j>0.20.1</version.nfs4j>
-		<version.liquibase>3.4.2</version.liquibase>
+		<version.liquibase>4.8.0</version.liquibase>
 		<version.hibernate>5.0.7.Final</version.hibernate>
 		<version.infinispan>8.1.0.Final</version.infinispan>
 		<version.junit>4.11</version.junit>
